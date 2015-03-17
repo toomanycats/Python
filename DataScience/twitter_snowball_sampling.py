@@ -10,13 +10,13 @@ import tweepy
 import ipdb
 import numpy as np
 
-CONSUMER_KEY = "XXXXXXXXXX"
-CONSUMER_SECRET = "XXXXXXXXXXX"
+CONSUMER_KEY = "FMPqUqF5xdGeiijFtFrCdgXdU"
+CONSUMER_SECRET = "6xNlJYgwMcuRLE6JWfn6x6XXlmRwwRQwkkjk74QE8bWtC8IlpE"
 
-ACCESS_TOKEN = "XXXXXXXXXX"
-TOKEN_SECRET = "XXXXXXXXXX"
+ACCESS_TOKEN = "3019119488-hBVjFeeHOvMKEEkNNfRnGhVJoUAc3tQmDVJBFwe"
+TOKEN_SECRET = "VUyPy9w7G29Fszp5D0HGLMXxQtEGXdb6MnnTrRDUy1Yrg"
 
-ROOT = '/Users/username/git/Python2.7/resources/'
+ROOT = '/Users/dcuneo/git/Python2.7/resources/'
 CENTERS = os.path.join(ROOT, 'centers')
 FOLLOWING_DIR = os.path.join(ROOT, 'following')
 EDGE_FILE = os.path.join(ROOT, 'twitter_edges.csv')
