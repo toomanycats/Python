@@ -1,13 +1,14 @@
 
 """This is a snowball sampler. """
-import networkx as net
+import matplotlib.pyplot as plt
+import networkx as nx
 import glob
 import time
 import os
-import sys
 import json
 import tweepy
 import ipdb
+import numpy as np
 
 CONSUMER_KEY = "FMPqUqF5xdGeiijFtFrCdgXdU"
 CONSUMER_SECRET = "6xNlJYgwMcuRLE6JWfn6x6XXlmRwwRQwkkjk74QE8bWtC8IlpE"
@@ -20,25 +21,15 @@ CENTERS = os.path.join(ROOT, 'centers')
 FOLLOWING_DIR = os.path.join(ROOT, 'following')
 EDGE_FILE = os.path.join(ROOT, 'twitter_edges.csv')
 
-MAX_FOLLOWERS = 20
+SEED = 'WholeFoods'
+MAX_FOLLOWERS = 50
 MAX_DEPTH = 5
-
-enc = lambda x: x.encode('ascii', errors='ignore')
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, TOKEN_SECRET)
 api = tweepy.API(auth)
 
-
-def main():
-    screen_name = "WholeFoods"
-
-    if not os.path.exists(FOLLOWING_DIR):
-        os.makedirs(FOLLOWING_DIR)
-        os.makedirs(CENTERS)
-
-    #ipdb.set_trace()
-    get_user_dict(screen_name, depth=0)
+enc = lambda x: x.encode('ascii', errors='ignore')
 
 def _get_userfname(center, type_='center'):
     if type_ == "center":
@@ -51,12 +42,18 @@ def _get_userfname(center, type_='center'):
 
 def _get_followers_from_file(fname, type_='id'):
     screen_name = os.path.split(fname)[-1]
-    print 'Retrieving friends for user: %s' %screen_name
     f = open(fname)
+
     if type_ == 'id':
-        info = [line.strip().split('\t')[1] for line in f]
+        try:
+            info = [line.strip().split('\t')[1] for line in f]
+        except IndexError:
+            print "No screen name in file:%s" %fname
+            info = []
+
     elif type_ == 'all':
-       info = [line.strip().split('\t') for line in f]
+        info = [line.strip().split('\t') for line in f]
+
     else:
         raise Exception("Not a valid option")
 
@@ -68,130 +65,156 @@ def _get_followers_from_file(fname, type_='id'):
 
     return info
 
-def _get_list_of_friends(user_id):
-    try:
-        c = tweepy.Cursor(api.followers, id=user_id).items()
 
-    except tweepy.TweepError, error:
-        print error
+class Sample(object):
+    def __init__(self):
+        pass
 
-        wait_for_limit(error)
-        _get_list_of_friends(user_id)
+    def main(self):
+        screen_name = "WholeFoods"
 
-    except Exception, err:
-        print err
-        return None
+        if not os.path.exists(FOLLOWING_DIR):
+            os.makedirs(FOLLOWING_DIR)
+            os.makedirs(CENTERS)
 
-    return c
+        #ipdb.set_trace()
+        self.get_user_dict(screen_name, depth=0)
 
-def _get_user(center):
+    def _get_list_of_friends(self, user_id):
+        try:
+            c = tweepy.Cursor(api.followers, id=user_id).items()
 
-    try:
-        user = api.get_user(center)
-        return user
-
-    except tweepy.TweepError, error:
-        print error
-
-        wait_for_limit(error)
-        user = _get_user(center)
-
-    except Exception, err:
-        print err
-
-        return None
-
-def wait_for_limit(error):
-    #ipdb.set_trace()
-    try:
-        if error[0][0]['message'] == 'Rate limit exceeded':
-            print 'Rate limited. Sleeping for 15 minutes.'
-            time.sleep(15 * 60 + 15)
-
-    except:
-        print str(error)
-        return
-
-def get_user_dict(center, depth):
-    print 'Retrieving user details for twitter id %s' % enc(center)
-
-    fname = _get_userfname(center, 'center')
-    if os.path.exists(fname):
-        user = json.loads(file(fname).read())
-
-    else:
-        user_info = _get_user(center)
-
-        try:# follwers ids can fail for permission error
-            user = {'name': enc(user_info.name),
-                    'screen_name': enc(user_info.screen_name),
-                    'id': user_info.id,
-                    'friends_count': user_info.friends_count,
-                    'followers_count': user_info.followers_count,
-                    'followers_ids': user_info.followers_ids()
-                   }
         except tweepy.TweepError, error:
+            print error
+
             wait_for_limit(error)
+            self._get_list_of_friends(user_id)
+
+        except Exception, err:
+            print err
+            return None
+
+        return c
+
+    def _get_user(self, center):
+
+        try:
+            user = api.get_user(center)
+            return user
+
+        except tweepy.TweepError, error:
+            print error
+
+            wait_for_limit(error)
+            user = _get_user(center)
+
+        except Exception, err:
+            print err
+
+            return None
+
+    def wait_for_limit(self, error):
+        #ipdb.set_trace()
+        try:
+            if error[0][0]['message'] == 'Rate limit exceeded':
+                print 'Rate limited. Sleeping for 15 minutes.'
+                time.sleep(15 * 60 + 15)
+
+        except:
+            print str(error)
             return
 
-        with open(fname, 'w') as outf:
-            outf.write(json.dumps(user) + '\t')
+    def get_user_dict(self, center, depth):
+        print '\nRetrieving user details for twitter id %s\n' % enc(center)
 
-    fname = _get_userfname(user['screen_name'], 'followers')
-    if os.path.exists(fname):
+        fname = _get_userfname(center, 'center')
+        if os.path.exists(fname):
+            user = json.loads(file(fname).read())
+
+        else:
+            user_info = self._get_user(center)
+
+            try:# follwers ids can fail for permission error
+                user = {'name': enc(user_info.name),
+                        'screen_name': enc(user_info.screen_name),
+                        'id': user_info.id,
+                        'friends_count': user_info.friends_count,
+                        'followers_count': user_info.followers_count,
+                        'followers_ids': user_info.followers_ids()
+                    }
+            except tweepy.TweepError, error:
+                self.wait_for_limit(error)
+                depth -= 1
+                return depth
+
+            with open(fname, 'w') as outf:
+                outf.write(json.dumps(user) + '\t')
+
+        fname = _get_userfname(user['screen_name'], 'followers')
+        if os.path.exists(fname):
+            return
+            #followers = _get_followers_from_file(fname)
+
+        else:
+            print 'Retrieving friends for user: %s' %center
+            self.lookup_followers(user['id'], user['screen_name'])
+            followers = _get_followers_from_file(fname)
+
+        if followers is not None and depth < MAX_DEPTH:# * len(followers):
+            for follower in followers:
+                depth += 1
+                self.get_user_dict(follower, depth)
+                print "depth: %i" %depth
+        #else:
+        #    for follower in followers:
+        #        print "reached depth:%i" %depth
+        #        print 'Retrieving friends for user: %s' %center
+        #        self.lookup_followers(user['id'], user['screen_name'])
+
         return
-        #followers = _get_followers_from_file(fname)
 
-    else:
-        lookup_followers(user['id'], user['screen_name'])
-        followers = _get_followers_from_file(fname)
+    def lookup_followers(self, user_id, screen_name):
+        cursor = self._get_list_of_friends(user_id)
 
-    if followers is not None and depth < MAX_DEPTH * len(followers):
-        for follower in followers:
-            get_user_dict(follower, depth)
-            depth += 1
+        if cursor is None:
+            return None
 
-def lookup_followers(user_id, screen_name):
-    cursor = _get_list_of_friends(user_id)
+        fname = _get_userfname(screen_name, 'followers')
 
-    if cursor is None:
-        return None
+        outf = open(fname, 'w')
 
-    fname = _get_userfname(screen_name, 'followers')
+        cnt = 0
+        while True:
+            try:
+                follower = cursor.next()
+                cnt += 1
+                string = '%s\t%s\t%s\n' %(follower.id,
+                                        enc(follower.screen_name),
+                                        enc(follower.name)
+                                        )
+                outf.write('%s' %string)
+                print "follower:%s" %follower.screen_name
 
-    outf = open(fname, 'w')
+                if cnt == MAX_FOLLOWERS:
+                    break
 
-    cnt = 0
-    while True:
-        try:
-            follower = cursor.next()
-            string = '%s\t%s\t%s\n' %(follower.id,
-                                      enc(follower.screen_name),
-                                      enc(follower.name)
-                                      )
-            outf.write('%s' %string)
-            cnt += 1
-            print cnt
+            except tweepy.TweepError, error:
+                self.wait_for_limit(error)
 
-            if cnt == MAX_FOLLOWERS:
+            # add exception for cursor.next()
+            except StopIteration:
                 break
 
-        except tweepy.TweepError, error:
-            wait_for_limit(error)
-
-        # add exception for cursor.next()
-        except StopIteration:
-            break
-
-    outf.close()
+        outf.close()
 
 
-class Graph(object):
+class Edges(object):
     def __init__(self):
         self.users = {'followers': 0}
         self.edges = []
+        self.black_list = []
 
-    def load_centers(self):
+    def load_users(self):
         for file_ in glob.glob(os.path.join(CENTERS, '*.json')):
             f = open(file_, 'r')
             data = json.load(f)
@@ -200,6 +223,11 @@ class Graph(object):
             self.users[screen_name] = {'num_followers': data['followers_count']}
 
     def build_edges(self, screen_name):
+        if screen_name in self.black_list:
+            return
+        else:
+            self.black_list.append(screen_name)
+
         fname = _get_userfname(screen_name, type_='followers')
         if not os.path.exists(fname):
             return
@@ -209,14 +237,16 @@ class Graph(object):
         if followers_info is None or len(followers_info) < 2:
             return
 
-        data = self._build_new_data(screen_name, followers_info)
+        data = self._build_row(screen_name, followers_info)
         if data is not None:
             self.edges += (data)
+        else:
+            return
 
-        for item in followers_info:
-            self.build_edges(item[1])
+        for id, screen_name, user_name in followers_info:
+            self.build_edges(screen_name)
 
-    def _build_new_data(self, screen_name, followers):
+    def _build_row(self, screen_name, followers):
         new_data = []
         for follower_data in followers:
             screen_name_follower = follower_data[1]
@@ -232,7 +262,7 @@ class Graph(object):
 
         return new_data
 
-    def write_edge_dict_to_file(self):
+    def write_edges_to_file(self):
         f = open(EDGE_FILE, 'w')
 
         for edge in self.edges:
@@ -241,32 +271,62 @@ class Graph(object):
         f.close()
 
     def main(self):
-        #ipdb.set_trace()
-        self.load_centers()
-        SEED = 'WholeFoods'
+        ipdb.set_trace()
+        self.load_users()
         self.build_edges(SEED)
-        self.write_edge_dict_to_file()
+        self.write_edges_to_file()
 
-class PlotGraph(object):
+
+class Network(object):
     def __init__(self):
-        self.di_graph = net.DiGraph()
+        self.di_graph = nx.DiGraph()
         self.weights = {}
 
     def load_network(self):
         network = _get_followers_from_file(EDGE_FILE, 'all')
 
         for screen_name, followed_by, weight in network:
-            self.di_graph.add_edge(screen_name, followed_by, int(weight))
-            self.weights[screen_name] = int(weight)
+            weight = int(weight)
+            self.di_graph.add_edge(screen_name, followed_by, weight=weight)
+            self.weights[screen_name] = weight
+
+    def scale_positions(self, pos):
+        # tinest bit faster than a
+        # list comprehension with dict()
+        # and probably more clear
+        for k, v in pos.iteritems():
+            pos[k] = 5 * v
+
+        return pos
+
+    def get_colors(self, positions):
+        colors = np.empty(len(positions), dtype=str)
+        color_list = ['r', 'b', 'g', 'm', 'c', 'y']
+
+        for i in range(len(positions)):
+            color_list = np.roll(color_list, 1)
+            colors[i] = color_list[0]
+
+        return colors
 
     def main(self):
-        SEED = "WholeFoods"
-        graph = net.DiGraph(net.ego_graph(self.di_graph, SEED, radius=4))
+        self.load_network()
+        graph = nx.DiGraph(nx.ego_graph(self.di_graph, SEED, radius=4))
 
-        net.draw_networkx_nodes()
-        net.draw_networkx_edges()
+        positions = nx.spring_layout(self.di_graph)
+
+        colors = self.get_colors(positions)
+        nx.draw_networkx_nodes(self.di_graph, positions, node_color=colors,
+                                alpha=0.6)
+
+        nx.draw_networkx_edges(self.di_graph, positions, width=0.5, alpha=0.5)
+        # unresolved bug in the below for OSX
+        #nx.draw_networkx_labels(self.di_graph, positions, font_size=9, alpha=0.7)
+        # hack fix
+        for string, pos in positions.iteritems():
+            p1 = pos[0]
+            p2 = pos[1]
+            plt.text(p1, p2, string, fontsize=8)
 
 
 
-if __name__ == "__main__":
-    main()
