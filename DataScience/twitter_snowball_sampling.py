@@ -7,11 +7,11 @@ import tweepy
 import ipdb
 from pymongo import MongoClient
 
-CONSUMER_KEY = "FMPqUqF5xdGeiijFtFrCdgXdU"
-CONSUMER_SECRET = "6xNlJYgwMcuRLE6JWfn6x6XXlmRwwRQwkkjk74QE8bWtC8IlpE"
+CONSUMER_KEY = "FMPqUqF5xdGeiijFXXXXXXX"
+CONSUMER_SECRET = "6xNlJYgwMcuRLE6JWfn6x6XXlmRwwRQwkkjk74QE8XXXXXXX"
 
-ACCESS_TOKEN = "3019119488-hBVjFeeHOvMKEEkNNfRnGhVJoUAc3tQmDVJBFwe"
-TOKEN_SECRET = "VUyPy9w7G29Fszp5D0HGLMXxQtEGXdb6MnnTrRDUy1Yrg"
+ACCESS_TOKEN = "3019119488-hBVjFeeHOvMKEEkNNfRnGhVJoUAc3XXXXXXXXXX"
+TOKEN_SECRET = "VUyPy9w7G29Fszp5D0HGLMXxQtEGXdb6MnnXXXXXXXXX"
 
 ROOT = '/Users/dcuneo/git/Python2.7/resources/'
 GRAPHML = os.path.join(ROOT, 'network_graph.graphml')
