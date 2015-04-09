@@ -6,21 +6,33 @@ import os
 import tweepy
 import ipdb
 from pymongo import MongoClient
-
-CONSUMER_KEY = "FMPqUqF5xdGeiijFXXXXXXX"
-CONSUMER_SECRET = "6xNlJYgwMcuRLE6JWfn6x6XXlmRwwRQwkkjk74QE8XXXXXXX"
-
-ACCESS_TOKEN = "3019119488-hBVjFeeHOvMKEEkNNfRnGhVJoUAc3XXXXXXXXXX"
-TOKEN_SECRET = "VUyPy9w7G29Fszp5D0HGLMXxQtEGXdb6MnnXXXXXXXXX"
+import ConfigParser
 
 ROOT = '/Users/dcuneo/git/Python2.7/resources/'
 GRAPHML = os.path.join(ROOT, 'network_graph.graphml')
 
-auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-auth.set_access_token(ACCESS_TOKEN, TOKEN_SECRET)
+tokens = Tokens()
+auth = tweepy.OAuthHandler(tokens.consumer_key,
+                           tokens.consumer_token
+                           )
+
+auth.set_access_token(token.access_token,
+                      token.token_secret
+                      )
+
 api = tweepy.API(auth)
 
 enc = lambda x: x.encode('ascii', errors='ignore')
+
+class Tokens(object):
+    def __init__(self):
+        config_file = "/home/daniel/git/Python2.7/DataScience/twitter_tokens.cfg")
+        config_parser = ConfigParser.RawConfigParser()
+        config_parser.read(config_file)
+        self.consumer_key = config_parser.get("consumer_key")
+        self.consumer_token = config_parser.get("consumer_token")
+        self.access_token = config_parser.get("access_token")
+        self.token_secret = config_parser.get("token_secret")
 
 
 def wait_for_limit(error):
