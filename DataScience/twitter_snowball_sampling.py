@@ -24,16 +24,6 @@ api = tweepy.API(auth)
 
 enc = lambda x: x.encode('ascii', errors='ignore')
 
-class Tokens(object):
-    def __init__(self):
-        config_file = "/home/daniel/git/Python2.7/DataScience/twitter_tokens.cfg")
-        config_parser = ConfigParser.RawConfigParser()
-        config_parser.read(config_file)
-        self.consumer_key = config_parser.get("consumer_key")
-        self.consumer_token = config_parser.get("consumer_token")
-        self.access_token = config_parser.get("access_token")
-        self.token_secret = config_parser.get("token_secret")
-
 
 def wait_for_limit(error):
     try:
@@ -45,6 +35,17 @@ def wait_for_limit(error):
     except:
         print str(error)
         return None
+
+
+class Tokens(object):
+    def __init__(self):
+        config_file = "/home/daniel/git/Python2.7/DataScience/twitter_tokens.cfg")
+        config_parser = ConfigParser.RawConfigParser()
+        config_parser.read(config_file)
+        self.consumer_key = config_parser.get("consumer_key")
+        self.consumer_token = config_parser.get("consumer_token")
+        self.access_token = config_parser.get("access_token")
+        self.token_secret = config_parser.get("token_secret")
 
 
 class DB(object):
