@@ -1,4 +1,4 @@
 *.pyc
 twitter_tokens.cfg
 *.swp
-
+.ipynb_checkpoints/
