@@ -16,11 +16,11 @@ enc = lambda x: x.encode('ascii', errors='ignore')
 def get_api():
     tokens = Tokens()
     auth = tweepy.OAuthHandler(tokens.consumer_key,
-                               tokens.consumer_token
+                               tokens.consumer_secret
                                )
 
     auth.set_access_token(tokens.access_token,
-                          tokens.token_secret
+                          tokens.access_token_secret
                           )
 
     api = tweepy.API(auth)
@@ -46,9 +46,9 @@ class Tokens(object):
         config_parser = ConfigParser.RawConfigParser()
         config_parser.read(config_file)
         self.consumer_key = config_parser.get("tokens", "consumer_key")
-        self.consumer_token = config_parser.get("tokens", "consumer_token")
+        self.consumer_secret = config_parser.get("tokens", "consumer_secret")
         self.access_token = config_parser.get("tokens", "access_token")
-        self.token_secret = config_parser.get("tokens", "token_secret")
+        self.access_token_secret = config_parser.get("tokens", "access_token_secret")
 
 
 class DB(object):
