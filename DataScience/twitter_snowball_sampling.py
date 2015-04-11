@@ -11,18 +11,21 @@ import ConfigParser
 ROOT = '/Users/dcuneo/git/Python2.7/resources/'
 GRAPHML = os.path.join(ROOT, 'network_graph.graphml')
 
-tokens = Tokens()
-auth = tweepy.OAuthHandler(tokens.consumer_key,
-                           tokens.consumer_token
-                           )
-
-auth.set_access_token(token.access_token,
-                      token.token_secret
-                      )
-
-api = tweepy.API(auth)
-
 enc = lambda x: x.encode('ascii', errors='ignore')
+
+def get_api():
+    tokens = Tokens()
+    auth = tweepy.OAuthHandler(tokens.consumer_key,
+                               tokens.consumer_token
+                               )
+
+    auth.set_access_token(tokens.access_token,
+                          tokens.token_secret
+                          )
+
+    api = tweepy.API(auth)
+
+    return api
 
 
 def wait_for_limit(error):
@@ -39,13 +42,13 @@ def wait_for_limit(error):
 
 class Tokens(object):
     def __init__(self):
-        config_file = "/home/daniel/git/Python2.7/DataScience/twitter_tokens.cfg")
+        config_file = "/home/daniel/git/Python2.7/DataScience/twitter_tokens.cfg"
         config_parser = ConfigParser.RawConfigParser()
         config_parser.read(config_file)
-        self.consumer_key = config_parser.get("consumer_key")
-        self.consumer_token = config_parser.get("consumer_token")
-        self.access_token = config_parser.get("access_token")
-        self.token_secret = config_parser.get("token_secret")
+        self.consumer_key = config_parser.get("tokens", "consumer_key")
+        self.consumer_token = config_parser.get("tokens", "consumer_token")
+        self.access_token = config_parser.get("tokens", "access_token")
+        self.token_secret = config_parser.get("tokens", "token_secret")
 
 
 class DB(object):
@@ -99,7 +102,7 @@ class CursorLoop(object):
 
 
 class Sample(object):
-    def __init__(self, seed, max_followers=20, max_depth=5):
+    def __init__(self, api, seed, max_followers=20, max_depth=5):
         db = DB()
         self.nodes = db.nodes
         self.edges = db.edges
@@ -107,14 +110,15 @@ class Sample(object):
         self.seed = seed
         self.max_followers = max_followers
         self.max_depth = max_depth
+        self.api = api
 
     def main(self):
-        screen_name = "WholeFoods"
+        screen_name = self.seed
         self.get_screen_name_info(screen_name, depth=0)
 
     def _get_list_followers(self, user_id):
         try:
-            c = tweepy.Cursor(api.followers, id=user_id).items()
+            c = tweepy.Cursor(self.api.followers, id=user_id).items()
 
         except tweepy.TweepError, error:
             print error
@@ -132,7 +136,7 @@ class Sample(object):
     def _get_user(self, screen_name):
 
         try:
-            user = api.get_user(screen_name)
+            user = self.api.get_user(screen_name)
             return user
 
         except tweepy.TweepError, error:
@@ -366,11 +370,12 @@ class Network(object):
 
 
 class TwitterContent(object):
-    def __init__(self, num_tweets):
+    def __init__(self, api, num_tweets):
         self.db = DB()
         self.nodes = self.db.nodes
         self.content = self.db.content
         self.num = num_tweets
+        self.api = api
 
     def get_name_list(self):
         cursor = self.nodes.find({}, {"screen_name":True, "_id":False})
@@ -380,7 +385,7 @@ class TwitterContent(object):
         return name_list
 
     def get_user_tweets(self, screen_name):
-        cursor = tweepy.Cursor(api.user_timeline, id=screen_name)
+        cursor = tweepy.Cursor(self.api.user_timeline, id=screen_name)
         time_line = cursor.items(self.num)
 
         out = []
