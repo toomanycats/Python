@@ -8,8 +8,6 @@ import ipdb
 from pymongo import MongoClient
 import ConfigParser
 
-ROOT = '/Users/dcuneo/git/Python2.7/resources/'
-GRAPHML = os.path.join(ROOT, 'network_graph.graphml')
 
 enc = lambda x: x.encode('ascii', errors='ignore')
 
@@ -347,10 +345,12 @@ class Edges(object):
 
 
 class Network(object):
-    def __init__(self, seed):
+    def __init__(self, seed, outfile):
         self.di_graph = nx.DiGraph()
         self.weights = {}
         self.seed = seed
+        root = '/home/daniel/git/Python2.7/DataScience'
+        self.graphml_path = os.path.join(root, outfile)
 
     def load_network(self, network):
         for screen_name, followed_by, weight in network:
@@ -361,10 +361,8 @@ class Network(object):
     def main(self):
         network = Edges(self.seed).main()
         self.load_network(network)
-        #graph = nx.DiGraph(nx.ego_graph(self.di_graph, SEED, radius=4))
 
-        # save graphml for Gephi
-        f = open(GRAPHML, 'w')
+        f = open(self.graphml_path, 'w')
         nx.GraphMLWriter(self.di_graph).dump(f)
         f.close()
 
