@@ -343,6 +343,8 @@ class Edges(object):
         self.load_users()
         self.build_edges(self.seed)
 
+        return self.edges_list
+
 
 class Network(object):
     def __init__(self, seed, outfile):
