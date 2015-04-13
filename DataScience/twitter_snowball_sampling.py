@@ -339,7 +339,6 @@ class Edges(object):
         return new_data
 
     def main(self):
-        ipdb.set_trace()
         self.load_users()
         self.build_edges(self.seed)
 
