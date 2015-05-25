@@ -1,0 +1,14 @@
+This is the presentation notebook from my Meetup.
+Presenter was another member, Deepthi. She shared her
+Kaggle solution and data with us. I've tried out some
+ideas with her data in the ipnb file with my initials.
+
+Main additions I made:
+instead of using the mean age for missing ages, I
+use the  std * normal_dist + mean
+
+I also use word count vectorizer on first and last names,
+fit to the survivors, and transform all the names.
+Then, to get a single integer for the random forest
+ML, I sum all the counts as metric of fit with the survivor
+names.
