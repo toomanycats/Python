@@ -1,0 +1,67 @@
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key attr.name="weight" attr.type="int" for="edge" id="d0" />
+  <graph edgedefault="directed">
+    <node id="SAANBRO648" />
+    <node id="AyalaBrayton" />
+    <node id="dukerz45" />
+    <node id="GospelShaman" />
+    <node id="Raphaaapresley" />
+    <node id="shitikarsh" />
+    <node id="ChefCreosote" />
+    <node id="briannarae98" />
+    <node id="nasrullahztbl" />
+    <node id="mtobias33" />
+    <node id="WholeFoods" />
+    <node id="beefandtators" />
+    <node id="GeniDoni" />
+    <node id="homie2626" />
+    <edge source="GospelShaman" target="AyalaBrayton">
+      <data key="d0">9</data>
+    </edge>
+    <edge source="shitikarsh" target="Raphaaapresley">
+      <data key="d0">29</data>
+    </edge>
+    <edge source="shitikarsh" target="briannarae98">
+      <data key="d0">20</data>
+    </edge>
+    <edge source="shitikarsh" target="AyalaBrayton">
+      <data key="d0">9</data>
+    </edge>
+    <edge source="shitikarsh" target="nasrullahztbl">
+      <data key="d0">928</data>
+    </edge>
+    <edge source="shitikarsh" target="GeniDoni">
+      <data key="d0">2</data>
+    </edge>
+    <edge source="WholeFoods" target="ChefCreosote">
+      <data key="d0">0</data>
+    </edge>
+    <edge source="WholeFoods" target="SAANBRO648">
+      <data key="d0">40</data>
+    </edge>
+    <edge source="WholeFoods" target="dukerz45">
+      <data key="d0">4</data>
+    </edge>
+    <edge source="WholeFoods" target="mtobias33">
+      <data key="d0">13</data>
+    </edge>
+    <edge source="WholeFoods" target="homie2626">
+      <data key="d0">3</data>
+    </edge>
+    <edge source="beefandtators" target="dukerz45">
+      <data key="d0">4</data>
+    </edge>
+    <edge source="GeniDoni" target="shitikarsh">
+      <data key="d0">375</data>
+    </edge>
+    <edge source="homie2626" target="shitikarsh">
+      <data key="d0">375</data>
+    </edge>
+    <edge source="homie2626" target="GospelShaman">
+      <data key="d0">42379</data>
+    </edge>
+    <edge source="homie2626" target="beefandtators">
+      <data key="d0">5259</data>
+    </edge>
+  </graph>
+</graphml>
