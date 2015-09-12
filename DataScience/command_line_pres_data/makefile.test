@@ -1,0 +1,10 @@
+
+inventory = ~/git/Python2.7/DataScience/command_line_pres_data/linux_inventory.csv
+kernel = /home/daniel/git/Python2.7/DataScience/command_line_pres_data/linux-2.6.32.67
+
+inventory :
+	~/Keystone/code-insights/code-insights/profiler/run_inventory.sh $(kernel) $(inventory)
+	mysql --user=root --password=test -e "DROP TABLE inventory;" LinuxKernel
+    csvsql --db "mysql://root:test@127.0.0.1/LinuxKernel" --table "inventory" --insert "linux_inventory.csv"
+	mysql --user=root --password=test -e "SELECT SUM(sloc) FROM inventory GROUP BY ext ORDER BY SUM(sloc);" LinuxKernel
+
