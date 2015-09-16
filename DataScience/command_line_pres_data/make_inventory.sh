@@ -42,5 +42,5 @@ ext=$(get_extension $input)
 if [ $ascii_bool == 1 ];then
     printf "\"${input}\",\"${count}\",\"${ext}\"\n"
 else
-    printf "\"{$input}\",\"0\",\"${ext}\"\n"
+    printf "\"${input}\",\"0\",\"${ext}\"\n"
 fi
