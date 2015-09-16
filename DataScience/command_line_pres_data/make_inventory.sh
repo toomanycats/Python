@@ -19,9 +19,17 @@ fi
 
 function get_extension
 {
-input=$1
-ext=$(echo $input | rev | cut -d. -f 1 | rev)
-echo $ext
+    input="$1"
+    base=$(basename "$input")
+    test_=$(echo "$base" | grep -c "\.")
+
+    if [ $test_ -eq 0 ];then
+        echo "NONE"
+    else
+        ext=$(echo "$base" | rev | cut -d. -f 1 | rev)
+    fi
+
+    echo ${ext}
 }
 
 #### calls here ###
@@ -32,7 +40,7 @@ ascii_bool=$(check_for_ascii $input)
 ext=$(get_extension $input)
 
 if [ $ascii_bool == 1 ];then
-    printf "%i,%s\n" $count, $ext
+    printf "\"${input}\",\"${count}\",\"${ext}\"\n"
 else
-    printf "0,%s\n" $ext
+    printf "\"{$input}\",\"0\",\"${ext}\"\n"
 fi
