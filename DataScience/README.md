@@ -1,2 +1,3 @@
-This repo contains programs from my most recent employment in 
-Data Science. The code is not very formalized yet.
+This is a somewhat loose collection of data science programs and ipython notebooks for my Meetup, Scientists New To Data Science.
+
+
