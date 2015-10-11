@@ -7,4 +7,4 @@ access_token
 command_line_data/
 consumer
 dummy.db
-
+*.bak
