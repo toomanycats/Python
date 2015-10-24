@@ -1,5 +1,5 @@
+"""This is a snowball sampler for Twitter data."""
 
-"""This is a snowball sampler. """
 import networkx as nx
 import time
 import os
@@ -53,7 +53,7 @@ class DB(object):
     """Simple data base class to open mongoDB"""
     def __init__(self):
         client = MongoClient('localhost', 27017)
-        db = client.wfm_snowball
+        db = client.snowball
         self.nodes = db.wfm_centers
         self.edges = db.wfm_followers
         self.content = db.content
