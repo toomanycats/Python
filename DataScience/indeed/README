@@ -1,0 +1,8 @@
+postal codes taken from:
+https://www.aggdata.com/node/86
+
+this csv file needs some cleaning:
+dos2unix us_postal_codes.csv
+
+remove the last comma from each line:
+sed -i 's/,//7' us_postal_codes.csv
