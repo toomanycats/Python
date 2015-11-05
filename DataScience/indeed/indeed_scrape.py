@@ -6,6 +6,7 @@
 #TODO: add logger
 #TODO: use MRJob mapper for parsing
 
+import ConfigParser
 import json
 import pandas as pd
 import urllib2
@@ -22,8 +23,15 @@ stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
-        self.pub_id = "2818745629107228"
-        self.api = r'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&l=%(loc)s&q=%%22data%%20science%%22&start=0&fromage=30&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
+        self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
+        self.load_config()
+        self.api = 'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&chnl=%(channel_name)s&l=%(loc)s&q=%%22data%%20science%%22&start=0&fromage=30&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
+
+    def load_config(self):
+        config_parser = ConfigParser.RawConfigParser()
+        config_parser.read(self.config_path)
+        self.pub_id = config_parser.get("id", "pub_id")
+        self.channel_name = config_parser.get("channel", "channel_name")
 
     def get_urls(self):
         df= pd.read_csv('/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv', dtype=str)
@@ -35,8 +43,9 @@ class Indeed(object):
         urls = []
         for loc in loc_samp:
             api = self.api %{'pub_id':self.pub_id,
-                            'loc':loc
-                            }
+                             'loc':loc,
+                             'channel_name':self.channel_name
+                             }
 
             try:
                 response = urllib2.urlopen(api)
