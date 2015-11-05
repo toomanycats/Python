@@ -145,7 +145,7 @@ class Indeed(object):
         df['assignments'] = self.cluster(matrix)
         df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv', index=False)
 
-    def vectorizer(self, corpus, max_features=100, max_df=1.0, min_df=0.2):
+    def vectorizer(self, corpus, max_features=100, max_df=1.0, min_df=0.2, n_min=2):
         vectorizer = TfidfVectorizer(max_features=max_features,
                                     max_df=max_df,
                                     min_df=min_df,
@@ -153,7 +153,7 @@ class Indeed(object):
                                     use_idf=False, # consider using CountVectorizer
                                     stop_words='english',
                                     norm='l2',
-                                    ngram_range=(2, 3),
+                                    ngram_range=(n_min, 3),
                                     analyzer='word',
                                     decode_error='ignore',
                                     strip_accents='unicode'
