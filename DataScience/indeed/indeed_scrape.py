@@ -11,7 +11,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity, cosine_distances, euclidean_distances
 from sklearn.cluster import KMeans
 from sklearn import metrics
-import ipdb
+from nltk import stem
+
+stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
@@ -83,17 +85,18 @@ class Indeed(object):
         df['summary'] = df['url'].apply(self.parse_content)
         df.drop_duplicates(inplace=True)
 
-        ipdb.set_trace()
-
         matrix, features = self.vectorizer(df['summary'])
         print features
 
         df['assignments'] = self.cluster(matrix)
+        df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv', index=False)
+
         grp = df.groupby('assignments')
-        print grp
+        print grp.describe()
 
     def vectorizer(self, corpus):
-        vectorizer = TfidfVectorizer(max_features=30,
+        vectorizer = TfidfVectorizer(max_features=150,
+                                    preprocessor=stemmer,
                                     lowercase=True,
                                     max_df=0.7,
                                     min_df=0.1,
@@ -116,9 +119,9 @@ class Indeed(object):
         cos_dist = cosine_distances(matrix)
         euc_dist = euclidean_distances(matrix)
 
-        km = KMeans(k=3,
-                    init='random',
-                    #init='k-means++',
+        km = KMeans(n_clusters=3,
+                    #init='random',
+                    init='k-means++',
                     n_init=100,
                     max_iter=1000,
                     tol=1e-7,
@@ -126,7 +129,7 @@ class Indeed(object):
                     verbose=0,
                     random_state=1,
                     copy_x=True,
-                    n_jobs=4
+                    n_jobs=1
                     )
 
         assignments = km.fit_predict(cos_dist)
