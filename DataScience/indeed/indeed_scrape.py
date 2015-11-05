@@ -90,51 +90,42 @@ class Indeed(object):
         return new_list
 
     def tokenizer(self, string):
-        try:
-            if string is None:
-                return None
+        if string is None:
+            return None
 
-            elif len(string.split(" ")) < 3:
-                return None
+        words = toker(string)
+        words = self.len_tester(words)
+        words = map(stemmer.stem, words)
 
-            else:
-                words = toker(string)
-                words = self.len_tester(words)
-                words = map(stemmer.stem, words)
-
-                return " ".join(words)
-
-        except Exception, err:
-            print err
-            print string
-            raise Exception
+        return " ".join(words)
 
     def parse_content(self, url):
         content = self.get_content(url)
 
-        if content is not None:
-            content = content.decode("ascii", "ignore")
-            soup = BeautifulSoup(content, 'html.parser')
+        if content is None:
+            return None
 
-            try:
-                summary = soup.find('span', {'summary'})
+        content = content.decode("ascii", "ignore")
+        soup = BeautifulSoup(content, 'html.parser')
 
-            except AttributeError:
-                summary = soup.find_all('span')
+        try:
+            summary = soup.find('span', {'summary'})
 
-            bullets = summary.find_all("li")
-            if bullets is not None:
-                skills = bullets
-            else:
-                skills = summary
+        except AttributeError:
+            summary = soup.find_all('span')
+            if summary is None:
+                return None
 
-            output = [item.get_text() for item in skills]
+        bullets = summary.find_all("li")
+        if bullets is not None:
+            skills = bullets
+        else:
+            skills = summary
 
-            if len(output) > 0:
-                return output
-            else:
-               return None
+        output = [item.get_text() for item in skills]
 
+        if len(output) > 0:
+            return " ".join(output)
         else:
             return None
 
@@ -143,7 +134,9 @@ class Indeed(object):
         df['url'] = self.get_urls()
         df['summary'] = df['url'].apply(lambda x:self.parse_content(x))
         df['summary_toke'] = df['summary'].apply(lambda x: self.tokenizer(x))
+
         df.drop_duplicates(inplace=True)
+        df.dropna(inplace=True, how='any', axis=0)
 
         matrix, features = self.vectorizer(df['summary_toke'])
         fea = pd.DataFrame(features)
@@ -152,15 +145,15 @@ class Indeed(object):
         df['assignments'] = self.cluster(matrix)
         df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv', index=False)
 
-    def vectorizer(self, corpus, max_features=100, max_df=0.65, min_df=0.2):
+    def vectorizer(self, corpus, max_features=100, max_df=1.0, min_df=0.2):
         vectorizer = TfidfVectorizer(max_features=max_features,
                                     max_df=max_df,
                                     min_df=min_df,
                                     lowercase=True,
-                                    use_idf=True,
+                                    use_idf=False, # consider using CountVectorizer
                                     stop_words='english',
                                     norm='l2',
-                                    ngram_range=(1, 5),
+                                    ngram_range=(2, 3),
                                     analyzer='word',
                                     decode_error='ignore',
                                     strip_accents='unicode'
