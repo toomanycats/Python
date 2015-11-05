@@ -54,6 +54,10 @@ class Indeed(object):
                 print err
                 continue
 
+            except Exception, err:
+                print err
+                continue
+
         return urls
 
     def get_content(self, url):
@@ -67,7 +71,12 @@ class Indeed(object):
 
             return content
 
-        except urlib2.HTTPError:
+        except urllib2.HTTPError, err:
+            print err
+            return None
+
+        except Exception, err:
+            print err
             return None
 
     def len_tester(self, word_list):
@@ -81,16 +90,29 @@ class Indeed(object):
         return new_list
 
     def tokenizer(self, string):
-        words = toker(string)
-        words = self.len_tester(words)
-        words = map(stemmer.stem, words)
+        try:
+            if string is None:
+                return None
 
-        return " ".join(words)
+            elif len(string.split(" ")) < 3:
+                return None
+
+            else:
+                words = toker(string)
+                words = self.len_tester(words)
+                words = map(stemmer.stem, words)
+
+                return " ".join(words)
+
+        except Exception, err:
+            print err
+            print string
+            raise Exception
 
     def parse_content(self, url):
         content = self.get_content(url)
 
-        if len(content) > 0:
+        if content is not None:
             content = content.decode("ascii", "ignore")
             soup = BeautifulSoup(content, 'html.parser')
 
@@ -100,8 +122,18 @@ class Indeed(object):
             except AttributeError:
                 summary = soup.find_all('span')
 
-            output = [item.get_text() for item in summary.find_all("li")]
-            return output
+            bullets = summary.find_all("li")
+            if bullets is not None:
+                skills = bullets
+            else:
+                skills = summary
+
+            output = [item.get_text() for item in skills]
+
+            if len(output) > 0:
+                return output
+            else:
+               return None
 
         else:
             return None
