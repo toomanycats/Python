@@ -3,14 +3,16 @@
 # Author : Daniel Cuneo
 # Creation Date : 11-05-2015
 ######################################
+#TODO: add logger
+#TODO: use MRJob mapper for parsing
+
 import json
 import pandas as pd
 import urllib2
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity, cosine_distances, euclidean_distances
+from sklearn.metrics.pairwise import cosine_distances
 from sklearn.cluster import KMeans
-from sklearn import metrics
 from nltk import stem
 from nltk import tokenize
 
@@ -90,7 +92,15 @@ class Indeed(object):
         if len(content) > 0:
             content = content.decode("ascii", "ignore")
             soup = BeautifulSoup(content, 'html.parser')
-            summary = soup.find('span', {'summary'})
+            try:
+                summary = soup.find('span', {'summary'})
+            except AttributeError:
+                out = []
+                sums = soup.find_all('span')
+                for summary in sums:
+                    out.append(summary.get_text())
+
+                return out
 
             return summary.get_text()
 
@@ -110,14 +120,11 @@ class Indeed(object):
         df['assignments'] = self.cluster(matrix)
         df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv', index=False)
 
-        grp = df.groupby('assignments')
-        print grp.describe()
-
     def vectorizer(self, corpus, max_features=100, max_df=0.65, min_df=0.2):
         vectorizer = TfidfVectorizer(max_features=max_features,
                                     max_df=max_df,
                                     min_df=min_df,
-                                    to_lower=True,
+                                    lowercase=True,
                                     use_idf=True,
                                     stop_words='english',
                                     norm='l2',
