@@ -51,33 +51,39 @@ class Indeed(object):
 
         return urls
 
-    def open_url(self, url):
+    def get_content(self, url):
+        if url is None:
+            return None
+
         try:
             response = urllib2.urlopen(url)
             content = response.read()
+            response.close()
+
             return content
 
         except urlib2.HTTPError:
-            return
-
-        finally:
-            response.close()
-
-    def parse_content(self, content):
-        if content is None:
             return None
 
-        soup = BeautifulSoup(content, 'html.parser')
-        summary = soup.find('span', {'summary'})
+    def parse_content(self, url):
+        content = self.get_content(url)
 
-        return summary.get_text()
+        if len(content) > 0:
+            soup = BeautifulSoup(content, 'html.parser')
+            summary = soup.find('span', {'summary'})
+
+            return summary.get_text()
+
+        else:
+            return None
 
     def main(self):
-        ipdb.set_trace()
         df = pd.DataFrame()
         df['url'] = self.get_urls()
         df['summary'] = df['url'].apply(self.parse_content)
-        df = df.duplicated(keep='last')
+        df.drop_duplicates(inplace=True)
+
+        ipdb.set_trace()
 
         matrix, features = self.vectorizer(df['summary'])
         print features
