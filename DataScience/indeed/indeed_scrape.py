@@ -39,7 +39,7 @@ class Indeed(object):
                 response.close()
 
                 try:
-                    url = [item['url'] for item in data['results']]
+                    urls.extend([item['url'] for item in data['results']])
 
                 except Exception, err:
                     print err
@@ -48,9 +48,6 @@ class Indeed(object):
             except urllib2.HTTPError, err:
                 print err
                 continue
-
-
-            urls.append(url)
 
         return urls
 
@@ -67,6 +64,9 @@ class Indeed(object):
             response.close()
 
     def parse_content(self, content):
+        if content is None:
+            return None
+
         soup = BeautifulSoup(content, 'html.parser')
         summary = soup.find('span', {'summary'})
 
