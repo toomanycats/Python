@@ -12,14 +12,15 @@ from sklearn.metrics.pairwise import cosine_similarity, cosine_distances, euclid
 from sklearn.cluster import KMeans
 from sklearn import metrics
 from nltk import stem
+from nltk import tokenize
 
+toker = tokenize.word_tokenize
 stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
         self.pub_id = "2818745629107228"
         self.api = r'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&l=%(loc)s&q=%%22data%%20science%%22&start=0&fromage=30&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
-
 
     def get_urls(self):
         df= pd.read_csv('/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv', dtype=str)
@@ -66,10 +67,28 @@ class Indeed(object):
         except urlib2.HTTPError:
             return None
 
+    def len_tester(self, word_list):
+        new_list = []
+        for word in word_list:
+            if len(word) < 3:
+                continue
+            else:
+                new_list.append(word)
+
+        return new_list
+
+    def tokenizer(self, string):
+        words = toker(string)
+        words = self.len_tester(words)
+        words = map(stemmer.stem, words)
+
+        return " ".join(words)
+
     def parse_content(self, url):
         content = self.get_content(url)
 
         if len(content) > 0:
+            content = content.decode("ascii", "ignore")
             soup = BeautifulSoup(content, 'html.parser')
             summary = soup.find('span', {'summary'})
 
@@ -81,10 +100,11 @@ class Indeed(object):
     def main(self):
         df = pd.DataFrame()
         df['url'] = self.get_urls()
-        df['summary'] = df['url'].apply(self.parse_content)
+        df['summary'] = df['url'].apply(lambda x:self.parse_content(x))
+        df['summary_toke'] = df['summary'].apply(lambda x: self.tokenizer(x))
         df.drop_duplicates(inplace=True)
 
-        matrix, features = self.vectorizer(df['summary'])
+        matrix, features = self.vectorizer(df['summary_toke'])
         print features
 
         df['assignments'] = self.cluster(matrix)
@@ -93,12 +113,11 @@ class Indeed(object):
         grp = df.groupby('assignments')
         print grp.describe()
 
-    def vectorizer(self, corpus, max_features=100, max_df=0.8, min_df=0.2):
+    def vectorizer(self, corpus, max_features=100, max_df=0.65, min_df=0.2):
         vectorizer = TfidfVectorizer(max_features=max_features,
-                                    preprocessor=stemmer.stem,
-                                    lowercase=True,
                                     max_df=max_df,
                                     min_df=min_df,
+                                    to_lower=True,
                                     use_idf=True,
                                     stop_words='english',
                                     norm='l2',
