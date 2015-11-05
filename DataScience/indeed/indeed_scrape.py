@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_distances
 from sklearn.cluster import KMeans
+from sklearn.metrics import euclidean_distances
 from nltk import stem
 from nltk import tokenize
 
@@ -92,17 +93,15 @@ class Indeed(object):
         if len(content) > 0:
             content = content.decode("ascii", "ignore")
             soup = BeautifulSoup(content, 'html.parser')
+
             try:
                 summary = soup.find('span', {'summary'})
+
             except AttributeError:
-                out = []
-                sums = soup.find_all('span')
-                for summary in sums:
-                    out.append(summary.get_text())
+                summary = soup.find_all('span')
 
-                return out
-
-            return summary.get_text()
+            output = [item.get_text() for item in summary.find_all("li")]
+            return output
 
         else:
             return None
@@ -115,7 +114,8 @@ class Indeed(object):
         df.drop_duplicates(inplace=True)
 
         matrix, features = self.vectorizer(df['summary_toke'])
-        print features
+        fea = pd.DataFrame(features)
+        fea.to_csv("/home/daniel/git/Python2.7/DataScience/indeed/features.txt", index=False)
 
         df['assignments'] = self.cluster(matrix)
         df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv', index=False)
@@ -128,7 +128,7 @@ class Indeed(object):
                                     use_idf=True,
                                     stop_words='english',
                                     norm='l2',
-                                    ngram_range=(1, 1),
+                                    ngram_range=(1, 5),
                                     analyzer='word',
                                     decode_error='ignore',
                                     strip_accents='unicode'
@@ -141,7 +141,7 @@ class Indeed(object):
 
     def cluster(self, matrix):
 
-        cos_dist = cosine_distances(matrix)
+        #cos_dist = cosine_distances(matrix)
         euc_dist = euclidean_distances(matrix)
 
         km = KMeans(n_clusters=3,
@@ -157,7 +157,7 @@ class Indeed(object):
                     n_jobs=1
                     )
 
-        assignments = km.fit_predict(cos_dist)
+        assignments = km.fit_predict(euc_dist)
 
         return assignments
 
