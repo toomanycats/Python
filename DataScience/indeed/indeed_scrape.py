@@ -17,9 +17,8 @@ stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
-#http://api.indeed.com/ads/apisearch?publisher=2818745629107228&q=%22data%20science%22&start=0&limit=4000&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%2F4.0%28Firefox%29&v=2
         self.pub_id = "2818745629107228"
-        self.api = r'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&l=%(loc)s&q=%%22data%%20science%%22&start=0&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
+        self.api = r'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&l=%(loc)s&q=%%22data%%20science%%22&start=0&fromage=30&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
 
 
     def get_urls(self):
@@ -94,12 +93,12 @@ class Indeed(object):
         grp = df.groupby('assignments')
         print grp.describe()
 
-    def vectorizer(self, corpus):
-        vectorizer = TfidfVectorizer(max_features=150,
-                                    preprocessor=stemmer,
+    def vectorizer(self, corpus, max_features=100, max_df=0.8, min_df=0.2):
+        vectorizer = TfidfVectorizer(max_features=max_features,
+                                    preprocessor=stemmer.stem,
                                     lowercase=True,
-                                    max_df=0.7,
-                                    min_df=0.1,
+                                    max_df=max_df,
+                                    min_df=min_df,
                                     use_idf=True,
                                     stop_words='english',
                                     norm='l2',
