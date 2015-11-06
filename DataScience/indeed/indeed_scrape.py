@@ -11,12 +11,13 @@ import json
 import pandas as pd
 import urllib2
 from bs4 import BeautifulSoup
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_distances
 from sklearn.cluster import KMeans
 from sklearn.metrics import euclidean_distances
 from nltk import stem
 from nltk import tokenize
+import matplotlib.pyplot as plt
 
 toker = tokenize.word_tokenize
 stemmer = stem.SnowballStemmer('english')
@@ -52,12 +53,7 @@ class Indeed(object):
                 data = json.loads(response.read())
                 response.close()
 
-                try:
-                    urls.extend([item['url'] for item in data['results']])
-
-                except Exception, err:
-                    print err
-                    continue
+                urls.extend([item['url'] for item in data['results']])
 
             except urllib2.HTTPError, err:
                 print err
@@ -154,15 +150,15 @@ class Indeed(object):
         df['assignments'] = self.cluster(matrix)
         df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv', index=False)
 
-    def vectorizer(self, corpus, max_features=100, max_df=1.0, min_df=0.2, n_min=2):
-        vectorizer = TfidfVectorizer(token_pattern=r'\b[a-z]+\b',
+        self.plot_features(features, matrix)
+
+    def vectorizer(self, corpus, max_features=100, max_df=1.0, min_df=0.1, n_min=2):
+        vectorizer = CountVectorizer(token_pattern=r'\b[a-z]+\b',
                                     max_features=max_features,
                                     max_df=max_df,
                                     min_df=min_df,
                                     lowercase=True,
-                                    use_idf=False, # consider using CountVectorizer
                                     stop_words='english',
-                                    norm='l2',
                                     ngram_range=(n_min, 3),
                                     analyzer='word',
                                     decode_error='ignore',
@@ -173,6 +169,18 @@ class Indeed(object):
         features = vectorizer.get_feature_names()
 
         return matrix, features
+
+    def plot_features(self, features, matrix):
+        x = np.arange(len(features))
+        tot = np.array(matrix.sum(axis=0))
+        tot = np.squeeze(tot)
+
+        plt.bar(x, tot)
+        plt.xticks(x, features, rotation='horizontal', fontsize=12)
+        plt.xlabel("Key word features")
+        plt.ylabel("Counts")
+        plt.title("Count of Keywords")
+        plt.show()
 
     def cluster(self, matrix):
 
