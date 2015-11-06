@@ -179,6 +179,8 @@ class Indeed(object):
         plt.bar(x, tot, align='center', alpha=0.5)
         plt.xticks(x, features, rotation='vertical', fontsize=12)
         plt.grid(True)
+        plt.xlim(-1, len(x))
+
         plt.xlabel("Key word features")
         plt.ylabel("Counts")
         plt.title("Count of Keywords")
