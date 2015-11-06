@@ -19,12 +19,15 @@ from nltk import stem
 from nltk import tokenize
 import matplotlib.pyplot as plt
 import numpy as np
+from mrjob.job import MRJob
+from mrjob.step import MRStep
 
 toker = tokenize.word_tokenize
 stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
+        self.zipcode_file = '/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv'
         self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
         self.load_config()
         self.api = 'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&chnl=%(channel_name)s&l=%(loc)s&q=%%22data%%20science%%22&start=0&fromage=30&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
@@ -35,12 +38,13 @@ class Indeed(object):
         self.pub_id = config_parser.get("id", "pub_id")
         self.channel_name = config_parser.get("channel", "channel_name")
 
-    def get_urls(self):
-        df= pd.read_csv('/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv', dtype=str)
-        df.dropna(inplace=True)
+    def load_zipcodes(self):
+        self.df_zip = pd.read_csv(self.zipcode_file, dtype=str)
+        self.df_zip.dropna(inplace=True, how='all')
 
-        locations = df['Postal Code'].dropna()
-        loc_samp = locations.sample(100)
+    def get_urls(self):
+        locations = self.df_zip['Postal Code'].dropna(how='any')
+        loc_samp = locations.sample(300)
 
         urls = []
         for loc in loc_samp:
@@ -119,10 +123,12 @@ class Indeed(object):
 
         except AttributeError:
             summary = soup.find_all('span')
-            if summary is None:
-                return None
+
+        if summary is None:
+            return None
 
         bullets = summary.find_all("li")
+
         if bullets is not None:
             skills = bullets
         else:
@@ -136,6 +142,7 @@ class Indeed(object):
             return None
 
     def main(self):
+        self.load_zipcodes()
         df = pd.DataFrame()
         df['url'] = self.get_urls()
         df['summary'] = df['url'].apply(lambda x:self.parse_content(x))
@@ -177,13 +184,12 @@ class Indeed(object):
         tot = np.squeeze(tot)
 
         plt.bar(x, tot, align='center', alpha=0.5)
-        plt.xticks(x, features, rotation='vertical', fontsize=12)
+        plt.xticks(x, features, rotation='vertical', fontsize=15)
         plt.grid(True)
         plt.xlim(-1, len(x))
 
-        plt.xlabel("Key word features")
-        plt.ylabel("Counts")
-        plt.title("Count of Keywords")
+        plt.ylabel("Counts", fontsize=15)
+        plt.title("Count of Keywords", fontsize=15)
         plt.tight_layout()
 
         plt.show()
@@ -209,6 +215,29 @@ class Indeed(object):
         assignments = km.fit_predict(euc_dist)
 
         return assignments
+
+class MRWorker(MRJob, Indeed):
+    def __init__(self):
+        Indeed.__init__(self)
+
+    def configure_options(self):
+        super(MRWorker, self).configure_options()
+        self.add_file_option('--items', dest='input_file', help='Path to u.item')
+
+    def load_options(self, args):
+        super(MovieSimilarities, self).load_options(args)
+        self.input_file = self.options.input_file
+
+    def steps(self):
+        return [
+            MRStep(mapper=self.mapper_parse_input,
+                    reducer=self.reducer_ratings_by_user),
+            MRStep(mapper=self.mapper_create_item_pairs,
+                    reducer=self.reducer_compute_similarity),
+            MRStep(mapper=self.mapper_sort_similarities,
+                    mapper_init=self.load_movie_names,
+                    reducer=self.reducer_output_similarities)
+               ]
 
 if __name__ == "__main__":
     indeed = Indeed()
