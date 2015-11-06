@@ -67,26 +67,26 @@ class Indeed(object):
                 print err
                 continue
 
-        yield urls
+        return urls
 
     def get_content(self, url):
         if url is None:
-            yield None
+            return None
 
         try:
             response = urllib2.urlopen(url)
             content = response.read()
             response.close()
 
-            yield content
+            return content
 
         except urllib2.HTTPError, err:
             print err
-            yield None
+            return None
 
         except Exception, err:
             print err
-            yield None
+            return None
 
     def len_tester(self, word_list):
         new_list = []
@@ -112,7 +112,7 @@ class Indeed(object):
         content = self.get_content(url)
 
         if content is None:
-            yield None
+            return None
 
         content = content.decode("ascii", "ignore")
         soup = BeautifulSoup(content, 'html.parser')
@@ -124,7 +124,7 @@ class Indeed(object):
             summary = soup.find_all('span')
 
         if summary is None:
-            yield None
+            return None
 
         bullets = summary.find_all("li")
 
@@ -136,9 +136,9 @@ class Indeed(object):
         output = [item.get_text() for item in skills]
 
         if len(output) > 0:
-            yield " ".join(output)
+            return " ".join(output)
         else:
-            yield None
+            return None
 
     def main(self):
         self.load_zipcodes()
@@ -233,7 +233,7 @@ class MRWorker(MRJob):
 
     def mapper_get_url(self, _, zipcodes):
         url = self.get_urls(zipcodes)
-        yield url
+        return url
 
 
     def steps(self):
