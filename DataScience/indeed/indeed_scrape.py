@@ -176,11 +176,14 @@ class Indeed(object):
         tot = np.array(matrix.sum(axis=0))
         tot = np.squeeze(tot)
 
-        plt.bar(x, tot, alpha=0.5)
+        plt.bar(x, tot, align='center', alpha=0.5)
         plt.xticks(x, features, rotation='vertical', fontsize=12)
+        plt.grid(True)
         plt.xlabel("Key word features")
         plt.ylabel("Counts")
         plt.title("Count of Keywords")
+        plt.tight_layout()
+
         plt.show()
 
     def cluster(self, matrix):
