@@ -71,22 +71,22 @@ class Indeed(object):
 
     def get_content(self, url):
         if url is None:
-            return None
+            yield None
 
         try:
             response = urllib2.urlopen(url)
             content = response.read()
             response.close()
 
-            return content
+            yield content
 
         except urllib2.HTTPError, err:
             print err
-            return None
+            yield None
 
         except Exception, err:
             print err
-            return None
+            yield None
 
     def len_tester(self, word_list):
         new_list = []
@@ -112,7 +112,7 @@ class Indeed(object):
         content = self.get_content(url)
 
         if content is None:
-            return None
+            yield None
 
         content = content.decode("ascii", "ignore")
         soup = BeautifulSoup(content, 'html.parser')
@@ -124,7 +124,7 @@ class Indeed(object):
             summary = soup.find_all('span')
 
         if summary is None:
-            return None
+            yield None
 
         bullets = summary.find_all("li")
 
@@ -136,9 +136,9 @@ class Indeed(object):
         output = [item.get_text() for item in skills]
 
         if len(output) > 0:
-            return " ".join(output)
+            yield " ".join(output)
         else:
-            return None
+            yield None
 
     def main(self):
         self.load_zipcodes()
@@ -221,16 +221,14 @@ class Indeed(object):
         return assignments
 
 
-class MRWorker(MRJob, Indeed):
-    def __init__(self):
-        Indeed.__init__(self)
+class MRWorker(MRJob):
 
     def configure_options(self):
         super(MRWorker, self).configure_options()
         self.add_file_option('-f', dest='input_file')
 
     def load_options(self, args):
-        super(MovieSimilarities, self).load_options(args)
+        super(MRWorker, self).load_options(args)
         self.input_file = self.options.input_file
 
     def mapper_get_url(self, _, zipcodes):
@@ -240,9 +238,7 @@ class MRWorker(MRJob, Indeed):
 
     def steps(self):
         return [
-            MRStep(mapper_init=self.load_zipcodes,
-                   mapper=self.get_urls),
-            MRStep(mapper='')
+            MRStep(mapper_init=Indeed().load_zipcodes, mapper=Indeed().get_urls)
                ]
 
 if __name__ == "__main__":
