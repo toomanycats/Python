@@ -155,7 +155,8 @@ class Indeed(object):
         df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv', index=False)
 
     def vectorizer(self, corpus, max_features=100, max_df=1.0, min_df=0.2, n_min=2):
-        vectorizer = TfidfVectorizer(max_features=max_features,
+        vectorizer = TfidfVectorizer(token_pattern=r'\b[a-z]+\b',
+                                    max_features=max_features,
                                     max_df=max_df,
                                     min_df=min_df,
                                     lowercase=True,
