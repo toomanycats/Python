@@ -27,6 +27,7 @@ stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
+        self.df = pd.DataFrame()
         self.zipcode_file = '/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv'
         self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
         self.load_config()
@@ -42,12 +43,10 @@ class Indeed(object):
         self.df_zip = pd.read_csv(self.zipcode_file, dtype=str)
         self.df_zip.dropna(inplace=True, how='all')
 
-    def get_urls(self):
-        locations = self.df_zip['Postal Code'].dropna(how='any')
-        loc_samp = locations.sample(300)
+    def get_urls(self, locations):
 
         urls = []
-        for loc in loc_samp:
+        for loc in locations:
             api = self.api %{'pub_id':self.pub_id,
                              'loc':loc,
                              'channel_name':self.channel_name
@@ -68,26 +67,26 @@ class Indeed(object):
                 print err
                 continue
 
-        return urls
+        yield urls
 
     def get_content(self, url):
         if url is None:
-            return None
+            yield None
 
         try:
             response = urllib2.urlopen(url)
             content = response.read()
             response.close()
 
-            return content
+            yield content
 
         except urllib2.HTTPError, err:
             print err
-            return None
+            yield None
 
         except Exception, err:
             print err
-            return None
+            yield None
 
     def len_tester(self, word_list):
         new_list = []
@@ -113,7 +112,7 @@ class Indeed(object):
         content = self.get_content(url)
 
         if content is None:
-            return None
+            yield None
 
         content = content.decode("ascii", "ignore")
         soup = BeautifulSoup(content, 'html.parser')
@@ -125,7 +124,7 @@ class Indeed(object):
             summary = soup.find_all('span')
 
         if summary is None:
-            return None
+            yield None
 
         bullets = summary.find_all("li")
 
@@ -137,26 +136,30 @@ class Indeed(object):
         output = [item.get_text() for item in skills]
 
         if len(output) > 0:
-            return " ".join(output)
+            yield " ".join(output)
         else:
-            return None
+            yield None
 
     def main(self):
         self.load_zipcodes()
-        df = pd.DataFrame()
-        df['url'] = self.get_urls()
-        df['summary'] = df['url'].apply(lambda x:self.parse_content(x))
-        df['summary_toke'] = df['summary'].apply(lambda x: self.tokenizer(x))
+        locations = self.df_zip['Postal Code'].dropna(how='any')
+        loc_samp = locations.sample(300)
 
-        df.drop_duplicates(inplace=True)
-        df.dropna(inplace=True, how='any', axis=0)
+        self.df['url'] = self.get_urls(loc_samp)
+        self.df['summary'] = self.df['url'].apply(lambda x:self.parse_content(x))
+        self.df['summary_toke'] = self.df['summary'].apply(lambda x: self.tokenizer(x))
 
-        matrix, features = self.vectorizer(df['summary_toke'])
+        self.df.drop_duplicates(inplace=True)
+        self.df.dropna(inplace=True, how='any', axis=0)
+
+        matrix, features = self.vectorizer(self.df['summary_toke'])
         fea = pd.DataFrame(features)
         fea.to_csv("/home/daniel/git/Python2.7/DataScience/indeed/features.txt", index=False)
 
-        df['assignments'] = self.cluster(matrix)
-        df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv', index=False)
+        self.df['assignments'] = self.cluster(matrix)
+        self.df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv',
+                  index=False,
+                  encoding='utf-8')
 
         self.plot_features(features, matrix)
 
@@ -189,7 +192,8 @@ class Indeed(object):
         plt.xlim(-1, len(x))
 
         plt.ylabel("Counts", fontsize=15)
-        plt.title("Count of Keywords", fontsize=15)
+        string = "Key Word Count: %i Features" %len(features)
+        plt.title(string,  fontsize=15)
         plt.tight_layout()
 
         plt.show()
@@ -216,27 +220,25 @@ class Indeed(object):
 
         return assignments
 
-class MRWorker(MRJob, Indeed):
-    def __init__(self):
-        Indeed.__init__(self)
+
+class MRWorker(MRJob):
 
     def configure_options(self):
         super(MRWorker, self).configure_options()
-        self.add_file_option('--items', dest='input_file', help='Path to u.item')
+        self.add_file_option('-f', dest='input_file')
 
     def load_options(self, args):
-        super(MovieSimilarities, self).load_options(args)
+        super(MRWorker, self).load_options(args)
         self.input_file = self.options.input_file
+
+    def mapper_get_url(self, _, zipcodes):
+        url = self.get_urls(zipcodes)
+        yield url
+
 
     def steps(self):
         return [
-            MRStep(mapper=self.mapper_parse_input,
-                    reducer=self.reducer_ratings_by_user),
-            MRStep(mapper=self.mapper_create_item_pairs,
-                    reducer=self.reducer_compute_similarity),
-            MRStep(mapper=self.mapper_sort_similarities,
-                    mapper_init=self.load_movie_names,
-                    reducer=self.reducer_output_similarities)
+            MRStep(mapper_init=Indeed().load_zipcodes, mapper=Indeed().get_urls)
                ]
 
 if __name__ == "__main__":
