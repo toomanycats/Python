@@ -18,6 +18,7 @@ from sklearn.metrics import euclidean_distances
 from nltk import stem
 from nltk import tokenize
 import matplotlib.pyplot as plt
+import numpy as np
 
 toker = tokenize.word_tokenize
 stemmer = stem.SnowballStemmer('english')
@@ -175,8 +176,8 @@ class Indeed(object):
         tot = np.array(matrix.sum(axis=0))
         tot = np.squeeze(tot)
 
-        plt.bar(x, tot)
-        plt.xticks(x, features, rotation='horizontal', fontsize=12)
+        plt.bar(x, tot, alpha=0.5)
+        plt.xticks(x, features, rotation='vertical', fontsize=12)
         plt.xlabel("Key word features")
         plt.ylabel("Counts")
         plt.title("Count of Keywords")
