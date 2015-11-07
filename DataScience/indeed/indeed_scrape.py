@@ -30,7 +30,6 @@ class Indeed(object):
         self.zip_code_file ='/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv'
         self.df = pd.DataFrame()
         self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
-        self.load_config()
         self.query = None
 
     def build_api_string(self):
@@ -179,6 +178,7 @@ class Indeed(object):
             return None
 
     def main(self):
+        self.load_config()
         self.build_api_string()
         if self.locations is None:
             self.load_zipcodes()
