@@ -11,7 +11,7 @@ import json
 import pandas as pd
 import urllib2
 from bs4 import BeautifulSoup
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
 from sklearn.metrics.pairwise import cosine_distances
 from sklearn.cluster import KMeans
 from sklearn.metrics import euclidean_distances
@@ -27,66 +27,71 @@ stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
+        self.stop_words = ENGLISH_STOP_WORDS.union(['data'])
+        self.num_samp = 300
+        self.zip_code_file ='/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv'
         self.df = pd.DataFrame()
-        self.zipcode_file = '/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv'
         self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
         self.load_config()
         self.api = 'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&chnl=%(channel_name)s&l=%(loc)s&q=%%22data%%20science%%22&start=0&fromage=30&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
 
     def load_config(self):
+        '''loads a config file that contains tokens'''
         config_parser = ConfigParser.RawConfigParser()
         config_parser.read(self.config_path)
         self.pub_id = config_parser.get("id", "pub_id")
         self.channel_name = config_parser.get("channel", "channel_name")
 
     def load_zipcodes(self):
-        self.df_zip = pd.read_csv(self.zipcode_file, dtype=str)
+        '''loads the zip code file and returnes a list of zip codes'''
+        self.df_zip = pd.read_csv(self.zip_code_file, dtype=str)
         self.df_zip.dropna(inplace=True, how='all')
+        locations = self.df_zip['Postal Code'].dropna(how='any')
 
-    def get_urls(self, locations):
+        return locations
 
-        urls = []
-        for loc in locations:
-            api = self.api %{'pub_id':self.pub_id,
-                             'loc':loc,
-                             'channel_name':self.channel_name
-                             }
+    def get_url(self, location):
+        '''method good for use with MapReduce'''
 
-            try:
-                response = urllib2.urlopen(api)
-                data = json.loads(response.read())
-                response.close()
+        api = self.api %{'pub_id':self.pub_id,
+                        'loc':location,
+                        'channel_name':self.channel_name
+                        }
 
-                urls.extend([item['url'] for item in data['results']])
+        try:
+            response = urllib2.urlopen(api)
+            data = json.loads(response.read())
+            response.close()
 
-            except urllib2.HTTPError, err:
-                print err
-                continue
+            urls = []
+            urls.extend([item['url'] for item in data['results']])
 
-            except Exception, err:
-                print err
-                continue
+        except urllib2.HTTPError, err:
+            yield None
 
-        return urls
+        except Exception, err:
+            yield None
+
+        yield urls
 
     def get_content(self, url):
         if url is None:
-            return None
+            yield None
 
         try:
             response = urllib2.urlopen(url)
             content = response.read()
             response.close()
 
-            return content
+            yield content
 
         except urllib2.HTTPError, err:
             print err
-            return None
+            yield None
 
         except Exception, err:
             print err
-            return None
+            yield None
 
     def len_tester(self, word_list):
         new_list = []
@@ -112,7 +117,7 @@ class Indeed(object):
         content = self.get_content(url)
 
         if content is None:
-            return None
+            yield None
 
         content = content.decode("ascii", "ignore")
         soup = BeautifulSoup(content, 'html.parser')
@@ -124,11 +129,11 @@ class Indeed(object):
             summary = soup.find_all('span')
 
         if summary is None:
-            return None
+            yield None
 
         bullets = summary.find_all("li")
 
-        if bullets is not None:
+        if bullets is not None and len(bullets) > 2:
             skills = bullets
         else:
             skills = summary
@@ -136,20 +141,19 @@ class Indeed(object):
         output = [item.get_text() for item in skills]
 
         if len(output) > 0:
-            return " ".join(output)
+            yield " ".join(output)
         else:
-            return None
+            yield None
 
     def main(self):
-        self.load_zipcodes()
-        locations = self.df_zip['Postal Code'].dropna(how='any')
-        loc_samp = locations.sample(300)
+        locations = self.load_zipcodes()
+        loc_samp = locations.sample(self.num_samp)
 
-        self.df['url'] = self.get_urls(loc_samp)
+        self.df['url'] = map(self.get_url, loc_samp)
         self.df['summary'] = self.df['url'].apply(lambda x:self.parse_content(x))
         self.df['summary_toke'] = self.df['summary'].apply(lambda x: self.tokenizer(x))
 
-        self.df.drop_duplicates(inplace=True)
+        self.df.drop_duplicates(subset=['summary', 'summary_toke'], inplace=True)
         self.df.dropna(inplace=True, how='any', axis=0)
 
         matrix, features = self.vectorizer(self.df['summary_toke'])
@@ -169,7 +173,7 @@ class Indeed(object):
                                     max_df=max_df,
                                     min_df=min_df,
                                     lowercase=True,
-                                    stop_words='english',
+                                    stop_words=self.stop_words,
                                     ngram_range=(n_min, 3),
                                     analyzer='word',
                                     decode_error='ignore',
@@ -220,27 +224,45 @@ class Indeed(object):
 
         return assignments
 
+    def find_words_in_radius(self, series, keyword, radius):
 
-class MRWorker(MRJob):
+        words_in_radius = []
 
-    def configure_options(self):
-        super(MRWorker, self).configure_options()
-        self.add_file_option('-f', dest='input_file')
+        for string in series:
+            test = string.decode('ascii', 'ignore')
+            test = tokenize.word_tokenize(test)
+            test = np.array(test)
 
-    def load_options(self, args):
-        super(MRWorker, self).load_options(args)
-        self.input_file = self.options.input_file
+            kw_ind = np.where(test == keyword)[0]
+            if len(kw_ind) == 0: #empty
+                continue
 
-    def mapper_get_url(self, _, zipcodes):
-        url = self.get_urls(zipcodes)
-        return url
+            src_range = self._find_words_in_radius(kw_ind, test, radius)
+
+            temp = " ".join(test[src_range])
+            words_in_radius.append(temp)
+
+        return words_in_radius
+
+    def _find_words_in_radius(self, kw_ind, test, radius):
+            # can be more than one kw in a string
+            lower = kw_ind - radius
+            upper = kw_ind + radius
+
+            src_range_tot = np.empty(0, dtype=np.int16)
+
+            for i in range(lower.shape[0]):
+                src_range = np.arange(lower[i], upper[i])
+
+                # truncate search range to valid values
+                # this operation also flattens the array
+                src_range = src_range[(src_range >= 0) & (src_range < test.size)]
+                src_range_tot = np.hstack((src_range_tot, src_range))
+
+            return np.unique(src_range_tot)
 
 
-    def steps(self):
-        return [
-            MRStep(mapper_init=Indeed().load_zipcodes, mapper=Indeed().get_urls)
-               ]
 
 if __name__ == "__main__":
-    indeed = Indeed()
-    indeed.main()
+    ind = Indeed()
+    ind.main()
