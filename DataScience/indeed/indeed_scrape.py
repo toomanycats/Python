@@ -5,7 +5,6 @@
 ######################################
 #TODO: add logger
 #TODO: use MRJob mapper for parsing
-import ipdb
 import ConfigParser
 import json
 import pandas as pd
@@ -19,8 +18,6 @@ from nltk import stem
 from nltk import tokenize
 import matplotlib.pyplot as plt
 import numpy as np
-from mrjob.job import MRJob
-from mrjob.step import MRStep
 
 toker = tokenize.word_tokenize
 stemmer = stem.SnowballStemmer('english')
