@@ -27,13 +27,40 @@ stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
+        self.locations = None
         self.stop_words = ENGLISH_STOP_WORDS.union(['data'])
         self.num_samp = 300
         self.zip_code_file ='/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv'
         self.df = pd.DataFrame()
         self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
         self.load_config()
-        self.api = 'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&chnl=%(channel_name)s&l=%(loc)s&q=data science&start=0&fromage=30&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
+        self.query = None
+
+    def build_api_string(self):
+        if self.query is None:
+            print "query cannot be empty"
+            raise ValueError
+
+        # beware of escaped %
+        query = self.format_query(self.query)
+        prefix = 'http://api.indeed.com/ads/apisearch?'
+        pub = 'publisher=%(pub_id)s'
+        chan = '&chnl=%(channel_name)s'
+        loc = '&l=%(loc)s'
+        query = '&q=%s' % query
+        start = '&start=0'
+        frm = '&fromage=30'
+        limit = '&limit=25'
+        site = '&st=employer'
+        format = '&format=json'
+        country = '&co=us'
+        suffix = '&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
+
+        self.api = prefix + pub + chan + loc + query + start + frm + limit + \
+                   site + format + country + suffix
+
+    def format_query(self, query):
+         return "%%20".join(query.split(" "))
 
     def load_config(self):
         '''loads a config file that contains tokens'''
@@ -46,9 +73,14 @@ class Indeed(object):
         '''loads the zip code file and returnes a list of zip codes'''
         self.df_zip = pd.read_csv(self.zip_code_file, dtype=str)
         self.df_zip.dropna(inplace=True, how='all')
-        locations = self.df_zip['Postal Code'].dropna(how='any')
+        self.locations = self.df_zip['Postal Code'].dropna(how='any')
 
-        return locations
+    def get_urls(self):
+        urls = []
+        for url in self.locations:
+            urls.extend(self.get_url(url))
+
+        return urls
 
     def get_url(self, location):
         '''method good for use with MapReduce'''
@@ -138,7 +170,11 @@ class Indeed(object):
         else:
             skills = summary
 
-        output = [item.get_text() for item in skills]
+        try:
+            output = [item.get_text() for item in skills]
+
+        except AttributeError:
+            return None
 
         if len(output) > 0:
             return " ".join(output)
@@ -146,11 +182,12 @@ class Indeed(object):
             return None
 
     def main(self):
-        ipdb.set_trace()
-        locations = self.load_zipcodes()
-        loc_samp = locations.sample(self.num_samp)
+        self.build_api_string()
+        if self.locations is None:
+            self.load_zipcodes()
+            self.locations = self.locations.sample(self.num_samp)
 
-        self.df['url'] = map(self.get_url, loc_samp)
+        self.df['url'] = self.get_urls()
         self.df['summary'] = self.df['url'].apply(lambda x:self.parse_content(x))
         self.df['summary_toke'] = self.df['summary'].apply(lambda x: self.tokenizer(x))
 
@@ -169,8 +206,7 @@ class Indeed(object):
         self.plot_features(features, matrix)
 
     def vectorizer(self, corpus, max_features=100, max_df=1.0, min_df=0.1, n_min=2):
-        vectorizer = CountVectorizer(token_pattern=r'\b[a-z]+\b',
-                                    max_features=max_features,
+        vectorizer = CountVectorizer(max_features=max_features,
                                     max_df=max_df,
                                     min_df=min_df,
                                     lowercase=True,
