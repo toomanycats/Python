@@ -5,7 +5,7 @@
 ######################################
 #TODO: add logger
 #TODO: use MRJob mapper for parsing
-
+import ipdb
 import ConfigParser
 import json
 import pandas as pd
@@ -33,7 +33,7 @@ class Indeed(object):
         self.df = pd.DataFrame()
         self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
         self.load_config()
-        self.api = 'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&chnl=%(channel_name)s&l=%(loc)s&q=%%22data%%20science%%22&start=0&fromage=30&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
+        self.api = 'http://api.indeed.com/ads/apisearch?publisher=%(pub_id)s&chnl=%(channel_name)s&l=%(loc)s&q=data science&start=0&fromage=30&limit=25&st=employer&format=json&co=us&fromage=360&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
 
     def load_config(self):
         '''loads a config file that contains tokens'''
@@ -67,31 +67,31 @@ class Indeed(object):
             urls.extend([item['url'] for item in data['results']])
 
         except urllib2.HTTPError, err:
-            yield None
+            return None
 
         except Exception, err:
-            yield None
+            return None
 
-        yield urls
+        return urls
 
     def get_content(self, url):
         if url is None:
-            yield None
+            return None
 
         try:
             response = urllib2.urlopen(url)
             content = response.read()
             response.close()
 
-            yield content
+            return content
 
         except urllib2.HTTPError, err:
             print err
-            yield None
+            return None
 
         except Exception, err:
             print err
-            yield None
+            return None
 
     def len_tester(self, word_list):
         new_list = []
@@ -117,7 +117,7 @@ class Indeed(object):
         content = self.get_content(url)
 
         if content is None:
-            yield None
+            return None
 
         content = content.decode("ascii", "ignore")
         soup = BeautifulSoup(content, 'html.parser')
@@ -129,7 +129,7 @@ class Indeed(object):
             summary = soup.find_all('span')
 
         if summary is None:
-            yield None
+            return None
 
         bullets = summary.find_all("li")
 
@@ -141,11 +141,12 @@ class Indeed(object):
         output = [item.get_text() for item in skills]
 
         if len(output) > 0:
-            yield " ".join(output)
+            return " ".join(output)
         else:
-            yield None
+            return None
 
     def main(self):
+        ipdb.set_trace()
         locations = self.load_zipcodes()
         loc_samp = locations.sample(self.num_samp)
 
