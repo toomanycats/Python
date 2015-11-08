@@ -148,7 +148,7 @@ class Indeed(object):
             return None
 
         content = content.decode("ascii", "ignore")
-        soup = BeautifulSoup(content, 'html.parser')
+        soup = BeautifulSoup(content, 'lxml')
 
         try:
             summary = soup.find('span', {'summary'})
