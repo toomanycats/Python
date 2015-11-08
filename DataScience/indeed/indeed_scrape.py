@@ -25,12 +25,17 @@ stemmer = stem.SnowballStemmer('english')
 class Indeed(object):
     def __init__(self):
         self.locations = None
-        self.stop_words = ENGLISH_STOP_WORDS.union(['data'])
+        self.stop_words = None
         self.num_samp = 300
         self.zip_code_file ='/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv'
         self.df = pd.DataFrame()
         self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
         self.query = None
+
+    def add_stop_words(self):
+        if self.stop_words is not None:
+            words = self.stop_words.split(" ")
+            self.stop_words = ENGLISH_STOP_WORDS.union([words])
 
     def build_api_string(self):
         if self.query is None:
@@ -73,8 +78,10 @@ class Indeed(object):
 
     def get_urls(self):
         urls = []
-        for url in self.locations:
-            urls.extend(self.get_url(url))
+        for item in self.locations:
+            url = self.get_url(item)
+            if url is not None:
+                urls.extend(url)
 
         return urls
 
@@ -180,6 +187,8 @@ class Indeed(object):
     def main(self):
         self.load_config()
         self.build_api_string()
+        self.add_stop_words()
+
         if self.locations is None:
             self.load_zipcodes()
             self.locations = self.locations.sample(self.num_samp)
