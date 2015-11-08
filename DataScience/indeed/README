@@ -8,9 +8,7 @@ remove the last comma from each line:
 sed -i 's/,//7' us_postal_codes.csv
 
 Run the map_red_scrape.py program with:
-python map_red_scrape.py -r emr --tokens tokens.cfg -c mrjob_config.conf us_postal_codes.csv                                                    <<<
+python map_red_scrape.py -r emr  --tokens tokens.cfg -c mrjob_config.conf  --python-archive emr/indeed_scrape.tar.gz us_postal_codes.csv > mr_output.txt
 
-This passes the tokens config file and uses a configuration file with pip installs and
-the tar.gz for indeed_scrape.py
 
 
