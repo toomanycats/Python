@@ -8,7 +8,7 @@ remove the last comma from each line:
 sed -i 's/,//7' us_postal_codes.csv
 
 Run the map_red_scrape.py program with:
-python map_red_scrape.py -r emr  --tokens tokens.cfg -c mrjob_config.conf  --python-archive emr/indeed_scrape.tar.gz us_postal_codes.csv > mr_output.txt
+python map_red_scrape.py -r emr --tokens tokens.cfg -c mrjob_config.conf --setup 'export PYTHONPATH=indeed_scrape.tar.gz#/:$PYTHONPATH' us_postal_codes.csv > mr_output.txt
 
 
 
