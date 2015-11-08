@@ -35,7 +35,7 @@ class Indeed(object):
     def add_stop_words(self):
         if self.stop_words is not None:
             words = self.stop_words.split(" ")
-            self.stop_words = ENGLISH_STOP_WORDS.union([words])
+            self.stop_words = ENGLISH_STOP_WORDS.union(words)
 
     def build_api_string(self):
         if self.query is None:
