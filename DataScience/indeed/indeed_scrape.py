@@ -206,7 +206,7 @@ class Indeed(object):
             for loc in self.parse_zipcode_beg():
                 locations.append(loc)
 
-        return locations
+        return np.unique(locations)
 
     def main(self):
         self.load_config()
