@@ -4,7 +4,7 @@
 # Creation Date : 11-07-2015
 ######################################
 from mrjob.job import MRJob
-from mrjob.step import MRStep
+#from mrjob.step import MRStep
 import indeed_scrape
 
 
@@ -27,6 +27,8 @@ class MRWorker(MRJob):
         for url in urls:
             if url is not None:
                 yield url, None
+    def reducer_init(self):
+        self.ind = indeed_scrape.Indeed()
 
     def reducer(self, url, _):
         skills = self.ind.parse_content(url)
