@@ -193,7 +193,7 @@ class Indeed(object):
         self.load_zipcodes()
         self.locations = self.locations.sample(self.num_samp).tolist()
         for loc in self.add_loc:
-            self.locations.extend(loc)
+            self.locations.append(loc)
 
         url_city = self.get_urls()
         self.df['url'] = [item[0] for item in url_city]
