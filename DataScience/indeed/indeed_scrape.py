@@ -54,11 +54,12 @@ class Indeed(object):
         limit = '&limit=25'
         site = '&st=employer'
         format = '&format=json'
+        sort = '&sort=0'
         country = '&co=us'
         suffix = '&userip=1.2.3.4&useragent=Mozilla/%%2F4.0%%28Firefox%%29&v=2'
 
         self.api = prefix + pub + chan + loc + query + start + frm + limit + \
-                   site + format + country + suffix
+                   site + format + country + sort + suffix
 
     def format_query(self, query):
          return "%%20".join(query.split(" "))
@@ -99,7 +100,7 @@ class Indeed(object):
             response.close()
 
             urls = []
-            urls.extend([item['url'] for item in data['results']])
+            urls.extend([ (item['url'], item['city']) for item in data['results']])
 
         except urllib2.HTTPError, err:
             return None
@@ -193,7 +194,10 @@ class Indeed(object):
             self.load_zipcodes()
             self.locations = self.locations.sample(self.num_samp)
 
-        self.df['url'] = self.get_urls()
+        url_city = self.get_urls()
+        self.df['url'] = [item[0] for item in url_city]
+        self.df['city'] = [item[1] for item in url_city]
+
         self.df['summary'] = self.df['url'].apply(lambda x:self.parse_content(x))
         self.df['summary_toke'] = self.df['summary'].apply(lambda x: self.tokenizer(x))
 
