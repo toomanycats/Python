@@ -1,25 +1,28 @@
 0
 abil work
 bachelor degre
+bachelor degre comput
 best practic
-big data
 communic skill
 comput scienc
-data analysi
-data scienc
-data scientist
-data set
-data sourc
-data visual
-e g
-experi data
+degre comput
+degre comput scienc
+design develop
 experi work
-fast pac
-machin learn
-predict model
+experi year
+master degre
+minimum year
 problem solv
+project manag
 relat field
+scienc relat
 skill abil
-softwar develop
+team member
+verbal written
 work experi
+work independ
+work knowledg
+written communic
+written communic skill
+written verbal
 year experi
