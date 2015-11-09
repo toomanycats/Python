@@ -18,6 +18,7 @@ from nltk import stem
 from nltk import tokenize
 import matplotlib.pyplot as plt
 import numpy as np
+import re
 
 toker = tokenize.word_tokenize
 stemmer = stem.SnowballStemmer('english')
@@ -75,7 +76,9 @@ class Indeed(object):
         '''loads the zip code file and returnes a list of zip codes'''
         self.df_zip = pd.read_csv(self.zip_code_file, dtype=str)
         self.df_zip.dropna(inplace=True, how='all')
-        self.locations = self.df_zip['Postal Code'].dropna(how='any')
+        locations = self.df_zip['Postal Code'].dropna(how='any')
+
+        return locations
 
     def get_urls(self):
         urls = []
@@ -185,15 +188,31 @@ class Indeed(object):
         else:
             return None
 
+    def parse_zipcode_beg(self):
+        '''locs are zipcode prefixes, like:902, provided as string'''
+        pat = '^[%s]' %self.add_loc
+        obj = re.compile(pat)
+
+        self.df_zip['include'] = self.df_zip['Postal Code'].apply(lambda x: 1 if obj.match(x) else 0)
+        zips = self.df_zip[self.df_zip['include']==1]['Postal Code']
+
+        return zips.tolist()
+
+    def handle_locations(self):
+        '''main method for setting up the locations for the API call'''
+        locations = self.load_zipcodes()
+        locations = locations.sample(self.num_samp).tolist()
+        if self.add_loc is not None:
+            for loc in self.parse_zipcode_beg():
+                locations.append(loc)
+
+        return locations
+
     def main(self):
         self.load_config()
         self.build_api_string()
         self.add_stop_words()
-
-        self.load_zipcodes()
-        self.locations = self.locations.sample(self.num_samp).tolist()
-        for loc in self.add_loc:
-            self.locations.append(loc)
+        self.locations = self.handle_locations()
 
         url_city = self.get_urls()
         self.df['url'] = [item[0] for item in url_city]
