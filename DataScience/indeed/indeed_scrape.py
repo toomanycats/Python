@@ -24,7 +24,7 @@ stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
-        self.locations = None
+        self.add_loc = None
         self.stop_words = None
         self.num_samp = 300
         self.zip_code_file ='/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv'
@@ -190,9 +190,10 @@ class Indeed(object):
         self.build_api_string()
         self.add_stop_words()
 
-        if self.locations is None:
-            self.load_zipcodes()
-            self.locations = self.locations.sample(self.num_samp)
+        self.load_zipcodes()
+        self.locations = self.locations.sample(self.num_samp).tolist()
+        for loc in self.add_loc:
+            self.locations.extend(loc)
 
         url_city = self.get_urls()
         self.df['url'] = [item[0] for item in url_city]
@@ -307,7 +308,6 @@ class Indeed(object):
                 src_range_tot = np.hstack((src_range_tot, src_range))
 
             return np.unique(src_range_tot)
-
 
 
 if __name__ == "__main__":
