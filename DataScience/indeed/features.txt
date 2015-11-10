@@ -7,16 +7,20 @@ communic skill
 comput scienc
 degre comput
 degre comput scienc
+demonstr abil
 design develop
 experi work
 experi year
 master degre
 minimum year
+polici procedur
 problem solv
+problem solv skill
 project manag
 relat field
 scienc relat
 skill abil
+solv skill
 team member
 verbal written
 work experi
@@ -24,5 +28,4 @@ work independ
 work knowledg
 written communic
 written communic skill
-written verbal
 year experi
