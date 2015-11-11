@@ -9,9 +9,7 @@ sed -i 's/,//7' us_postal_codes.csv
 
 run the map_red_scrape.py program with:
 
-python map_red_scrape.py -r emr --tokens tokens.cfg -c mrjob_config.conf  \
-    --python-archive indeed_scrape.tar.gz --ami-version 2.4.3 us_postal_codes.csv \
-    > mr_output.txt
+python map_red_scrape.py -r emr --tokens tokens.cfg -c mrjob_config.conf --python-archive indeed_scrape.tar.gz#/ us_postal_codes_test.csv > mr_outputh
 
 
 
