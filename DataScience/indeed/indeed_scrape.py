@@ -14,14 +14,12 @@ from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
 from sklearn.metrics.pairwise import cosine_distances
 from sklearn.cluster import KMeans
 from sklearn.metrics import euclidean_distances
-from nltk import stem
-from nltk import tokenize
+#from nltk import stem
+#from nltk import tokenize
 import matplotlib.pyplot as plt
 import numpy as np
 import re
 
-toker = tokenize.word_tokenize
-stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
@@ -142,13 +140,22 @@ class Indeed(object):
 
         return new_list
 
+    def _load_toker(self):
+        # import nltk here, so that MRjob can run effiecently
+        from nltk import stem
+        from nltk import tokenize
+
+        self.toker = tokenize.word_tokenize
+        self.stemmer = stem.SnowballStemmer('english')
+
     def tokenizer(self, string):
+
         if string is None:
             return None
 
-        words = toker(string)
+        words = self.toker(string)
         words = self.len_tester(words)
-        words = map(stemmer.stem, words)
+        words = map(self.stemmer.stem, words)
 
         return " ".join(words)
 
@@ -229,6 +236,8 @@ class Indeed(object):
         save-on-quit feature more usable, the locations are shuffled prior to
         getting the content.'''
 
+        # annoying hack so that MRJob can use this module wo bootstrapping unecessary packages
+        self._load_toker()
         self.load_config()
         self.build_api_string()
         self.add_stop_words()
