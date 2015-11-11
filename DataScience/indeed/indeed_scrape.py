@@ -234,17 +234,19 @@ class Indeed(object):
         self.add_stop_words()
         self.locations = self.handle_locations()
 
+        url_city = self.get_urls()
+
         try:
-            url_city = self.get_urls()
             self.df['url'] = [item[0] for item in url_city]
             self.df['city'] = [item[1] for item in url_city]
 
             self.df['summary'] = self.df['url'].apply(lambda x:self.parse_content(x))
             self.df['summary_toke'] = self.df['summary'].apply(lambda x: self.tokenizer(x))
 
-        except KeyboardInterupt:
+        except KeyboardInterrupt:
             print "Quiting job, saving data."
             self.save_data()
+            raise
 
         self.df['assignments'] = self.cluster(matrix)
         self.save_data()
