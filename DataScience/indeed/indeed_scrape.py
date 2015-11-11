@@ -206,32 +206,52 @@ class Indeed(object):
             for loc in self.parse_zipcode_beg():
                 locations.append(loc)
 
-        return np.unique(locations)
+        locations = np.unique(locations)
+        np.random.shuffle(locations)
+        # if we stop the program and take the avaiable output we'd like it to
+        # be radomly sampled
+
+        return locations
+
+    def save_data(self):
+
+        self.df.drop_duplicates(subset=['url'], inplace=True)
+        self.df.dropna(inplace=True, how='any', axis=0)
+
+        self.df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv',
+                        index=False,
+                        encoding='utf-8')
 
     def main(self):
+        '''Run all the steps to collect data and produce a bi-gram
+        bar plot of the keyword counts. Terminating the program execution
+        with control C, will save whatever data was collected. To make this
+        save-on-quit feature more usable, the locations are shuffled prior to
+        getting the content.'''
+
         self.load_config()
         self.build_api_string()
         self.add_stop_words()
         self.locations = self.handle_locations()
 
-        url_city = self.get_urls()
-        self.df['url'] = [item[0] for item in url_city]
-        self.df['city'] = [item[1] for item in url_city]
+        try:
+            url_city = self.get_urls()
+            self.df['url'] = [item[0] for item in url_city]
+            self.df['city'] = [item[1] for item in url_city]
 
-        self.df['summary'] = self.df['url'].apply(lambda x:self.parse_content(x))
-        self.df['summary_toke'] = self.df['summary'].apply(lambda x: self.tokenizer(x))
+            self.df['summary'] = self.df['url'].apply(lambda x:self.parse_content(x))
+            self.df['summary_toke'] = self.df['summary'].apply(lambda x: self.tokenizer(x))
 
-        self.df.drop_duplicates(subset=['summary', 'summary_toke'], inplace=True)
-        self.df.dropna(inplace=True, how='any', axis=0)
+        except KeyboardInterupt:
+            print "Quiting job, saving data."
+            self.save_data()
+
+        self.df['assignments'] = self.cluster(matrix)
+        self.save_data()
 
         matrix, features = self.vectorizer(self.df['summary_toke'])
         fea = pd.DataFrame(features)
         fea.to_csv("/home/daniel/git/Python2.7/DataScience/indeed/features.txt", index=False)
-
-        self.df['assignments'] = self.cluster(matrix)
-        self.df.to_csv('/home/daniel/git/Python2.7/DataScience/indeed/data_frame.csv',
-                  index=False,
-                  encoding='utf-8')
 
         self.plot_features(features, matrix)
 
