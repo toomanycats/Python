@@ -14,11 +14,14 @@ from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
 from sklearn.metrics.pairwise import cosine_distances
 from sklearn.cluster import KMeans
 from sklearn.metrics import euclidean_distances
-#from nltk import stem
-#from nltk import tokenize
 import matplotlib.pyplot as plt
 import numpy as np
 import re
+from nltk import stem
+from nltk import tokenize
+
+self.toker = tokenize.word_tokenize
+self.stemmer = stem.SnowballStemmer('english')
 
 
 class Indeed(object):
@@ -140,14 +143,6 @@ class Indeed(object):
 
         return new_list
 
-    def _load_toker(self):
-        # import nltk here, so that MRjob can run effiecently
-        from nltk import stem
-        from nltk import tokenize
-
-        self.toker = tokenize.word_tokenize
-        self.stemmer = stem.SnowballStemmer('english')
-
     def tokenizer(self, string):
 
         if string is None:
@@ -237,7 +232,6 @@ class Indeed(object):
         getting the content.'''
 
         # annoying hack so that MRJob can use this module wo bootstrapping unecessary packages
-        self._load_toker()
         self.load_config()
         self.build_api_string()
         self.add_stop_words()
@@ -257,10 +251,11 @@ class Indeed(object):
             self.save_data()
             raise
 
+
+        matrix, features = self.vectorizer(self.df['summary_toke'])
         self.df['assignments'] = self.cluster(matrix)
         self.save_data()
 
-        matrix, features = self.vectorizer(self.df['summary_toke'])
         fea = pd.DataFrame(features)
         fea.to_csv("/home/daniel/git/Python2.7/DataScience/indeed/features.txt", index=False)
 
