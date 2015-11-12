@@ -7,7 +7,6 @@ from mrjob.job import MRJob
 from mrjob.step import MRStep
 import indeed_scrape
 
-mrj = MRJob()
 
 class MRWorker(MRJob):
 
@@ -23,7 +22,9 @@ class MRWorker(MRJob):
         self.ind.build_api_string()
 
     def url_mapper(self, _, line):
+        self.set_status("url step")
         zipcode, _,_,_,_,_,_= line.split(',')
+        self.increment_counter('zipcode', zipcode)
         urls = self.ind.get_url(zipcode)
         for url, city in urls:
             yield city, url
@@ -32,18 +33,14 @@ class MRWorker(MRJob):
         self.ind = indeed_scrape.Indeed()
 
     def cont_mapper(self, city, url):
-        #mrj.set_status("reducer working")
-        content = self.ind.get_content(url)
-        yield city, content
-
-    def parse(self, city, content):
-        skills = self.ind.parse_content(content)
+        self.increment_counter('city', city)
+        self.set_status("parse step")
+        skills = self.ind.parse_content(url)
         yield city, skills
 
     def steps(self):
         return [MRStep(mapper=self.url_mapper, mapper_init=self.url_mapper_init),
                 MRStep(mapper=self.cont_mapper, mapper_init=self.cont_mapper_init),
-                MRStep(mapper=self.parse, mapper_init=self.cont_mapper_init)
                ]
 
 
