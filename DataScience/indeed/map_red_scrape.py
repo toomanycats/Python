@@ -26,14 +26,15 @@ class MRWorker(MRJob):
         urls = self.ind.get_url(zipcode)
         for url in urls:
             if url is not None:
-                yield url, None
+                yield url[0], url[1]
+
     def reducer_init(self):
         self.ind = indeed_scrape.Indeed()
 
-    def reducer(self, url, _):
+    def reducer(self, url, city):
         skills = self.ind.parse_content(url)
         if skills is not None:
-            yield skills, None
+            yield skills, city
 
 if __name__ == "__main__":
     MRWorker.run()
