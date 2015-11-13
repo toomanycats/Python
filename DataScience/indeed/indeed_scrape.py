@@ -20,8 +20,8 @@ import re
 from nltk import stem
 from nltk import tokenize
 
-self.toker = tokenize.word_tokenize
-self.stemmer = stem.SnowballStemmer('english')
+toker = tokenize.word_tokenize
+stemmer = stem.SnowballStemmer('english')
 
 
 class Indeed(object):
@@ -148,9 +148,9 @@ class Indeed(object):
         if string is None:
             return None
 
-        words = self.toker(string)
+        words = toker(string)
         words = self.len_tester(words)
-        words = map(self.stemmer.stem, words)
+        words = map(stemmer.stem, words)
 
         return " ".join(words)
 
