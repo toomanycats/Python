@@ -14,11 +14,14 @@ from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
 from sklearn.metrics.pairwise import cosine_distances
 from sklearn.cluster import KMeans
 from sklearn.metrics import euclidean_distances
-#from nltk import stem
-#from nltk import tokenize
 import matplotlib.pyplot as plt
 import numpy as np
+from nltk import stem
+from nltk import tokenize
 import re
+
+toker = tokenize.word_tokenize
+stemmer = stem.SnowballStemmer('english')
 
 
 class Indeed(object):
@@ -77,6 +80,17 @@ class Indeed(object):
         locations = self.df_zip['Postal Code'].dropna(how='any')
 
         return locations
+
+    def get_city_url_content_stem(self):
+        for zipcode in self.locations:
+            urls, city = self.get_url(zipcode)
+            for ind, url in enumerate(urls):
+                self.df.loc[ind, 'zipcode'] = zipcode
+                self.df.loc[ind, 'city'] = city
+                self.df.loc[ind, 'url'] = url
+                content = self.parse_content(url)
+                self.df.loc[ind, 'summary'] = content
+                self.df.loc[ind, 'summary_stem'] = self.stemmer_(content)
 
     def get_urls(self):
         urls = []
@@ -140,22 +154,14 @@ class Indeed(object):
 
         return new_list
 
-    def _load_toker(self):
-        # import nltk here, so that MRjob can run effiecently
-        from nltk import stem
-        from nltk import tokenize
-
-        self.toker = tokenize.word_tokenize
-        self.stemmer = stem.SnowballStemmer('english')
-
-    def tokenizer(self, string):
+    def stemmer_(self, string):
 
         if string is None:
             return None
 
-        words = self.toker(string)
+        words = toker(string)
         words = self.len_tester(words)
-        words = map(self.stemmer.stem, words)
+        words = map(stemmer.stem, words)
 
         return " ".join(words)
 
@@ -236,21 +242,13 @@ class Indeed(object):
         save-on-quit feature more usable, the locations are shuffled prior to
         getting the content.'''
 
-        # annoying hack so that MRJob can use this module wo bootstrapping unecessary packages
-        self._load_toker()
         self.load_config()
         self.build_api_string()
         self.add_stop_words()
         self.locations = self.handle_locations()
 
-        url_city = self.get_urls()
-
         try:
-            self.df['url'] = [item[0] for item in url_city]
-            self.df['city'] = [item[1] for item in url_city]
-
-            self.df['summary'] = self.df['url'].apply(lambda x:self.parse_content(x))
-            self.df['summary_toke'] = self.df['summary'].apply(lambda x: self.tokenizer(x))
+            self.get_city_url_content_stem()
 
         except KeyboardInterrupt:
             print "Quiting job, saving data."
