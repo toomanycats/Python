@@ -264,7 +264,7 @@ class Indeed(object):
 
         self.plot_features(features, matrix)
 
-    def vectorizer(self, corpus, max_features=100, max_df=1.0, min_df=0.1, n_min=2):
+    def vectorizer(self, corpus, max_features=200, max_df=0.8, min_df=0.1, n_min=2):
         vectorizer = CountVectorizer(max_features=max_features,
                                     max_df=max_df,
                                     min_df=min_df,
