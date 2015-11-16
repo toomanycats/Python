@@ -4,3 +4,4 @@
 us_postal_codes_test.csv
 indeed_scrape_article
 mrjob_config.conf
+indeed_scrape_spark.py
