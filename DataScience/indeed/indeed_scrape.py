@@ -106,8 +106,8 @@ class Indeed(object):
         '''method good for use with MapReduce'''
 
         api = self.api %{'pub_id':self.pub_id,
-                        'loc':location,
-                        'channel_name':self.channel_name
+                         'loc':location,
+                         'channel_name':self.channel_name
                         }
 
         try:
@@ -119,9 +119,11 @@ class Indeed(object):
             urls.extend([ (item['url'], item['city']) for item in data['results']])
 
         except urllib2.HTTPError, err:
+            print err
             return None
 
         except Exception, err:
+            print err
             return None
 
         return urls
