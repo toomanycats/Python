@@ -86,7 +86,7 @@ class Indeed(object):
             url_city = self.get_url(zipcode)
             if url_city is not None:
                 for ind, item in enumerate(url_city):
-                    self.df.loc[ind, 'zipcode'] = zipcode
+                    self.df.loc[ind, 'zipcode'] = str(zipcode)
                     self.df.loc[ind, 'url'] = item[0]
                     self.df.loc[ind, 'city'] = item[1]
                     content = self.parse_content(item[0])
@@ -251,8 +251,7 @@ class Indeed(object):
         try:
             self.get_city_url_content_stem()
 
-        #except KeyboardInterrupt:
-        except Exception:
+        except KeyboardInterrupt:
             print "Quiting job, saving data."
             self.save_data()
             raise
