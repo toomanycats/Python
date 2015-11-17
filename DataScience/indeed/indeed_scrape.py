@@ -33,6 +33,7 @@ class Indeed(object):
         self.df = pd.DataFrame()
         self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
         self.query = None
+        self.locations = None
 
     def add_stop_words(self):
         if self.stop_words is not None:
@@ -206,7 +207,7 @@ class Indeed(object):
 
     def parse_zipcode_beg(self):
         '''locs are zipcode prefixes, like:902, provided as string'''
-        pat = '^[%s]' %self.add_loc
+        pat = '^%s' %self.add_loc
         obj = re.compile(pat)
 
         self.df_zip['include'] = self.df_zip['Postal Code'].apply(lambda x: 1 if obj.match(x) else 0)
@@ -223,7 +224,7 @@ class Indeed(object):
                 locations.append(loc)
 
         locations = np.unique(locations)
-        np.random.shuffle(locations)
+        #np.random.shuffle(locations)
         # if we stop the program and take the avaiable output we'd like it to
         # be radomly sampled
 
@@ -248,7 +249,9 @@ class Indeed(object):
         self.load_config()
         self.build_api_string()
         self.add_stop_words()
-        self.locations = self.handle_locations()
+        # allow the user to specify locations
+        if self.locations is None:
+            self.locations = self.handle_locations()
 
         try:
             self.get_city_url_content_stem()
