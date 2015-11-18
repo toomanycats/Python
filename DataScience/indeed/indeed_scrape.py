@@ -261,10 +261,11 @@ class Indeed(object):
             self.save_data()
             raise
 
-        self.df['assignments'] = self.cluster(matrix)
         self.save_data()
 
-        matrix, features = self.vectorizer(self.df['summary_toke'])
+        matrix, features = self.vectorizer(self.df['summary_stem'])
+        self.df['assignments'] = self.cluster(matrix)
+
         fea = pd.DataFrame(features)
         fea.to_csv("/home/daniel/git/Python2.7/DataScience/indeed/features.txt", index=False)
 
