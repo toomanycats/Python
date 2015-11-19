@@ -146,7 +146,7 @@ class Indeed(object):
     def tokenizer(self, string):
 
         if string is None:
-            return None
+            return 'empty'
 
         words = toker(string)
         words = self.len_tester(words)
