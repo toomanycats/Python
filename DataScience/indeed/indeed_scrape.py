@@ -107,16 +107,16 @@ class Indeed(object):
             urls.extend([ (item['url'], item['city']) for item in data['results']])
 
         except urllib2.HTTPError, err:
-            return None
+            return 'empty'
 
         except Exception, err:
-            return None
+            return 'empty'
 
         return urls
 
     def get_content(self, url):
         if url is None:
-            return None
+            return 'empty'
 
         try:
             response = urllib2.urlopen(url)
@@ -127,11 +127,11 @@ class Indeed(object):
 
         except urllib2.HTTPError, err:
             print err
-            return None
+            return 'empty'
 
         except Exception, err:
             print err
-            return None
+            return 'empty'
 
     def len_tester(self, word_list):
         new_list = []
@@ -157,8 +157,8 @@ class Indeed(object):
     def parse_content(self, url):
         content = self.get_content(url)
 
-        if content is None:
-            return None
+        if content == 'empty':
+            return 'empty'
 
         content = content.decode("ascii", "ignore")
         soup = BeautifulSoup(content, 'lxml')
@@ -170,7 +170,7 @@ class Indeed(object):
             summary = soup.find_all('span')
 
         if summary is None:
-            return None
+            return 'empty'
 
         bullets = summary.find_all("li")
 
@@ -183,12 +183,12 @@ class Indeed(object):
             output = [item.get_text() for item in skills]
 
         except AttributeError:
-            return None
+            return 'empty'
 
         if len(output) > 0:
             return " ".join(output)
         else:
-            return None
+            return 'empty'
 
     def parse_zipcode_beg(self):
         '''locs are zipcode prefixes, like:902, provided as string'''
