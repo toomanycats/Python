@@ -293,7 +293,10 @@ class Indeed(object):
         f = np.array(fea)
         f = f[ind_sort]
 
-        range_ = n - m
+        range_ = m - n
+        if range_ < 0:
+            raise ValueError
+
         x = np.arange(range_)
 
         plt.xticks(x, f, rotation=90, fontsize=14)
