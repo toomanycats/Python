@@ -265,13 +265,13 @@ class Indeed(object):
 
         self.save_data()
 
-        matrix, features = self.vectorizer(self.df['summary_stem'])
-        self.df['assignments'] = self.cluster(matrix)
-
-        fea = pd.DataFrame(features)
-        fea.to_csv("/home/daniel/git/Python2.7/DataScience/indeed/features.txt", index=False)
-
-        self.plot_features(features, matrix)
+#        matrix, features = self.vectorizer(self.df['summary_stem'])
+#        self.df['assignments'] = self.cluster(matrix)
+#
+#        fea = pd.DataFrame(features)
+#        fea.to_csv("/home/daniel/git/Python2.7/DataScience/indeed/features.txt", index=False)
+#
+#        self.plot_features(features, matrix)
 
     def vectorizer(self, corpus, max_features=200, max_df=0.8, min_df=0.1, n_min=2):
         vectorizer = CountVectorizer(max_features=max_features,
