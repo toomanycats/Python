@@ -282,7 +282,7 @@ class Indeed(object):
 
         return matrix, features
 
-    def plot_sorted_subsection(self, fea, mat, n, m):
+    def plot_sorted_subsection(self, fea, mat, start, end):
         '''Plot the next n highest counts in sorted order from n to m'''
 
         m = mat.toarray().sum(axis=0)
@@ -293,7 +293,7 @@ class Indeed(object):
         f = np.array(fea)
         f = f[ind_sort]
 
-        range_ = m - n
+        range_ = end - start
         if range_ < 0:
             raise ValueError
 
