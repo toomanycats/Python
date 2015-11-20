@@ -265,14 +265,6 @@ class Indeed(object):
 
         self.save_data()
 
-#        matrix, features = self.vectorizer(self.df['summary_stem'])
-#        self.df['assignments'] = self.cluster(matrix)
-#
-#        fea = pd.DataFrame(features)
-#        fea.to_csv("/home/daniel/git/Python2.7/DataScience/indeed/features.txt", index=False)
-#
-#        self.plot_features(features, matrix)
-
     def vectorizer(self, corpus, max_features=200, max_df=0.8, min_df=0.1, n_min=2):
         vectorizer = CountVectorizer(max_features=max_features,
                                     max_df=max_df,
@@ -289,6 +281,23 @@ class Indeed(object):
         features = vectorizer.get_feature_names()
 
         return matrix, features
+
+    def plot_sorted_subsection(self, fea, mat, n, m):
+        '''Plot the next n highest counts in sorted order from n to m'''
+
+        m = mat.toarray().sum(axis=0)
+
+        ind_sort = np.argsort(m)
+        m = m[ind_sort]
+
+        f = np.array(fea)
+        f = f[ind_sort]
+
+        range_ = n - m
+        x = np.arange(range_)
+
+        plt.xticks(x, f, rotation=90, fontsize=14)
+        plt.bar(x, m[n:m], align='center')
 
     def plot_features(self, features, matrix):
         x = np.arange(len(features))
