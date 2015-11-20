@@ -226,7 +226,7 @@ class Indeed(object):
                 locations.append(loc)
 
         locations = np.unique(locations)
-        #np.random.shuffle(locations)
+        np.random.shuffle(locations)
         # if we stop the program and take the avaiable output we'd like it to
         # be radomly sampled
 
