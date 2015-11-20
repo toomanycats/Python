@@ -300,7 +300,7 @@ class Indeed(object):
         x = np.arange(range_)
 
         plt.xticks(x, f, rotation=90, fontsize=14)
-        plt.bar(x, m[n:m], align='center')
+        plt.bar(x, m[start:end], align='center')
 
     def plot_features(self, features, matrix):
         x = np.arange(len(features))
