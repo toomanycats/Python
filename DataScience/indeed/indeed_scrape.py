@@ -263,7 +263,7 @@ class Indeed(object):
             self.save_data()
             raise
 
-        self.save_data()
+        #self.save_data()
 
     def vectorizer(self, corpus, max_features=200, max_df=0.8, min_df=0.1, n_min=2):
         vectorizer = CountVectorizer(max_features=max_features,
