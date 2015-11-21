@@ -192,7 +192,7 @@ class Indeed(object):
 
     def parse_zipcode_beg(self):
         '''locs are zipcode prefixes, like:902, provided as string'''
-        pat = '^[%s]' %self.add_loc
+        pat = '%s' %self.add_loc
         obj = re.compile(pat)
 
         self.df_zip['include'] = self.df_zip['Postal Code'].apply(lambda x: 1 if obj.match(x) else 0)
