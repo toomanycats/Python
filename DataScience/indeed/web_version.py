@@ -18,7 +18,7 @@ input_template = jinja2.Template('''
 <html lang="en">
 <body>
     <h1>INDEED.COM JOB OPENINGS SKILL SCRAPER</h1>
-    <h2>Enter key words</h2>
+    <h2>Enter keywords you normally use to search for openings on indeed.com</h2>
     <form action="." method="POST">
         <div><input type="text" name="kw"></div>
         <input type="submit" value="Submit">
@@ -53,11 +53,17 @@ output_template = jinja2.Template("""
 
 app = Flask(__name__)
 
-def plot_fig(kw, count):
-    p = Bar(kw, count)
-    p.title = "testing"
-    p.xaxis.axis_label = "key word"
-    p.yaxis.axis_label = "count"
+def plot_fig(df):
+
+    title_string = "Analysis of %i Postings" % df['kw'].count()
+
+    p = Bar(df, 'kw',
+            values='count',
+            title=title_string,
+            title_text_font_size='15',
+            color='blue',
+            xlabel="keywords",
+            ylabel="Count")
 
     return p
 
@@ -68,13 +74,16 @@ def get_keywords():
 @app.route('/', methods=['POST'])
 def main():
     kws = request.form['kw']
-    #kws = get_keywords()
     kw, count = run_analysis(kws)
 
-    p = plot_fig(kw, count)
+    df = pd.DataFrame(columns=['keywords','counts'])
+
+    df['kw'] = kw
+    df['count'] = count
+
+    p = plot_fig(df)
     script, div = components(p)
 
-    output_file(output_template)
     html = output_template.render(script=script, div=div)
 
     return encode_utf8(html)
@@ -83,14 +92,18 @@ def run_analysis(keywords):
 
     ind = indeed_scrape.Indeed()
     ind.query = keywords
+    ind.stop_words = "and"
     ind.add_loc = "^(94)"
-    ind.locations = ind.handle_locations()[0:10]
+    ind.locations = ind.handle_locations()
 
     ind.main()
     df = ind.df
     df = df.drop_duplicates(['url']).dropna(how='any')
 
     count, kw = ind.vectorizer(df['summary_stem'])
+    #convert from sparse matrix to single dim np array
+    count = count.toarray().sum(axis=0)
+
     return kw, count
 
 if __name__ == "__main__":
