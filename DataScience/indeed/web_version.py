@@ -20,8 +20,8 @@ input_template = jinja2.Template('''
     <h1>INDEED.COM JOB OPENINGS SKILL SCRAPER</h1>
     <h2>Enter key words</h2>
     <form action="." method="POST">
-        <input type="text" name="text">
-        <input type="submit" name="input_template" value="Send">
+        <div><input type="text" name="kw"></div>
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>''')
@@ -66,14 +66,10 @@ def get_keywords():
     return input_template.render()
 
 @app.route('/', methods=['POST'])
-def keywords():
-    return request.form['text']
-
-@app.route('/')
 def main():
-
-    kws = keywords()
-    kw, count = self.run_analysis(kws)
+    kws = request.form['kw']
+    #kws = get_keywords()
+    kw, count = run_analysis(kws)
 
     p = plot_fig(kw, count)
     script, div = components(p)
@@ -87,16 +83,14 @@ def run_analysis(keywords):
 
     ind = indeed_scrape.Indeed()
     ind.query = keywords
-    ind.num_samp = 0
-    ind.add_loc = '^(94)'
-
-    # test
-    ind.handle_locations()
-    ind.locations = ind.locations[0:10]
+    ind.add_loc = "^(94)"
+    ind.locations = ind.handle_locations()[0:10]
 
     ind.main()
+    df = ind.df
+    df = df.drop_duplicates(['url']).dropna(how='any')
 
-    count, kw = ind.vectorizer(ind.df['summary_stem'])
+    count, kw = ind.vectorizer(df['summary_stem'])
     return kw, count
 
 if __name__ == "__main__":
