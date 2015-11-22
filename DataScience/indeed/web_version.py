@@ -55,9 +55,9 @@ output_template = jinja2.Template("""
 
 app = Flask(__name__)
 
-def plot_fig(df):
+def plot_fig(df, num):
 
-    title_string = "Analysis of %i Postings" % df['kw'].count()
+    title_string = "Analysis of %i Postings" % num
 
     p = Bar(df, 'kw',
             values='count',
@@ -77,14 +77,15 @@ def get_keywords():
 def main():
     kws = request.form['kw']
     zips = request.form['zipcodes']
-    kw, count = run_analysis(kws, zips)
+    kw, count, num, cities = run_analysis(kws, zips)
 
-    df = pd.DataFrame(columns=['keywords','counts'])
+    df = pd.DataFrame(columns=['keywords','counts', 'cities'])
 
     df['kw'] = kw
     df['count'] = count
+    df['cities'] = cities
 
-    p = plot_fig(df)
+    p = plot_fig(df, num)
     script, div = components(p)
 
     html = output_template.render(script=script, div=div)
@@ -97,9 +98,6 @@ def run_analysis(keywords, zipcodes):
     ind.query = keywords
     ind.stop_words = "and"
     ind.add_loc = zipcodes
-    # recall indeed_scrape.py shuffles the zips first
-    # so this 100 is randomly selected
-    ind.locations = ind.handle_locations()[0:100]
 
     ind.main()
     df = ind.df
@@ -109,8 +107,8 @@ def run_analysis(keywords, zipcodes):
     #convert from sparse matrix to single dim np array
     count = count.toarray().sum(axis=0)
 
-    return kw, count
+    return kw, count, df['urls'].count(), df['city']
 
 if __name__ == "__main__":
     app.debug = True
-    app.run(port=5050)
+    app.run()
