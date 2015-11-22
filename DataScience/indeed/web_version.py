@@ -97,7 +97,9 @@ def run_analysis(keywords, zipcodes):
     ind.query = keywords
     ind.stop_words = "and"
     ind.add_loc = zipcodes
-    ind.locations = ind.handle_locations()
+    # recall indeed_scrape.py shuffles the zips first
+    # so this 100 is randomly selected
+    ind.locations = ind.handle_locations()[0:100]
 
     ind.main()
     df = ind.df
