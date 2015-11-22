@@ -21,7 +21,9 @@ input_template = jinja2.Template('''
     <h2>Enter keywords you normally use to search for openings on indeed.com</h2>
     <form action="." method="POST">
         <div><input type="text" name="kw"></div>
-        <input type="submit" value="Submit">
+    <h2>Enter zipcodes </h2>
+        <div><input type="text" name="zipcodes"></div>
+    <input type="submit" value="Submit">
     </form>
 </body>
 </html>''')
@@ -74,7 +76,8 @@ def get_keywords():
 @app.route('/', methods=['POST'])
 def main():
     kws = request.form['kw']
-    kw, count = run_analysis(kws)
+    zips = request.form['zipcodes']
+    kw, count = run_analysis(kws, zips)
 
     df = pd.DataFrame(columns=['keywords','counts'])
 
@@ -88,12 +91,12 @@ def main():
 
     return encode_utf8(html)
 
-def run_analysis(keywords):
+def run_analysis(keywords, zipcodes):
 
     ind = indeed_scrape.Indeed()
     ind.query = keywords
     ind.stop_words = "and"
-    ind.add_loc = "^(94)"
+    ind.add_loc = zipcodes
     ind.locations = ind.handle_locations()
 
     ind.main()
