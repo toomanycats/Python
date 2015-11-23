@@ -3,27 +3,38 @@
 # Author : Daniel Cuneo
 # Creation Date : 11-21-2015
 ######################################
+import logging
 import pandas as pd
 from flask import Flask
-from flask import request, render_template
+from flask import request, render_template, url_for
 import indeed_scrape
 import jinja2
 from bokeh.embed import components
 from bokeh.plotting import figure, output_file
 from bokeh.util.string import encode_utf8
 from bokeh.charts import Bar
+import os
+
+data_dir = os.getenv('OPENSHIFT_DATA_DIR')
+logfile = os.path.join(data_dir, 'logfile.log')
+logging.basicConfig(filename=logfile, level=logging.INFO)
+
 
 input_template = jinja2.Template('''
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <title>indeed skill scraper</title>
+    <meta charset="UTF-8">
+</head>
 <body>
     <h1>INDEED.COM JOB OPENINGS SKILL SCRAPER</h1>
-    <h2>Enter keywords you normally use to search for openings on indeed.com</h2>
-    <form action="." method="POST">
-        <div><input type="text" name="kw"></div>
-    <h2>Enter zipcodes </h2>
-        <div><input type="text" name="zipcodes"></div>
-    <input type="submit" value="Submit">
+    <form action="/main/" method="POST">
+        Enter keywords you normally use to search for openings on indeed.com<br>
+        <input type="text" name="kw"><br>
+        Enter zipcodes<br>
+        <input type="text" name="zipcodes"><br>
+        <input type="submit" value="Submit" name="submit">
     </form>
 </body>
 </html>''')
@@ -31,6 +42,10 @@ input_template = jinja2.Template('''
 output_template = jinja2.Template("""
 <!DOCTYPE html>
 <html lang="en-US">
+<head>
+    <title>indeed skill scraper results</title>
+    <meta charset="UTF-8">
+</head>
 
 <link
     href="http://cdn.pydata.org/bokeh/release/bokeh-0.9.0.min.css"
@@ -42,7 +57,7 @@ output_template = jinja2.Template("""
 
 <body>
 
-    <h1>INDEED.COM JOB OPENINGS SKILL SCRAPER</h1>
+    <h1>INDEED.COM JOB OPENINGS SKILL SCRAPER RESULTS</h1>
 
     {{ script }}
 
@@ -73,24 +88,32 @@ def plot_fig(df, num):
 def get_keywords():
     return input_template.render()
 
-@app.route('/', methods=['POST'])
+@app.route('/main/', methods=['POST'])
 def main():
-    kws = request.form['kw']
-    zips = request.form['zipcodes']
-    kw, count, num, cities = run_analysis(kws, zips)
+    try:
+        kws = request.form['kw']
+        zips = request.form['zipcodes']
+        logging.info(kws)
+        logging.info(zips)
 
-    df = pd.DataFrame(columns=['keywords','counts', 'cities'])
+        kw, count, num, cities = run_analysis(kws, zips)
 
-    df['kw'] = kw
-    df['count'] = count
-    df['cities'] = cities
+        df = pd.DataFrame(columns=['keywords','counts', 'cities'])
 
-    p = plot_fig(df, num)
-    script, div = components(p)
+        df['kw'] = kw
+        df['count'] = count
+        df['cities'] = cities
 
-    html = output_template.render(script=script, div=div)
+        p = plot_fig(df, num)
+        script, div = components(p)
 
-    return encode_utf8(html)
+        html = output_template.render(script=script, div=div)
+
+        return encode_utf8(html)
+
+    except Exception, err:
+        logging.error(err)
+        raise
 
 def run_analysis(keywords, zipcodes):
 
@@ -106,8 +129,9 @@ def run_analysis(keywords, zipcodes):
     count, kw = ind.vectorizer(df['summary_stem'])
     #convert from sparse matrix to single dim np array
     count = count.toarray().sum(axis=0)
+    num = df['url'].count()
 
-    return kw, count, df['urls'].count(), df['city']
+    return kw, count, num, df['city']
 
 if __name__ == "__main__":
     app.debug = True
