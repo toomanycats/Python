@@ -19,6 +19,7 @@ import numpy as np
 from nltk import stem
 from nltk import tokenize
 import re
+import os
 
 toker = tokenize.word_tokenize
 stemmer = stem.SnowballStemmer('english')
@@ -26,12 +27,14 @@ stemmer = stem.SnowballStemmer('english')
 
 class Indeed(object):
     def __init__(self):
+        repo_dir = os.getenv("OPENSHIFT_REPO_DIR")
+
         self.add_loc = None
         self.stop_words = None
-        self.num_samp = 300
-        self.zip_code_file ='/home/daniel/git/Python2.7/DataScience/indeed/us_postal_codes.csv'
-        self.df = pd.DataFrame()
-        self.config_path = "/home/daniel/git/Python2.7/DataScience/indeed/tokens.cfg"
+        self.num_samp = 100
+        self.zip_code_file = os.path.join(repo_dir, 'us_postal_codes.csv')
+        self.df = pd.DataFrame(columns=['url'])
+        self.config_path = os.path.join(repo_dir, "tokens.cfg")
         self.query = None
         self.locations = None
 
@@ -179,7 +182,7 @@ class Indeed(object):
             return None
 
         content = content.decode("ascii", "ignore")
-        soup = BeautifulSoup(content, 'lxml')
+        soup = BeautifulSoup(content, 'html.parser')
 
         try:
             summary = soup.find('span', {'summary'})
@@ -256,15 +259,7 @@ class Indeed(object):
         if self.locations is None:
             self.locations = self.handle_locations()
 
-        try:
-            self.get_city_url_content_stem()
-
-        except KeyboardInterrupt:
-            print "Quiting job, saving data."
-            self.save_data()
-            raise
-
-        #self.save_data()
+        self.get_city_url_content_stem()
 
     def vectorizer(self, corpus, max_features=200, max_df=0.8, min_df=0.1, n_min=2):
         vectorizer = CountVectorizer(max_features=max_features,
