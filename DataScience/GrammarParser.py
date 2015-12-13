@@ -1,5 +1,6 @@
 ''' https://gist.github.com/alexbowe/879414#file-nltk-intro-py-L34'''
 from nltk.corpus import stopwords
+import nltk
 
 stopwords = stopwords.words('english')
 lemmatizer = nltk.WordNetLemmatizer()
