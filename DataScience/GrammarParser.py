@@ -27,7 +27,7 @@ grammar = r"""
 """
 
 
-class Alternate(object):
+class GrammarParser(object):
     """Fancier preprocessing of corpus using a grammar."""
 
     def leaves(self, tree):
