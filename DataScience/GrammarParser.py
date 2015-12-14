@@ -74,6 +74,9 @@ class GrammarParser(object):
         """Breaks a single string into a tree using the grammar and returns
         the specified words as a string."""
 
+        if text is None:
+            return None
+
         chunker = nltk.RegexpParser(grammar)
 
         toks = nltk.regexp_tokenize(text, sentence_re)
