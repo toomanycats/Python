@@ -3,10 +3,7 @@
 # Author : Daniel Cuneo
 # Creation Date : 10-29-2015
 ######################################
-from mrjob.util import bash_wrap
 from mrjob.job import MRJob
-from mrjob.step import MRStep
-import json
 
 class Process(MRJob):
 
