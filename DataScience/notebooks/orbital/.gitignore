@@ -1,2 +1,6 @@
 *.swp
 *.pyc
+*.aux
+*.log
+*.pdf
+
