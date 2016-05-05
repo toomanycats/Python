@@ -1,0 +1,1604 @@
+
+% Defauet to the notebook output style
+
+
+
+
+% Inherit from the specified cell style.
+
+
+
+
+
+\documentclass{article}
+
+
+
+    \usepackage{graphicx} % Used to insert images
+    \usepackage{adjustbox} % Used to constrain images to a maximum size
+    \usepackage{color} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{url}
+    \usepackage{courier}
+
+
+
+    \definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
+    \definecolor{darkorange}{rgb}{.71,0.21,0.01}
+    \definecolor{darkgreen}{rgb}{.12,.54,.11}
+    \definecolor{myteal}{rgb}{.26, .44, .56}
+    \definecolor{gray}{gray}{0.45}
+    \definecolor{lightgray}{gray}{.95}
+    \definecolor{mediumgray}{gray}{.8}
+    \definecolor{inputbackground}{rgb}{.95, .95, .85}
+    \definecolor{outputbackground}{rgb}{.95, .95, .95}
+    \definecolor{traceback}{rgb}{1, .95, .95}
+    % ansi colors
+    \definecolor{red}{rgb}{.6,0,0}
+    \definecolor{green}{rgb}{0,.65,0}
+    \definecolor{brown}{rgb}{0.6,0.6,0}
+    \definecolor{blue}{rgb}{0,.145,.698}
+    \definecolor{purple}{rgb}{.698,.145,.698}
+    \definecolor{cyan}{rgb}{0,.698,.698}
+    \definecolor{lightgray}{gray}{0.5}
+
+    % bright ansi colors
+    \definecolor{darkgray}{gray}{0.25}
+    \definecolor{lightred}{rgb}{1.0,0.39,0.28}
+    \definecolor{lightgreen}{rgb}{0.48,0.99,0.0}
+    \definecolor{lightblue}{rgb}{0.53,0.81,0.92}
+    \definecolor{lightpurple}{rgb}{0.87,0.63,0.87}
+    \definecolor{lightcyan}{rgb}{0.5,1.0,0.83}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Data Analysis on the Command Line \\
+        \tiny{Loosely based on the Jeroen Janssens Book \\
+    \url{http://jeroenjanssens.com}}}
+    \author{Daniel P Cuneo}
+
+    % Pygments definitions
+
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=blue,
+      linkcolor=darkorange,
+      citecolor=darkgreen,
+      }
+    % Slightly bigger margins than the latex defaults
+
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+
+
+
+    \begin{document}
+
+
+    \maketitle
+
+
+
+
+    \section{Command Line Tools for Small
+Data}\label{command-line-tools-for-small-data}
+
+Ipython run in a terminal is about the best way to work with data
+interactively. Loading a csv into a Pandas dataframe or just a Numpy
+array is very powerful. However, there are times when a handful of shell
+programs can either save the day or just make the day more productive.
+
+Primarliy, I've found the program find to be extremely helpful, and
+combing it with grep / pcregrep can be enough to get a report out.
+
+I also find myself loading data into a table on mySQL as the size of the
+test data grows. This has the advantage of being a little easier to
+share with coworkers too.
+
+Csvkit was brought to my attention by the O'Reilly book, Data Science on
+the Command Line and I've come to really like it for small scale work.
+Pandas can also push and pull data into and out of tables.
+
+There are times when keeping my preliminary preprocessing steps
+completely shell driven is convenient especially if used with a
+makefile. I've been exploring the use of Drake, since it can encorporate
+native Python and I think that will be the future. Since GNU Make has
+been around a long time and is typically installed on any machine you're
+likely to come across, I've been trying to use it more and appreciate it
+before making the switch to Drake.
+
+    \subsection{Version Information}\label{version-information}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+        {\color{incolor}In [{\color{incolor}1}]:} \PY{c}{\PYZsh{} \url{https://github.com/rasbt/watermark}}
+        \PY{o}{\PYZpc{}}\PY{k}{load\PYZus{}ext} watermark
+        \PY{o}{\PYZpc{}}\PY{k}{watermark} \PYZhy{}g \PYZhy{}p numpy,scipy,pandas,matplotlib,statsmodels
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+numpy 1.9.3
+scipy 0.16.0
+pandas 0.16.2
+matplotlib 1.4.3
+statsmodels 0.6.1
+Git hash: 22a1442ea56894a00796328d7be321ef8dfcf28d
+    \end{Verbatim}
+
+    \subsection{Programs you may want to
+install}\label{programs-you-may-want-to-install}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  csvkit by onryx, install with pip or conda
+\item
+  pcregrep, Debian sudo apt-get install
+\item
+  parallel, in the Debian repo.
+\end{itemize}
+
+\subsection{Other items}\label{other-items}
+
+I do a little contrast using Python and Pandas. You can skip running it
+if you don't already have it installed.
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  mySQL
+\item
+  Pandas
+\end{itemize}
+
+\subsection{Links}\label{links}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+    regular expression: \url{http://www.rexegg.com/}
+\item
+  freeing memory: \\
+  \url{http://unix.stackexchange.com/questions/87908/how-do-you-empty-the-buffers-and-cache-on-a-linux-system}
+\item
+    csvkit:\url{https://csvkit.readthedocs.org/en/0.9.1/}
+\item
+  \emph{find} command examples
+  \url{http://www.binarytides.com/linux-find-command-examples}
+\item
+  stackoverflow on excluding directories with \emph{find}
+  \url{http://stackoverflow.com/questions/1489277/how-to-use-prune-option-of-find-in-sh}
+\item
+    fun site for inspiration \url{http://www.commandlinefu.com/commands/browse}
+\end{itemize}
+
+\section{How to use this notebook}\label{how-to-use-this-notebook}
+
+The ipython notebook is great for Python and there's some support for
+BASH and SQL. However, it's not perfect yet, and you will have to modify
+some lines.
+
+The cells using bash commands, have the bash magic at the top and a
+shell variable:
+%%bash
+root="/home/daniel/git/Python2.7/DataScience/command\_line\_pres\_data"
+    That path is specific to my personal computer and will not work for you.
+You will need to change \textbf{every} occurance to the root path you
+downloaded the data set to.
+
+In the future I'll consider using this BASH kernel for ipython
+notebooks:\url{https://github.com/takluyver/bash\_kernel}. This kernel would
+allow me to export any shell variables once.
+
+I also like this SQL magic provided here:
+\url{https://github.com/catherinedevlin/ipython-sql}
+
+It prints SQL tables nicely and could be good for work reports based on
+SQL.
+
+    This notebook doesn't explain the individual commands in great detail. I
+am assuming that you either know them, or will be researching them on
+your own as you work through the commands. I have made some effort to
+make limited notes about the commands you see. Mainly, these notes are
+for explaining something not easily understood right away although I
+still assume you have googled or man paged the command.
+
+    \section{Man Page}\label{man-page}
+
+If you are very new to the command line you might not know how the man
+pages work. The manual is opened in vi like environment so navigation
+might be difficult at first. Pressing \emph{h} while in the man pages
+will bring up a help file.
+
+Here is summary of a few commands for the man page viewer: * q to quit *
+/ to search * n for next forward match * N for match backwards * h man
+page navigation help * j scroll up * k scroll down
+
+\section{Things I Don't Cover}\label{things-i-dont-cover}
+
+\subsection{Quoting}\label{quoting}
+
+Quoting is tricky when dealing with the shell. The shell has to
+interpret ( or not ) everything passed in the command line. That means
+if there's spaces, or special tokens in the strings you are passing
+around, you'll have to escape the strings and wrap them in quotes,
+double or single.
+
+This is a topic in itself. I didn't want to get sidetracked here so
+please read about it. In fact you'll have to because you'll end up
+banging your head against a wall sooner than later because of it.
+
+A nice work around, is to write intermediate steps of a shell script to
+a file. Then read back the file. Since you are not passing the strings
+through the shell interpreter directly through stdin, they will not need
+special escaping or treatment. There's nothing wrong with this, it can
+help make things more clear to others, rather than using obscure escape
+sequences.
+
+I made a point to use only \emph{nice} file names here. Windoze people
+have a nasty habit of using spaces which is a huge PITA.
+
+\subsubsection{In brief:}\label{in-brief}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Single quotes, ' , are for string literals with no special actions due
+  to tokens
+\item
+  Double quotes, " , allow the expansion of shell variables and
+  parameters, \$FOO, and \textbackslash{} escape charaters
+\item
+  back ticks, ` , are completely different and are used to evaluate a
+  command. Although I prefer the \$(cmd) syntax
+\end{enumerate}
+
+\subsection{Regular Expressions}\label{regular-expressions}
+
+I used a handful of beefy regex's here that I chose because they cover a
+lot of ground. You'll want to spend a few weekends on the regegg.com
+site. I provide a quick overview of what the regex means in a cell but
+you'll have to look them up yourself.
+
+\url{https://en.wikiquote.org/wiki/Jamie\_Zawinski}
+
+``Some people, when confronted with a problem, think''I know, I'll use
+regular expressions." Now they have two problems."
+
+    \section{Imaginary use case}\label{imaginary-use-case}
+
+I'm given a hard drive full of source code and told that we will be
+doing a dependency analysis for some particular C libraries. We don't
+know in advance what we are looking for at the moment. That may be
+revealed on a client call or more information will be passed down. For
+now, we have the directories what can we do with it quickly ?
+
+For this exercise I'm using the Linux Kernel 2.6 because it's
+sufficiently large and free to download.
+
+\paragraph{The first thing I'd do, is inventory this thing we are given
+and prepare some basic report about what we have been
+given.}\label{the-first-thing-id-do-is-inventory-this-thing-we-are-given-and-prepare-some-basic-report-about-what-we-have-been-given.}
+
+    \subsection{For this exercise we need an
+inventory}\label{for-this-exercise-we-need-an-inventory}
+
+Below is is a simple inventory shell script, where we get the lines of
+code (including blanks, comments everything\ldots{}not a real good
+method) and the file extension. This is more advanced than I plan to
+cover in this notebook.
+
+This code goes into a file named run\_inventory.sh which is included in
+the git repo if you cloned it.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}25}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash} \PYZsh{} this line is here for syntax highlighting only
+
+         \PYZsh{}!/bin/bash
+
+         function count\PYZus{}lines
+         \PYZob{}
+             input=\PYZdl{}1
+             echo \PYZdl{}(cat \PYZdl{}input | wc \PYZhy{}l)
+         \PYZcb{}
+
+         function check\PYZus{}for\PYZus{}ascii
+         \PYZob{}
+             input=\PYZdl{}1
+             bool=\PYZdl{}(file \PYZdl{}input | grep \PYZhy{}ic \PYZdq{}ascii\PYZdq{})
+             if [[ \PYZdl{}bool \PYZhy{}gt 0 ]];then
+                 echo 1
+             else
+                 echo 0
+             fi
+         \PYZcb{}
+
+         function get\PYZus{}extension
+         \PYZob{}
+             input=\PYZdq{}\PYZdl{}1\PYZdq{}
+             base=\PYZdl{}(basename \PYZdq{}\PYZdl{}input\PYZdq{})
+             test\PYZus{}=\PYZdl{}(echo \PYZdq{}\PYZdl{}base\PYZdq{} | grep \PYZhy{}c \PYZdq{}\PYZbs{}.\PYZdq{})
+
+             if [ \PYZdl{}test\PYZus{} \PYZhy{}eq 0 ];then
+                 echo \PYZdq{}NONE\PYZdq{}
+             else
+                 ext=\PYZdl{}(echo \PYZdq{}\PYZdl{}base\PYZdq{} | rev | cut \PYZhy{}d. \PYZhy{}f 1 | rev)
+             fi
+
+             echo \PYZdl{}\PYZob{}ext\PYZcb{}
+         \PYZcb{}
+
+         \PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{} calls here \PYZsh{}\PYZsh{}\PYZsh{}
+         input=\PYZdl{}1
+
+         count=\PYZdl{}(count\PYZus{}lines \PYZdl{}input)
+         ascii\PYZus{}bool=\PYZdl{}(check\PYZus{}for\PYZus{}ascii \PYZdl{}input)
+         ext=\PYZdl{}(get\PYZus{}extension \PYZdl{}input)
+
+         if [ \PYZdl{}ascii\PYZus{}bool == 1 ];then
+             printf \PYZdq{}\PYZbs{}\PYZdq{}\PYZdl{}\PYZob{}input\PYZcb{}\PYZbs{}\PYZdq{},\PYZbs{}\PYZdq{}\PYZdl{}\PYZob{}count\PYZcb{}\PYZbs{}\PYZdq{},\PYZbs{}\PYZdq{}\PYZdl{}\PYZob{}ext\PYZcb{}\PYZbs{}\PYZdq{}\PYZbs{}n\PYZdq{}
+         else
+             printf \PYZdq{}\PYZbs{}\PYZdq{}\PYZob{}\PYZdl{}input\PYZcb{}\PYZbs{}\PYZdq{},\PYZbs{}\PYZdq{}0\PYZbs{}\PYZdq{},\PYZbs{}\PYZdq{}\PYZdl{}\PYZob{}ext\PYZcb{}\PYZbs{}\PYZdq{}\PYZbs{}n\PYZdq{}
+         fi
+\end{Verbatim}
+
+
+    \section{Make an inventory}\label{make-an-inventory}
+
+The \emph{find} program is tricky to learn, it has many options. I plan
+to dive more into \emph{find}, but for now, I really just want an
+inventory.csv to play with.
+
+I give find the path to search, which is our Linux Kernel directory,
+then I tell find, to only return the type, ``f'' which means files. No
+directories.
+
+I then use a pipe `\textbar{}' to pass the output into the input of the
+next program `run\_inventory.sh'. We need to use \emph{xargs} to limit
+the way the output is presented to `run\_inventory.sh'. \emph{Xargs} is
+another topic to learn about, so for now, just trust me.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+        \PYZsh{}make a header
+        printf \PYZdq{}\PYZbs{}\PYZdq{}path\PYZbs{}\PYZdq{},\PYZbs{}\PYZdq{}nlines\PYZbs{}\PYZdq{},\PYZbs{}\PYZdq{}ext\PYZbs{}\PYZdq{}\PYZbs{}n\PYZdq{} \PYZgt{} \PYZdl{}root/linux\PYZus{}inventory.csv
+        find \PYZdl{}root/linux\PYZhy{}2.6.32.67 \PYZhy{}type f | xargs \PYZhy{}n 1 \PYZdl{}root/make\PYZus{}inventory.sh \PYZgt{}\PYZgt{} \PYZdl{}root/linux\PYZus{}inventory.csv
+\end{Verbatim}
+
+    The \textgreater{} is for stream redirection. The output stream from
+\emph{printf} is sent to a new file. This will clobber existing files so
+practice with it. The second use is slightly different,
+\textgreater{}\textgreater{} is an appending stream redirection.
+
+Since we don't want to clobber the linux\_inventory.csv, we use the
+append operation for the actual data.
+
+    It's useful to be able to dro the header and add it back. You could do
+it in an editor, but since this notebook needs to be self contained, I
+add these cells. plus you can see another use for \emph{sed} .
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}15}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         \PYZsh{}drop header
+         root=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         sed \PYZhy{}i \PYZsq{}1 d\PYZsq{} \PYZdl{}root/linux\PYZus{}inventory.csv
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}30}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         \PYZsh{} add header
+
+         root=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         header=\PYZdq{}\PYZbs{}\PYZdq{}path\PYZbs{}\PYZdq{},\PYZbs{}\PYZdq{}nlines\PYZbs{}\PYZdq{},\PYZbs{}\PYZdq{}ext\PYZbs{}\PYZdq{}\PYZdq{}
+         sed \PYZhy{}i \PYZdq{}1 i \PYZdl{}\PYZob{}header\PYZcb{}\PYZdq{} \PYZdl{}root/linux\PYZus{}inventory.csv
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+        head \PYZhy{}n 5 \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZus{}inventory.csv\PYZdq{}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+"path","nlines","ext"
+command\_line\_pres\_data/linux-2.6.32.67/net/wireless/scan.c","1027","c"
+command\_line\_pres\_data/linux-2.6.32.67/net/wireless/core.h","401","h"
+command\_line\_pres\_data/linux-2.6.32.67/net/wireless/ibss.c","509","c"
+command\_line\_pres\_data/linux-2.6.32.67/net/wireless/nl80211.c","4896","c"
+    \end{Verbatim}
+
+    A neat trick to view the csv contents better. Works great in a real
+terminal, the ipython notebook's default cell width is too small to look
+nice :\textbar{} So I hacked off part of the path output.
+
+\url{https://www.reddit.com/r/IPython/comments/27zash/can\_i\_increase\_notebook\_cell\_width\_on\_wide\_screens/}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}15}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         head \PYZhy{}n 10 \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZus{}inventory.csv\PYZdq{} | cut \PYZhy{}d/ \PYZhy{}f 5\PYZhy{} | column \PYZhy{}t \PYZhy{}s,
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+"path"                                                                                            "nlines"  "ext"
+Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/scan.c"                 "1027"    "c"
+Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/core.h"                 "401"     "h"
+Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/ibss.c"                 "509"     "c"
+Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/nl80211.c"              "4896"    "c"
+Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/lib80211\_crypt\_tkip.c"  "788"     "c"
+Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/util.c"                 "717"     "c"
+Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/mlme.c"                 "679"     "c"
+Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/reg.h"                  "55"      "h"
+Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/wext-sme.c"             "402"     "c"
+    \end{Verbatim}
+
+    The pipe, \textbar{}, takes output from another process, and supplies it
+as input to the next program. You will get different output for the two
+cells below. The first cell tells \emph{grep} to operate on the output
+stream of the \emph{find} command. The second tells \emph{grep} to
+operate on files whose path is given as the output from \emph{find}.
+
+If you don't know what or how \emph{head} works, try the man page for
+it. Look up the option \emph{n} .
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}20}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         find \PYZdl{}root/linux\PYZhy{}2.6.32.67 \PYZhy{}type f | grep \PYZdq{}2.6\PYZdq{} | tail \PYZhy{}n 10
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+command\_line\_pres\_data/linux-2.6.32.67/virt/kvm/ioapic.h
+command\_line\_pres\_data/linux-2.6.32.67/virt/kvm/irq\_comm.c
+command\_line\_pres\_data/linux-2.6.32.67/virt/kvm/iodev.h
+command\_line\_pres\_data/linux-2.6.32.67/virt/kvm/coalesced\_mmio.h
+command\_line\_pres\_data/linux-2.6.32.67/virt/kvm/coalesced\_mmio.c
+command\_line\_pres\_data/linux-2.6.32.67/virt/kvm/Kconfig
+command\_line\_pres\_data/linux-2.6.32.67/virt/kvm/iommu.c
+command\_line\_pres\_data/linux-2.6.32.67/virt/kvm/eventfd.c
+command\_line\_pres\_data/linux-2.6.32.67/README
+command\_line\_pres\_data/linux-2.6.32.67/COPYING
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}21}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         find \PYZdl{}root/linux\PYZhy{}2.6.32.67 \PYZhy{}type f | xargs grep \PYZdq{}2.6\PYZdq{} | tail \PYZhy{}n 10
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+command\_line\_pres\_data/linux-2.6.32.67/README:   not incremental and must be applied to the 2.6.xx base tree. For
+command\_line\_pres\_data/linux-2.6.32.67/README:   example, if your base kernel is 2.6.12 and you want to apply the
+command\_line\_pres\_data/linux-2.6.32.67/README:   2.6.12.3 patch, you do not and indeed must not first apply the
+command\_line\_pres\_data/linux-2.6.32.67/README:   2.6.12.1 and 2.6.12.2 patches. Similarly, if you are running kernel
+command\_line\_pres\_data/linux-2.6.32.67/README:   version 2.6.12.2 and want to jump to 2.6.12.3, you must first
+command\_line\_pres\_data/linux-2.6.32.67/README:   reverse the 2.6.12.2 patch (that is, patch -R) \_before\_ applying
+command\_line\_pres\_data/linux-2.6.32.67/README:   the 2.6.12.3 patch.
+command\_line\_pres\_data/linux-2.6.32.67/README:   Compiling and running the 2.6.xx kernels requires up-to-date
+command\_line\_pres\_data/linux-2.6.32.67/README:     kernel source code:	/usr/src/linux-2.6.N
+command\_line\_pres\_data/linux-2.6.32.67/README:   cd /usr/src/linux-2.6.N
+    \end{Verbatim}
+
+    \section{let's make a summary of the kinds of files we were given by
+extension.}\label{lets-make-a-summary-of-the-kinds-of-files-we-were-given-by-extension.}
+
+The next three cells are illustrating the how one can use cat, cut, sort
+and uniq to get a preliminary output of this inventory.
+
+I broke out the steps so that you can follow along. There maybe short
+cuts and other arguments I didn't use. Sometimes it doesn't matter if
+you do something the correct way, just that you get it done quickly and
+you are confident that you know what you did. This type of prototyping
+is great, because you can see what's happening.
+
+    \subsubsection{The program cut is super helpful. We can parse many
+output streams with
+cut.}\label{the-program-cut-is-super-helpful.-we-can-parse-many-output-streams-with-cut.}
+
+If the format of a steam in tablular, then awk maybe the best, but awk
+is a whole animal into itself and I think most days, I rely on cut and
+then step into ipython and use Pandas or just Numpy.
+
+The -d, option is to set the delimiter and the -f 3 says to use the 3rd
+field.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}22}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+         cat \PYZdl{}root\PYZus{}dir/linux\PYZus{}inventory.csv | cut \PYZhy{}d, \PYZhy{}f 3 | tail \PYZhy{}n 5
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+"NONE"
+"c"
+"c"
+"NONE"
+"NONE"
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}23}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+         cat \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZus{}inventory.csv\PYZdq{} | cut \PYZhy{}d, \PYZhy{}f 3 | sort  | tail \PYZhy{}n  5
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+"y"
+"y"
+"y"
+"y"
+"ymfsb"
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+         cat \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZus{}inventory.csv\PYZdq{} | cut \PYZhy{}d, \PYZhy{}f 3 | sort | uniq \PYZhy{}c | tail \PYZhy{}n 5
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+  1 "x86"
+  105 "xml"
+  6 "xsl"
+  5 "y"
+  1 "ymfsb"
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+         cat \PYZdl{}root\PYZus{}dir/linux\PYZus{}inventory.csv | cut \PYZhy{}d, \PYZhy{}f 3 | sort | uniq \PYZhy{}ic | sort \PYZhy{}n | tail \PYZhy{}n 5
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+   857 "txt"
+   1080 "S"
+   2818 "NONE"
+  11638 "h"
+  13154 "c"
+    \end{Verbatim}
+
+    \subsection{Putting this command line data into a
+database.}\label{putting-this-command-line-data-into-a-database.}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  csvkit: csvsql
+\item
+  Pandas: df.to\_sql()
+\end{itemize}
+
+\subsubsection{Both Pandas and csvkit use SqlAlchemy to handle the
+connection to the
+DB.}\label{both-pandas-and-csvkit-use-sqlalchemy-to-handle-the-connection-to-the-db.}
+
+I'm not expert at SqlAlchemy, but learning the connection strings offer
+value immediately.
+That's the, "mysql://<log-in>:<passwd>@<ip>/<db-name>"  I'm running mySQL locally, localhost has IP 127.0.0.1
+    First I'll make the database using the mysqladmin program.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}21}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         mysqladmin \PYZhy{}\PYZhy{}user=root \PYZhy{}\PYZhy{}password=test create LinuxKernel
+\end{Verbatim}
+
+    csvsql will put the data into a table named ``inventory'' or if no
+--tables argument is given, named after the input file. It also deduces
+the data types.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}22}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         csvsql \PYZhy{}\PYZhy{}db \PYZdq{}mysql://root:test@127.0.0.1/LinuxKernel\PYZdq{} \PYZhy{}\PYZhy{}tables \PYZdq{}inventory\PYZdq{} \PYZhy{}\PYZhy{}insert \PYZdq{}\PYZdl{}\PYZob{}root\PYZcb{}/linux\PYZus{}inventory.csv\PYZdq{}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    \subsubsection{Check that it worked}\label{check-that-it-worked}
+
+The notebook isn't using the alias the way I expected so I had to type
+out the full command with user and password. In normal practice you'd
+make an alias as in the comments.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}20}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         \PYZsh{}alias mysql=\PYZsq{}mysql \PYZhy{}\PYZhy{}user=root \PYZhy{}\PYZhy{}password=test\PYZsq{}
+         \PYZsh{}mysql \PYZhy{}e \PYZdq{}SELECT * FROM inventory LIMIT 5;\PYZdq{} LinuxKernel
+
+         mysql \PYZhy{}\PYZhy{}user=root \PYZhy{}\PYZhy{}password=test \PYZhy{}e \PYZdq{}SELECT * FROM inventory LIMIT 5;\PYZdq{} LinuxKernel
+\end{Verbatim}
+
+
+    \subsection{CSV outputs from mySQL without stepping into the sql
+shell}\label{csv-outputs-from-mysql-without-stepping-into-the-sql-shell}
+
+sql2csv returns a query in csv format to the stdout which can then be
+redirected to a file.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        sql2csv \PYZhy{}\PYZhy{}db mysql://root:test@127.0.0.1/LinuxKernel \PYZhy{}\PYZhy{}query \PYZdq{}select ext, count(ext) from inventory group by ext order by count(ext);\PYZdq{} | \PYZbs{}
+            tail \PYZhy{}n 5 | column \PYZhy{}t \PYZhy{}s,
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+dts  115
+txt  857
+S    1080
+h    11639
+c    13154
+    \end{Verbatim}
+
+    \subsubsection{The numbers checkout.}\label{the-numbers-checkout.}
+
+\paragraph{Lets explore awk a little. The easiest thing to make
+\emph{awk} do (and perhaps the most useful), is to print columns or rows
+from a file
+stream.}\label{lets-explore-awk-a-little.-the-easiest-thing-to-make-awk-do-and-perhaps-the-most-useful-is-to-print-columns-or-rows-from-a-file-stream.}
+
+awk * FS field separator set to comma * \$3 is the 3rd column
+
+grep * -E regular expression * -c count occurance (grep operates per
+line, we use pcregrep for multiple line searches)
+
+There is a way to do the whole regex and count in awk I just didn't want
+to get into it. I'm still learning awk myself, and I haven't decided on
+it's usefulness over other tools. If I'm already in a database then
+forget it\ldots{}I mostly want to show use of grep and awk for column
+parsing ( rather than cut ).
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}33}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         cat \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZus{}inventory.csv\PYZdq{}  | awk  \PYZsq{}FS=\PYZdq{},\PYZdq{}; \PYZob{}print \PYZdl{}3\PYZcb{}\PYZsq{} | grep \PYZhy{}cE \PYZdq{}txt\PYZdq{}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+1715
+    \end{Verbatim}
+
+    \section{Practice using \emph{find} and
+\emph{grep}}\label{practice-using-find-and-grep}
+\begin{Verbatim}
+    find "${root_dir}/linux-2.6.32.67" -maxdepth 2 -mindepth 1 -type f -iname "*.c" | \
+    xargs -n 1 pcregrep -no "(?sim)[a-z]+\w*\(.*?\)" /dev/null | \
+    sed 's/\s//g' | \
+    tail -n 10
+    \subsection{find \$\{root\_dir\}/linux-2.6.32.67" -maxdepth 2 -mindepth
+1 -type f -iname
+``*.c"}\label{find-rootux5fdirlinux-2.6.32.67--maxdepth-2--mindepth-1--type-f--iname-.c}
+\end{Verbatim}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  path to search
+\item
+  -maxdepth 2 dont', search past 2 directories deep
+\item
+  -mindepth 1, search at least 1 directory deep (using this to save time
+  and the notebook kept crashing)
+\item
+  -type f, only look for files not directories or links or anything else
+\item
+  -iname, case insensitive glob style name matching, just like ls uses
+\end{itemize}
+
+\subsection{xargs}\label{xargs}
+
+A neat helper program, that takes the output from another shell program,
+and parses it into discrete intput arguments for the next program in a
+pipe.
+
+This will allow us to pass one line at a time from find, to grep. Some
+programs do not need xargs, as they are designed to take a stream of
+input. Not in this case however.
+
+\subsection{Pearl Compatiple Regular Expression Grep (pcregrep)}
+
+\begin{Verbatim}
+    pcregrep -no "(?sim)[a-z]+\w*(.*?)" /dev/null
+\end{Verbatim}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+    s dot matches everything including newlines\begin{verbatim}\\n\end{verbatim}
+\item
+    \begin{verbatim}i\end{verbatim} case insensitive
+\item
+ \begin{verbatim}m\end{verbatim}  multiline
+\end{itemize}
+
+The (.\emph\{?) makes the greedy ``.'' stop, after encountering a left
+    parenthesis, escaped like this \textbackslash{}( This page explains the
+    ``Lazy Trap'' issue. The greedy match ``jumps the fence''
+    \url{http://www.rexegg.com/regex-quantifiers.html\#lazytrap}
+
+\subsubsection{This is going to hunt for
+functions}\label{this-is-going-to-hunt-for-functions}
+
+That is, strings that match\begin{verbatim}(?sim){[}a-z{]}+\w*(.*?)\end{verbatim} where:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  {[}a-z{]} a list of lower case letters
+\item
+    \begin{verbatim}+\end{verbatim} at least once, or more
+\item
+  \begin{verbatim}\w\end{verbatim} any alpha-numeric zero or more times
+\item
+  \textbackslash{}( literal left parenthesis
+\item
+  greedy match until right paren
+\end{itemize}
+
+The \begin{verbatim}/dev/null\end{verbatim} is a trick to make grep print the file path it's working
+on.
+
+\subsection{sed}\label{sed}
+
+used to remove any spaces: \begin{verbatim}sed 's/\\s//g'\end{verbatim}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  s substitute
+\item
+  \begin{verbatim}\\s\end{verbatim}  regular expression for any kind of while space
+\item
+  // replace with nothing\ldots{}.easier to read if it was, sed
+  `s/foo/bar/g' , replace `foo' with `bar'
+\item
+  g globally, as many times as a match can be made
+\end{itemize}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/notebooks/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+        find \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZhy{}2.6.32.67\PYZdq{} \PYZhy{}maxdepth 2 \PYZhy{}mindepth 1 \PYZhy{}type f \PYZhy{}iname \PYZdq{}*.c\PYZdq{} | xargs \PYZhy{}n 1 pcregrep \PYZhy{}no \PYZdq{}(?sim)[a\PYZhy{}z]+\PYZbs{}w*\PYZbs{}(.*?\PYZbs{})\PYZdq{} /dev/null| sed \PYZsq{}s/\PYZbs{}s//g\PYZsq{} | tail \PYZhy{}n 10
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+command\_line\_pres\_data/linux-2.6.32.67/fs/dcookies.c:332:mutex\_lock(\&dcookie\_mutex)
+command\_line\_pres\_data/linux-2.6.32.67/fs/dcookies.c:334:list\_del(\&user->next)
+command\_line\_pres\_data/linux-2.6.32.67/fs/dcookies.c:335:kfree(user)
+command\_line\_pres\_data/linux-2.6.32.67/fs/dcookies.c:337:is\_live()
+command\_line\_pres\_data/linux-2.6.32.67/fs/dcookies.c:338:dcookie\_exit()
+command\_line\_pres\_data/linux-2.6.32.67/fs/dcookies.c:340:mutex\_unlock(\&dcookie\_mutex)
+command\_line\_pres\_data/linux-2.6.32.67/fs/dcookies.c:343:EXPORT\_SYMBOL\_GPL(dcookie\_register)
+command\_line\_pres\_data/linux-2.6.32.67/fs/dcookies.c:344:EXPORT\_SYMBOL\_GPL(dcookie\_unregister)
+command\_line\_pres\_data/linux-2.6.32.67/fs/dcookies.c:345:EXPORT\_SYMBOL\_GPL(get\_dcookie)
+command\_line\_pres\_data/linux-2.6.32.67/fs/no-block.c:15:no\_blkdev\_open(structinode*inode,structfile*filp)
+    \end{Verbatim}
+
+    \subsubsection{This example used the regular expression syntax where as
+above, I used the ``globbing''
+rules.}\label{this-example-used-the-regular-expression-syntax-where-as-above-i-used-the-globbing-rules.}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+        find \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZhy{}2.6.32.67\PYZdq{} \PYZhy{}maxdepth 2 \PYZhy{}mindepth 1 \PYZhy{}type f \PYZhy{}regextype posix\PYZhy{}extended \PYZhy{}regex \PYZdq{}.*\PYZbs{}.(c|h|cpp)\PYZdq{} | \PYZbs{}
+            xargs \PYZhy{}n 1 pcregrep  \PYZhy{}no \PYZdq{}(?sim)[a\PYZhy{}z]+\PYZbs{}w*\PYZbs{}(.*?\PYZbs{})\PYZdq{} /dev/null | sed \PYZsq{}s/\PYZbs{}s//g\PYZsq{} | tail \PYZhy{}n 10
+\end{Verbatim}
+
+    We could use the ``or'' operator (-o) to \emph{find} as well as the
+regex.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+        find \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZhy{}2.6.32.67\PYZdq{} \PYZhy{}maxdepth 2 \PYZhy{}mindepth 1 \PYZhy{}type f \PYZhy{}iname \PYZdq{}*.c\PYZdq{} \PYZhy{}o \PYZhy{}iname \PYZdq{}*.h\PYZdq{} \PYZhy{}o \PYZhy{}iname \PYZdq{}*.cpp\PYZdq{} | tail \PYZhy{}n 10
+\end{Verbatim}
+
+    \section{An aside about loops vs the \emph{parallel}
+program}\label{an-aside-about-loops-vs-the-parallel-program}
+
+\subsection{While loops in bash}\label{while-loops-in-bash}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+        while read f;do
+            file\PYZus{}=\PYZdl{}(echo \PYZdl{}f | cut \PYZhy{}d, \PYZhy{}f 1 | sed \PYZsq{}s/\PYZbs{}\PYZdq{}//g\PYZsq{})
+            grep \PYZhy{}Eo \PYZhy{}m 1 \PYZdq{}\PYZca{}\PYZsh{}include \PYZlt{}linux\PYZdq{}  \PYZdq{}\PYZdl{}\PYZob{}file\PYZus{}\PYZcb{}\PYZdq{} /dev/null
+        done \PYZlt{} \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZus{}inventory.csv\PYZdq{}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+        cat \PYZdl{}root\PYZus{}dir/prep.sh
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+        tail \PYZhy{}n 10 \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZus{}inventory.csv\PYZdq{} | xargs \PYZhy{}P 4 \PYZhy{}n 1 \PYZdl{}root\PYZus{}dir/prep.sh
+\end{Verbatim}
+
+    \subsection{Parallel}\label{parallel}
+
+A powerful program that makes running shell programs on multiple cores
+trivial, is parallel . It also cleans up code and makes things a single
+line when used with just a single core.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        \PYZsh{} Free the cache to really test the timing
+        \PYZsh{} become root and run
+        \PYZsh{} free \PYZam{}\PYZam{} sync \PYZam{}\PYZam{} echo 3 \PYZgt{} /proc/sys/vm/drop\PYZus{}caches \PYZam{}\PYZam{} free
+
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+        time find \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZhy{}2.6.32.67\PYZdq{} \PYZhy{}maxdepth 2 \PYZhy{}mindepth 1 \PYZhy{}type f \PYZhy{}name \PYZdq{}*.c\PYZdq{} | \PYZbs{}
+            parallel \PYZhy{}\PYZhy{}jobs 1 \PYZhy{}n 1 \PYZsq{}pcregrep \PYZhy{}no \PYZdq{}(?sm)if\PYZbs{}s*\PYZbs{}(.*?\PYZbs{})\PYZdq{} /dev/null\PYZsq{} | sed \PYZsq{}s/\PYZbs{}s//g\PYZsq{} \PYZgt{} /dev/null
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        \PYZsh{} become root and run
+        \PYZsh{} free \PYZam{}\PYZam{} sync \PYZam{}\PYZam{} echo 3 \PYZgt{} /proc/sys/vm/drop\PYZus{}caches \PYZam{}\PYZam{} free
+        time find \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/linux\PYZhy{}2.6.32.67\PYZdq{} \PYZhy{}maxdepth 2 \PYZhy{}mindepth 1 \PYZhy{}type f \PYZhy{}name \PYZdq{}*.c\PYZdq{} | \PYZbs{}
+            parallel \PYZhy{}\PYZhy{}jobs 4 \PYZhy{}n 1 \PYZsq{}pcregrep \PYZhy{}no \PYZdq{}(?sm)if\PYZbs{}s*\PYZbs{}(.*?\PYZbs{})\PYZdq{} /dev/null\PYZsq{} | sed \PYZsq{}s/\PYZbs{}s//g\PYZsq{} \PYZgt{} /dev/null
+\end{Verbatim}
+
+    \section{Extend our use case}\label{extend-our-use-case}
+
+\subsection{Add categorical columns to our inventory
+database}\label{add-categorical-columns-to-our-inventory-database}
+
+Let's say that we want to add a categorical columns to our SQL table.
+This is a nice way to store information about a table without worrying
+about normalization. We are not DBA's trying to maintain strict schema
+here. We just need a fast and intuitive way to query our data.
+
+I had some difficulty when I first started reading about categorical
+variables. They are writen and talked about in various contexts. For
+now, I'm thinking about a column in a database table, that contains a
+string, which describes the row.
+
+In contrast, I could have had a boolean flag like column. For every file
+with an include statement that has ``linux'' in it, give it a 1 and the
+rest a 0. Then for another condition, I'd have to add a flag for it,
+``foo'' with 1 and 0's and so on.
+
+In this case, a categorical variable is a single column that makes it
+wasy to do ``group by'', and aggregrate across categories.
+So let's add a column for the name of the directory,in the include statement, "\#include <linux/*>"
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+        find \PYZdl{}root\PYZus{}dir/linux\PYZhy{}2.6.32.67 \PYZhy{}type f \PYZhy{}iname \PYZdq{}*.c\PYZdq{} \PYZhy{}o \PYZhy{}iname \PYZdq{}*.h\PYZdq{} | \PYZbs{}
+            parallel \PYZhy{}n 1 \PYZhy{}\PYZhy{}jobs 4 \PYZsq{}grep \PYZhy{}Po \PYZhy{}m 1 \PYZdq{}(\PYZsh{}include\PYZbs{}s*\PYZbs{}Wlinux/)\PYZbs{}K\PYZbs{}w+\PYZdq{}\PYZsq{} /dev/null \PYZbs{}
+            \PYZgt{} \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/path\PYZus{}cat\PYZus{}list.txt\PYZdq{}
+\end{Verbatim}
+
+    Again make a header as above with \emph{sed} .
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}11}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         sed \PYZhy{}i \PYZsq{}1 i\PYZbs{}path:category\PYZsq{} \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/path\PYZus{}cat\PYZus{}list.txt\PYZdq{}
+\end{Verbatim}
+
+    Sanity check
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}41}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         head \PYZhy{}n 3 \PYZdl{}root\PYZus{}dir/path\PYZus{}cat\PYZus{}list.txt
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+path:category
+/home/daniel/git/Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/scan.c:kernel
+/home/daniel/git/Python2.7/DataScience/command\_line\_pres\_data/linux-2.6.32.67/net/wireless/core.h:mutex
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}18}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         csvsql \PYZhy{}d \PYZdq{}:\PYZdq{} \PYZhy{}\PYZhy{}db \PYZdq{}mysql://root:test@127.0.0.1/LinuxKernel\PYZdq{} \PYZhy{}\PYZhy{}table \PYZdq{}categories\PYZdq{} \PYZhy{}\PYZhy{}insert \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/path\PYZus{}cat\PYZus{}list.txt\PYZdq{}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}17}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         mysql \PYZhy{}uroot \PYZhy{}ptest \PYZhy{}e \PYZdq{}select * from categories limit 5;\PYZdq{} LinuxKernel
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+path	category
+command\_line\_pres\_data/linux-2.6.32.67/net/wireless/scan.c	kernel
+command\_line\_pres\_data/linux-2.6.32.67/net/wireless/core.h	mutex
+command\_line\_pres\_data/linux-2.6.32.67/net/wireless/ibss.c	etherdevice
+command\_line\_pres\_data/linux-2.6.32.67/net/wireless/nl80211.c	if
+command\_line\_pres\_data/linux-2.6.32.67/net/wireless/lib80211\_crypt\_tkip.c	err
+    \end{Verbatim}
+
+    Merge the two tables so that the original inventory table has the
+categorical columns filled in.
+UPDATE inventory, categories
+SET inventory.cat = categories.category
+WHERE inventory.path = categories.path;
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        sql=\PYZdq{}update inventory, categories set inventory.cat = categories.category where inventory.path = categories.path;\PYZdq{}
+
+        mysql \PYZhy{}uroot \PYZhy{}ptest \PYZhy{}e \PYZdq{}\PYZdl{}sql\PYZdq{} LinuxKernel
+\end{Verbatim}
+
+    Get some summary output.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}46}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         sql2csv \PYZhy{}\PYZhy{}db \PYZdq{}mysql://root:test@127.0.0.1/LinuxKernel\PYZdq{} \PYZhy{}\PYZhy{}query \PYZdq{}select ext, count(ext), cat, count(cat) from inventory where ext = \PYZsq{}c\PYZsq{} or ext = \PYZsq{}h\PYZsq{} group by ext, cat order by count(cat) desc;\PYZdq{} | \PYZbs{}
+             head \PYZhy{}n 10 | column \PYZhy{}t \PYZhy{}s,
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+ext  count(ext)  cat     count(cat)
+c    2930        module  2930
+c    2124        kernel  2124
+c    1271        init    1271
+h    875         types   875
+c    654         types   654
+c    299         delay   299
+c    282         errno   282
+c    200         fs      200
+c    185         sched   185
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[Errno 32] Broken pipe
+    \end{Verbatim}
+
+    \subsection{Do the same thing with
+Pandas}\label{do-the-same-thing-with-pandas}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{k+kn}{import} \PY{n+nn}{sqlalchemy}
+        \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k+kn}{as} \PY{n+nn}{pd}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
+        \PY{k+kn}{from} \PY{n+nn}{os} \PY{k+kn}{import} \PY{n}{path}
+        \PY{n}{root\PYZus{}dir}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data}\PY{l+s}{\PYZdq{}}
+        \PY{n}{engine} \PY{o}{=} \PY{n}{sqlalchemy}\PY{o}{.}\PY{n}{create\PYZus{}engine}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{mysql://root:test@127.0.0.1/LinuxKernel}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+    \subsubsection{Instead of grepping we use the python regex in a
+function}\label{instead-of-grepping-we-use-the-python-regex-in-a-function}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{k+kn}{import} \PY{n+nn}{re}
+
+        \PY{n}{ob} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{compile}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZsh{}include}\PY{l+s}{\PYZbs{}}\PY{l+s}{s}\PY{l+s}{\PYZbs{}}\PY{l+s}{Wlinux/(?P\PYZlt{}name\PYZgt{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{w+)}\PY{l+s}{\PYZbs{}}\PY{l+s}{.h}\PY{l+s}{\PYZbs{}}\PY{l+s}{W}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+
+        \PY{k}{def} \PY{n+nf}{regex\PYZus{}check}\PY{p}{(}\PY{n}{filename}\PY{p}{)}\PY{p}{:}
+            \PY{n}{fname} \PY{o}{=} \PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{root\PYZus{}dir}\PY{p}{,} \PY{n}{filename}\PY{p}{)}
+            \PY{n}{f} \PY{o}{=} \PY{n+nb}{open}\PY{p}{(}\PY{n}{fname}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{r}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{match} \PY{o}{=} \PY{n}{ob}\PY{o}{.}\PY{n}{search}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+            \PY{n}{f}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)}
+
+            \PY{k}{if} \PY{n}{match}\PY{p}{:}
+                \PY{k}{return} \PY{n}{match}\PY{o}{.}\PY{n}{group}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{name}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+
+            \PY{k}{else}\PY{p}{:}
+                \PY{k}{return} \PY{n+nb+bp}{None}
+\end{Verbatim}
+
+    Make sure the regex captures the right stuff. It only gets the first
+instance, which is fine. That's all the grep version above did. Not
+perfect, but OK for a day 1 iteration of what's in the directory we were
+given.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}26}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         sed \PYZhy{}n \PYZdq{}12,15p\PYZdq{} \PYZdl{}root\PYZus{}dir/linux\PYZhy{}2.6.32.67/drivers/rapidio/rio\PYZhy{}access.c
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\#include <linux/rio.h>
+\#include <linux/module.h>
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{k}{print} \PY{n}{regex\PYZus{}check}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{linux\PYZhy{}2.6.32.67/drivers/rapidio/rio\PYZhy{}access.c}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+rio
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{src} \PY{o}{=} \PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{root\PYZus{}dir}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{linux\PYZus{}inventory.csv}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{src}\PY{p}{,} \PY{n}{quotechar}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{quoting}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+        \PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{category}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{row}\PY{p}{:} \PY{n}{regex\PYZus{}check}\PY{p}{(}\PY{n}{row}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{path}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{k}{if} \PY{n}{row}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{ext}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s}{\PYZsq{}}\PY{l+s}{h}\PY{l+s}{\PYZsq{}} \PY{o+ow}{or} \PY{n}{row}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{ext}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s}{\PYZsq{}}\PY{l+s}{c}\PY{l+s}{\PYZsq{}} \PY{k}{else} \PY{n+nb+bp}{None}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{df}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{,} \PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}7}]:} path                      nlines ext     category
+        0   /DataScience/command{\ldots}    1027   c       kernel
+        1   /DataScience/command{\ldots}     401   h        mutex
+        2   /DataScience/command{\ldots}     509   c  etherdevice
+        3   /DataScience/command{\ldots}    4896   c           if
+        4   /DataScience/command{\ldots}     788   c          err
+        5   /DataScience/command{\ldots}     717   c       bitops
+        6   /DataScience/command{\ldots}     679   c       kernel
+        7   /DataScience/command{\ldots}      55   h         None
+        8   /DataScience/command{\ldots}     402   c  etherdevice
+        9   /DataScience/command{\ldots}     113   c       device
+        10  /DataScience/command{\ldots}     259   c         None
+\end{Verbatim}
+
+    I don't use Pandas' pivot table enough\ldots{}I really like this
+tutorial and decided to incorporate it here. Once you go through the
+trouble of coding up a group by you might as well do a pivot table:
+
+\url{http://pbpython.com/pandas-pivot-table-explained.html}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}22}]:} \PY{n}{table} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{pivot\PYZus{}table}\PY{p}{(}\PY{n}{index}\PY{o}{=}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{ext}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{category}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PYZbs{}
+                                \PY{n}{aggfunc}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s}{\PYZsq{}}\PY{l+s}{ext}\PY{l+s}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{len}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{category}\PY{l+s}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{len}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{nlines}\PY{l+s}{\PYZsq{}}\PY{p}{:}\PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{\PYZcb{}}\PY{p}{,} \PYZbs{}
+                                \PY{n}{values}\PY{o}{=}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{ext}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{category}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{nlines}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PYZbs{}
+                                \PY{n}{margins}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+
+         \PY{n}{table}\PY{o}{.}\PY{n}{sort}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{nlines}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{10}\PY{p}{:}\PY{p}{]}
+
+         \PY{c}{\PYZsh{}table = df.pivot\PYZus{}table(index=\PYZsq{}ext\PYZsq{}, aggfunc=\PYZob{}\PYZsq{}nlines\PYZsq{}:np.sum,\PYZsq{}ext\PYZsq{}:np.count\PYZus{}nonzero\PYZcb{}, values=[\PYZsq{}nlines\PYZsq{}, \PYZsq{}ext\PYZsq{}], margins=True)}
+         \PY{c}{\PYZsh{}table.sort(\PYZdq{}nlines\PYZdq{})[\PYZhy{}10:]}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}22}]:}               category    ext    nlines
+         ext category
+         c   sched          186    186    137675
+             errno          283    283    147777
+             fs             200    200    157690
+         h   types          881    881    191313
+         c   delay          305    305    288431
+             types          655    655    325444
+             init          1277   1277    618232
+             kernel        2124   2124   1103586
+             module        2941   2941   2237201
+         All              30485  30485  10973169
+\end{Verbatim}
+
+    \subsection{Dump data frame to mySQL}\label{dump-data-frame-to-mysql}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}sql}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{inventory2}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{engine}\PY{p}{,} \PY{n}{flavor}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{mysql}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        sql=\PYZdq{}select count(path) as cts, category from inventory2 group by category order by cts desc limit 10;\PYZdq{}
+        mysql \PYZhy{}uroot \PYZhy{}ptest \PYZhy{}e \PYZdq{}\PYZdl{}\PYZob{}sql\PYZcb{}\PYZdq{} LinuxKernel
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+        sql2csv \PYZhy{}\PYZhy{}db \PYZdq{}mysql://root:test@127.0.0.1/LinuxKernel\PYZdq{} \PYZhy{}\PYZhy{}query \PYZdq{}select count(path) as cts, category from inventory2 group by category order by cts desc;\PYZdq{} \PYZbs{}
+        \PYZgt{} \PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/categories.csv\PYZdq{}
+\end{Verbatim}
+
+    \subsection{Back to Command line}\label{back-to-command-line}
+
+\subsection{Save the output to a file for the
+future}\label{save-the-output-to-a-file-for-the-future}
+
+We'll redirect the output from standard out (terminal display) to a
+file.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}37}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         cat \PYZdl{}root\PYZus{}dir/linux\PYZus{}inventory.csv | cut \PYZhy{}d, \PYZhy{}f 3 | sort | uniq \PYZhy{}c | sort \PYZhy{}n \PYZgt{} \PYZdl{}root\PYZus{}dir/ext\PYZus{}list.txt
+\end{Verbatim}
+
+    \subsection{Makefile}\label{makefile}
+
+Let's try using a makefile. We have 2 steps required to create the
+sorted list of extensions and their counts.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  make an inventory
+\item
+  sort the inventory by extension
+\end{enumerate}
+
+We also have 2 dependencies
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Linux kernel source
+\item
+  inventory
+\end{enumerate}
+
+There's one final output, the sorted list of counts by extension
+
+The idea behind the makefile, is that if we change a dependency, then we
+want the target output steps to run again. If a file was added to the
+Linux kernel, then we need a new inventory and then a file extension
+count list. in the a real world usage I'd make some more effort to avoid
+running the entire inventory. Here, that's a bit overkill.
+
+\subsection{What is happening}\label{what-is-happening}
+
+Make keeps track of when a file or directory has been modified. If
+something was touched, then the recipe is invoked to handle that updated
+information. Make can make use of functions, shell paramters although it
+a slightly different form.
+
+Makefile are typically named, ``makefile'', and are tab delimited. Make
+has to parse the makefile so there's some special syntax that is similar
+to but distinct from that of the shell.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}data\PYZdq{}
+
+        cat \PYZhy{}n makefile
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}data\PYZdq{}
+        cat \PYZhy{}n \PYZdl{}root\PYZus{}dir/makefile
+\end{Verbatim}
+
+    \subsubsection{Test it out}\label{test-it-out}
+
+We can use the \emph{touch} command to update the modifcation dates of a
+file or directory. There are at least 3 ways to see the modifcation
+dates of a file, the most common being to \emph{stat}. incidentaly,
+\emph{stat} is a really basic program that is called internally in many
+other shell programs.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}data\PYZdq{}
+
+        stat \PYZdl{}root\PYZus{}dir/linux\PYZhy{}2.6.32.67
+\end{Verbatim}
+
+    The program \emph{touch} is used to update the modification time to the
+present date. It is also used to create an empty file when one needs
+such a thing.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}data\PYZdq{}
+
+        touch \PYZdl{}root\PYZus{}dir/linux\PYZhy{}2.6.32.67
+        stat \PYZdl{}root\PYZus{}dir/linux\PYZhy{}2.6.32.67
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}data\PYZdq{}
+        \PYZsh{} if we are in the directory where the makefile exists, just issue the \PYZus{}make\PYZus{} command
+        \PYZsh{} because this notebook could theoretically be run from anywhere, I\PYZsq{}m using the full path and the \PYZhy{}f option
+        make \PYZhy{}f \PYZdl{}root\PYZus{}dir/makefile
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}data\PYZdq{}
+
+        stat \PYZdl{}root\PYZus{}dir/ext\PYZus{}list.txt
+\end{Verbatim}
+
+    \subsection{Storing the output of command to a variable (shell
+paramter)}\label{storing-the-output-of-command-to-a-variable-shell-paramter}
+
+We can set a shell paramter from the output of another shell
+command/program. You've seen this trick used in the simple inventory
+program earlier. I used it a lot actually, to assign the output of
+commands to a shell paramter.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+
+        echo \PYZdl{}SHELL \PYZsh{} shell variable setup when you login
+        var=\PYZdl{}(echo \PYZdl{}SHELL | cut \PYZhy{}d/ \PYZhy{}f 2)
+        echo \PYZdl{}var
+\end{Verbatim}
+
+    Another example with the \emph{date} program.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        date
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+        root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}data\PYZdq{}
+
+        dir\PYZus{}path=\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/\PYZdl{}(date +\PYZpc{}Y\PYZus{}\PYZpc{}m\PYZus{}\PYZpc{}d\PYZus{}\PYZpc{}H:\PYZpc{}M:\PYZpc{}S) \PYZsh{} date can take a format string
+        echo \PYZdl{}dir\PYZus{}path
+\end{Verbatim}
+
+    \subsection{Shell Loops}\label{shell-loops}
+
+There are two kinds of loops that I tend to use:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  while
+\item
+  for
+\end{enumerate}
+
+\subsubsection{Tests}\label{tests}
+
+The square brackets are called ``tests'' . This is another topic in
+shell scripting that I can't really cover right here but you can see a
+use case for it.
+
+The loop below is rather contrived. We would really just use \emph{cat}
+command to see the contents. But it's a good practice because the output
+is predictable.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}39}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         while read f;do
+             echo \PYZdl{}f
+         done \PYZlt{} \PYZdl{}root\PYZus{}dir/ext\PYZus{}list.txt
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+6 "conf"
+6 "xsl"
+7 "gif"
+7 "H16"
+7 "pdf"
+7 "sa"
+9 "h\_shipped"
+11 "c\_shipped"
+13 "tst"
+14 "ppm"
+15 "lds"
+23 "pl"
+26 "HEX"
+28 "debug"
+33 "tmpl"
+34 "sh"
+50 "boot"
+79 "gitignore"
+105 "xml"
+111 "ihex"
+115 "dts"
+857 "txt"
+1080 "S"
+2818 "NONE"
+11638 "h"
+13154 "c"
+    \end{Verbatim}
+
+    Bash will delimit the output of the cat, by spaces or newlines\begin{verbatim}(\n)\end{verbatim}. So
+in order to get the output as we'd like, we need each line to be
+delimited by \begin{verbatim}\n\end{verbatim}, thus the IFS syntax.
+
+Read is a better way to work with the contents of a file where it's
+assumed that you want data on a per-line basis. Most of the time we do.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}41}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         IFS=\PYZdl{}\PYZsq{}\PYZbs{}n\PYZsq{}
+         for f in \PYZdl{}(cat \PYZdl{}root\PYZus{}dir/ext\PYZus{}list.txt);do
+             echo \PYZdl{}f
+         done
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+      6 "conf"
+      6 "xsl"
+      7 "gif"
+      7 "H16"
+      7 "pdf"
+      7 "sa"
+      9 "h\_shipped"
+     11 "c\_shipped"
+     13 "tst"
+     14 "ppm"
+     15 "lds"
+     23 "pl"
+     26 "HEX"
+     28 "debug"
+     33 "tmpl"
+     34 "sh"
+     50 "boot"
+     79 "gitignore"
+    105 "xml"
+    111 "ihex"
+    115 "dts"
+    857 "txt"
+   1080 "S"
+   2818 "NONE"
+  11638 "h"
+  13154 "c"
+    \end{Verbatim}
+
+    Let's do something slighly more interesting and introduce the
+\emph{test} while were at it.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}42}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         while read f;do
+                 count=\PYZdl{}(echo \PYZdl{}f | awk \PYZsq{}\PYZob{}print \PYZdl{}1\PYZcb{}\PYZsq{})
+             if [ \PYZdl{}count \PYZhy{}gt 10 ];then
+                 echo \PYZdl{}f
+             fi
+         done \PYZlt{} \PYZdl{}root\PYZus{}dir/ext\PYZus{}list.txt
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+11 "c\_shipped"
+13 "tst"
+14 "ppm"
+15 "lds"
+23 "pl"
+26 "HEX"
+28 "debug"
+33 "tmpl"
+34 "sh"
+50 "boot"
+79 "gitignore"
+105 "xml"
+111 "ihex"
+115 "dts"
+857 "txt"
+1080 "S"
+2818 "NONE"
+11638 "h"
+13154 "c"
+    \end{Verbatim}
+
+    \subsubsection{Use case}\label{use-case}
+
+Maybe you run a program in a loop, and save each output to a new file
+named with the dat and time
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}43}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         for ind in \PYZob{}1..5\PYZcb{};do
+             fname=\PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/\PYZdl{}(date +\PYZpc{}Y\PYZus{}\PYZpc{}m\PYZus{}\PYZpc{}d\PYZus{}\PYZpc{}H:\PYZpc{}M:\PYZpc{}S).test\PYZdq{}
+             echo \PYZdl{}fname
+         done
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+command\_line\_pres\_data/2015\_09\_30\_19:07:04.test
+command\_line\_pres\_data/2015\_09\_30\_19:07:04.test
+command\_line\_pres\_data/2015\_09\_30\_19:07:04.test
+command\_line\_pres\_data/2015\_09\_30\_19:07:04.test
+command\_line\_pres\_data/2015\_09\_30\_19:07:04.test
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}44}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         root\PYZus{}dir=\PYZdq{}/home/daniel/git/Python2.7/DataScience/command\PYZus{}line\PYZus{}pres\PYZus{}data\PYZdq{}
+
+         for ind in \PYZob{}1..5\PYZcb{};do
+             fname=\PYZdq{}\PYZdl{}\PYZob{}root\PYZus{}dir\PYZcb{}/test\PYZus{}\PYZdl{}ind.txt\PYZdq{}
+             echo \PYZdl{}fname
+         done
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+command\_line\_pres\_data/test\_1.txt
+command\_line\_pres\_data/test\_2.txt
+command\_line\_pres\_data/test\_3.txt
+command\_line\_pres\_data/test\_4.txt
+command\_line\_pres\_data/test\_5.txt
+    \end{Verbatim}
+
+    \section{You made it pretty damned far\ldots{}. I've run out of things
+to cram into this
+tutorial.}\label{you-made-it-pretty-damned-far.-ive-run-out-of-things-to-cram-into-this-tutorial.}
+
+
+    % Add a bibliography block to the postdoc
+
+
+
+    \end{document}
