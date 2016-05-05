@@ -13,7 +13,7 @@
 \documentclass{article}
 
 
-
+    \usepackage{float}
     \usepackage{graphicx} % Used to insert images
     \usepackage{adjustbox} % Used to constrain images to a maximum size
     \usepackage{color} % Allow colors to be defined
@@ -93,7 +93,7 @@
     \def\lt{<}
     % Document parameters
     \title{Data Analysis on the Command Line \\
-        \tiny{Loosely based on the Jeroen Janssens Book \\
+        \scriptsize{Loosely based on the Jeroen Janssens Book \\
     \url{http://jeroenjanssens.com}}}
     \author{Daniel P Cuneo}
 
@@ -222,27 +222,33 @@
 
     \maketitle
 
+    \begin{figure}[h!]
+        \includegraphics[scale=0.60]{command_line_fu.jpg}
+        \caption{xkcd comic \url{http://imgs.xkcd.com/comics/command\_line\_fu.png}}
+\end{figure}
 
 
-
-    \section{Command Line Tools for Small
-Data}\label{command-line-tools-for-small-data}
+    \section{Command Line Tools for Small Data}\label{command-line-tools-for-small-data}
 
 Ipython run in a terminal is about the best way to work with data
 interactively. Loading a csv into a Pandas dataframe or just a Numpy
 array is very powerful. However, there are times when a handful of shell
 programs can either save the day or just make the day more productive.
 
-Primarliy, I've found the program find to be extremely helpful, and
-combing it with grep / pcregrep can be enough to get a report out.
 
-I also find myself loading data into a table on mySQL as the size of the
+Primarliy, I've found the program find to be extremely helpful, and
+combing it with grep or  pcregrep can be enough to get a status report out.
+
+
+I also find myself loading data into Sqlite as the size of the
 test data grows. This has the advantage of being a little easier to
 share with coworkers too.
+
 
 Csvkit was brought to my attention by the O'Reilly book, Data Science on
 the Command Line and I've come to really like it for small scale work.
 Pandas can also push and pull data into and out of tables.
+
 
 There are times when keeping my preliminary preprocessing steps
 completely shell driven is convenient especially if used with a
@@ -324,8 +330,9 @@ some lines.
 
 The cells using bash commands, have the bash magic at the top and a
 shell variable:
-%%bash
-root="/home/daniel/git/Python2.7/DataScience/command\_line\_pres\_data"
+\begin{verbatim}%%bash\end{verbatim}
+\begin{verbatim}root="/home/daniel/git/Python2.7/DataScience/command\_line\_pres\_data"\end{verbatim}
+
     That path is specific to my personal computer and will not work for you.
 You will need to change \textbf{every} occurance to the root path you
 downloaded the data set to.
