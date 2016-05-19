@@ -37,7 +37,6 @@
     \usepackage{courier}
 
 
-
     \definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
     \definecolor{darkorange}{rgb}{.71,0.21,0.01}
     \definecolor{darkgreen}{rgb}{.12,.54,.11}
@@ -230,25 +229,21 @@
 
     \section{Command Line Tools for Small Data}\label{command-line-tools-for-small-data}
 
-Ipython run in a terminal is about the best way to work with data
+IPython run in a terminal is about the best way to work with data
 interactively. Loading a csv into a Pandas dataframe or just a Numpy
 array is very powerful. However, there are times when a handful of shell
-programs can either save the day or just make the day more productive.
+programs can either save the day or just make the day more productive.\\
 
+Primarliy, I've found the program \texttt{find} to be extremely helpful, and
+combing it with \texttt{grep} or \texttt{pcregrep} can be enough to get a status report out.\\
 
-Primarliy, I've found the program find to be extremely helpful, and
-combing it with grep or  pcregrep can be enough to get a status report out.
+I also loading data into Sqlite as the size of the
+test data grows. This has the advantage of being a easier to
+informally share with coworkers.\\
 
-
-I also find myself loading data into Sqlite as the size of the
-test data grows. This has the advantage of being a little easier to
-share with coworkers too.
-
-
-Csvkit was brought to my attention by the O'Reilly book, Data Science on
-the Command Line and I've come to really like it for small scale work.
-Pandas can also push and pull data into and out of tables.
-
+Csvkit was brought to my attention by the O'Reilly book, \underline{Data Science on
+the Command Line} and I've come to really like it for small scale work.
+Note that Pandas can also push and pull data into and out of data base tables.\\
 
 There are times when keeping my preliminary preprocessing steps
 completely shell driven is convenient especially if used with a
@@ -281,11 +276,11 @@ install}\label{programs-you-may-want-to-install}
 \begin{itemize}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
-  csvkit by onryx, install with pip or conda
+    \texttt{csvkit} by onryx, install with pip or conda
 \item
-  pcregrep, Debian sudo apt-get install
+    \texttt{pcregrep} Debian sudo apt-get install
 \item
-  parallel, in the Debian repo.
+    \texttt{parallel} in the Debian repo.
 \end{itemize}
 
 \subsection{Other items}\label{other-items}
@@ -308,15 +303,15 @@ if you don't already have it installed.
 \item
     regular expression: \url{http://www.rexegg.com/}
 \item
-  freeing memory: \\
+  freeing memory \\
   \url{http://unix.stackexchange.com/questions/87908/how-do-you-empty-the-buffers-and-cache-on-a-linux-system}
 \item
-    csvkit:\url{https://csvkit.readthedocs.org/en/0.9.1/}
+    \texttt{csvkit} \url{https://csvkit.readthedocs.org/en/0.9.1/}
 \item
-  \emph{find} command examples
+  \texttt{find} command examples
   \url{http://www.binarytides.com/linux-find-command-examples}
 \item
-  stackoverflow on excluding directories with \emph{find}
+  stackoverflow on excluding directories with \texttt{find}
   \url{http://stackoverflow.com/questions/1489277/how-to-use-prune-option-of-find-in-sh}
 \item
     fun site for inspiration \url{http://www.commandlinefu.com/commands/browse}
@@ -326,7 +321,7 @@ if you don't already have it installed.
 
 The ipython notebook is great for Python and there's some support for
 BASH and SQL. However, it's not perfect yet, and you will have to modify
-some lines.
+some lines.\\
 
 The cells using bash commands, have the bash magic at the top and a
 shell variable:
@@ -335,19 +330,20 @@ shell variable:
 
     That path is specific to my personal computer and will not work for you.
 You will need to change \textbf{every} occurance to the root path you
-downloaded the data set to.
+downloaded the data set to.\\
 
 In the future I'll consider using this BASH kernel for ipython
 notebooks:\url{https://github.com/takluyver/bash\_kernel}. This kernel would
-allow me to export any shell variables once.
+allow me to export any shell variables once.\\
 
 I also like this SQL magic provided here:
-\url{https://github.com/catherinedevlin/ipython-sql}
+\url{https://github.com/catherinedevlin/ipython-sql}\\
 
 It prints SQL tables nicely and could be good for work reports based on
-SQL.
+SQL. \\
 
-    This notebook doesn't explain the individual commands in great detail. I
+
+This notebook doesn't explain the individual commands in great detail. I
 am assuming that you either know them, or will be researching them on
 your own as you work through the commands. I have made some effort to
 make limited notes about the commands you see. Mainly, these notes are
@@ -359,9 +355,9 @@ still assume you have googled or man paged the command.
 If you are very new to the command line you might not know how the man
 pages work. The manual is opened in vi like environment so navigation
 might be difficult at first. Pressing \emph{h} while in the man pages
-will bring up a help file.
+will bring up a help file. \\
 
-Here is summary of a few commands for the man page viewer: * q to quit *
+Here is a summary of a few commands for the man page viewer: * q to quit *
 / to search * n for next forward match * N for match backwards * h man
 page navigation help * j scroll up * k scroll down
 
@@ -373,18 +369,18 @@ Quoting is tricky when dealing with the shell. The shell has to
 interpret ( or not ) everything passed in the command line. That means
 if there's spaces, or special tokens in the strings you are passing
 around, you'll have to escape the strings and wrap them in quotes,
-double or single.
+double or single. \\
 
 This is a topic in itself. I didn't want to get sidetracked here so
 please read about it. In fact you'll have to because you'll end up
-banging your head against a wall sooner than later because of it.
+banging your head against a wall sooner than later because of it.\\
 
 A nice work around, is to write intermediate steps of a shell script to
 a file. Then read back the file. Since you are not passing the strings
 through the shell interpreter directly through stdin, they will not need
 special escaping or treatment. There's nothing wrong with this, it can
 help make things more clear to others, rather than using obscure escape
-sequences.
+sequences. \\
 
 I made a point to use only \emph{nice} file names here. Windoze people
 have a nasty habit of using spaces which is a huge PITA.
@@ -410,7 +406,7 @@ have a nasty habit of using spaces which is a huge PITA.
 I used a handful of beefy regex's here that I chose because they cover a
 lot of ground. You'll want to spend a few weekends on the regegg.com
 site. I provide a quick overview of what the regex means in a cell but
-you'll have to look them up yourself.
+you'll have to look them up yourself. \\
 
 \url{https://en.wikiquote.org/wiki/Jamie\_Zawinski}
 
@@ -423,10 +419,10 @@ I'm given a hard drive full of source code and told that we will be
 doing a dependency analysis for some particular C libraries. We don't
 know in advance what we are looking for at the moment. That may be
 revealed on a client call or more information will be passed down. For
-now, we have the directories what can we do with it quickly ?
+now, we have the directories what can we do with it quickly ? \\
 
 For this exercise I'm using the Linux Kernel 2.6 because it's
-sufficiently large and free to download.
+sufficiently large and free to download. \\
 
 \paragraph{The first thing I'd do, is inventory this thing we are given
 and prepare some basic report about what we have been
@@ -497,12 +493,12 @@ the git repo if you cloned it.
 
     \section{Make an inventory}\label{make-an-inventory}
 
-The \emph{find} program is tricky to learn, it has many options. I plan
-to dive more into \emph{find}, but for now, I really just want an
+The \texttt{find} program is tricky to learn, it has many options. I plan
+to dive more into \texttt{find}, but for now, I really just want an
 inventory.csv to play with.
 
-I give find the path to search, which is our Linux Kernel directory,
-then I tell find, to only return the type, ``f'' which means files. No
+I give \texttt{find} the path to search, which is our Linux Kernel directory,
+then I tell \texttt{find}, to only return the type, ``f'' which means files. No
 directories.
 
 I then use a pipe `\textbar{}' to pass the output into the input of the
@@ -521,12 +517,12 @@ another topic to learn about, so for now, just trust me.
     The \textgreater{} is for stream redirection. The output stream from
 \emph{printf} is sent to a new file. This will clobber existing files so
 practice with it. The second use is slightly different,
-\textgreater{}\textgreater{} is an appending stream redirection.
+\textgreater{}\textgreater{} is an appending stream redirection. \\
 
 Since we don't want to clobber the linux\_inventory.csv, we use the
-append operation for the actual data.
+append operation for the actual data. \\
 
-    It's useful to be able to dro the header and add it back. You could do
+It's useful to be able to drop the header and add it back. You could do
 it in an editor, but since this notebook needs to be self contained, I
 add these cells. plus you can see another use for \emph{sed} .
 
@@ -563,7 +559,7 @@ command\_line\_pres\_data/linux-2.6.32.67/net/wireless/ibss.c","509","c"
 command\_line\_pres\_data/linux-2.6.32.67/net/wireless/nl80211.c","4896","c"
     \end{Verbatim}
 
-    A neat trick to view the csv contents better. Works great in a real
+A neat trick to view the csv contents better. Works great in a real
 terminal, the ipython notebook's default cell width is too small to look
 nice :\textbar{} So I hacked off part of the path output.
 
@@ -952,7 +948,7 @@ rules.}\label{this-example-used-the-regular-expression-syntax-where-as-above-i-u
             xargs \PYZhy{}n 1 pcregrep  \PYZhy{}no \PYZdq{}(?sim)[a\PYZhy{}z]+\PYZbs{}w*\PYZbs{}(.*?\PYZbs{})\PYZdq{} /dev/null | sed \PYZsq{}s/\PYZbs{}s//g\PYZsq{} | tail \PYZhy{}n 10
 \end{Verbatim}
 
-    We could use the ``or'' operator (-o) to \emph{find} as well as the
+    We could use the ``or'' operator (-o) to \texttt{find} as well as the
 regex.
 
     \begin{Verbatim}[commandchars=\\\{\}]
