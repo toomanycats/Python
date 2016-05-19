@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.10)  19 MAY 2016 10:55
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.10)  19 MAY 2016 10:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -845,9 +845,15 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 1406.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1406.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1406.
 
-Package rerunfilecheck Info: File `wikipedia_views.out' has not changed.
-(rerunfilecheck)             Checksum: 34B365E58D701F193877F24BD4BEEF1C;1879.
 
+
+Package rerunfilecheck Warning: File `wikipedia_views.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `wikipedia_views.out':
+(rerunfilecheck)             Before: 34B365E58D701F193877F24BD4BEEF1C;1879
+(rerunfilecheck)             After:  E94AD30BFE99E3B7F8138B3347909DBD;1878.
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
@@ -856,7 +862,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1406.
 Here is how much of TeX's memory you used:
  8927 strings out of 493304
  132725 string characters out of 6139870
- 236473 words of memory out of 5000000
+ 236472 words of memory out of 5000000
  12172 multiletter control sequences out of 15000+600000
  11797 words of font info for 44 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
@@ -871,7 +877,7 @@ msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrb8a.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb>
-Output written on wikipedia_views.pdf (21 pages, 1119326 bytes).
+Output written on wikipedia_views.pdf (21 pages, 1119328 bytes).
 PDF statistics:
  293 PDF objects out of 1000 (max. 8388607)
  217 compressed objects within 3 object streams
