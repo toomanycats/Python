@@ -2,4 +2,5 @@
 *.log
 *.out
 time_series_files
+*.dvi
 
