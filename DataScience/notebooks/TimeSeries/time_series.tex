@@ -92,7 +92,7 @@
     \def\gt{>}
     \def\lt{<}
     % Document parameters
-    \title{Time Series Analysis:Recovering A Stochastic Signal}
+    \title{Time Series Analysis: Recovering A Stochastic Signal}
     \author{Daniel Cuneo}
 
 
@@ -408,6 +408,21 @@ day}\label{group-by-day-global-day-trend-averaging-over-the-5-samples-of-each-da
     It would appear as though the 21st day of each month saw greater count.
 However, we should check to see if it is statiscally significant.
 
+The histogram below suggests that the 21st day of each month tends to
+have a higher count.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}120}]:} \PY{n}{data} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{grp}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+          \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{;}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_24_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+
     \subsection{Removing Confounds}\label{removing-confounds}
 
 \subsubsection{Quadratic Detrend Using
@@ -434,7 +449,7 @@ PolyFit}\label{quadratic-detrend-using-polyfit}
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_26_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_27_0.png}
     \end{center}
     { \hspace*{\fill} \\}
 
@@ -445,7 +460,7 @@ PolyFit}\label{quadratic-detrend-using-polyfit}
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_27_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_28_0.png}
     \end{center}
     { \hspace*{\fill} \\}
 
@@ -498,7 +513,7 @@ just as well that you can see inside the Welch call.
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_32_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_33_0.png}
     \end{center}
     { \hspace*{\fill} \\}
 
@@ -511,17 +526,20 @@ just as well that you can see inside the Welch call.
 \end{Verbatim}
 
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}19}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x7f9e9a6e5210>
+{\color{outcolor}Out[{\color{outcolor}19}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x7f226c540210>
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_33_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_34_1.png}
     \end{center}
     { \hspace*{\fill} \\}
 
     \subsection{Fit A Distribution}\label{fit-a-distribution}
 
-The somewhat manual way and after with Seaborn
+Sometime it makes sense to fit the data to a distribution and rely upon
+the distribution for the parameters like a mean and variance.
+
+Let's assume that's a great thing to do here.
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}20}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
@@ -536,11 +554,11 @@ The somewhat manual way and after with Seaborn
 \end{Verbatim}
 
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}20}]:} <matplotlib.text.Text at 0x7f9e9a4ac510>
+{\color{outcolor}Out[{\color{outcolor}20}]:} <matplotlib.text.Text at 0x7f226c307510>
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_35_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_36_1.png}
     \end{center}
     { \hspace*{\fill} \\}
 
@@ -581,7 +599,7 @@ Amplitude:0.020397  mean:79.954072   std:13.724083
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_40_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_41_1.png}
     \end{center}
     { \hspace*{\fill} \\}
 
@@ -617,50 +635,45 @@ a resampling technique. The most simple is the Jackknife.
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}27}]:} \PY{n}{count} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{count}\PY{p}{)} \PY{c}{\PYZsh{} cast from dataframe/series into numpy array}
-         \PY{n}{jksig} \PY{o}{=} \PY{n}{jk\PYZus{}params}\PY{p}{(}\PY{n}{count}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}31}]:} \PY{n}{count} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{count}\PY{p}{)} \PY{c}{\PYZsh{} cast from dataframe/series into numpy array}
+         \PY{n}{jksig} \PY{o}{=} \PY{n}{jk\PYZus{}params}\PY{p}{(}\PY{n}{count}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
     \subsubsection{Bias Calculation}\label{bias-calculation}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}43}]:} \PY{n}{n} \PY{o}{=} \PY{n}{count}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{sig\PYZus{}bias} \PY{o}{=}  \PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mf}{1.0}\PY{p}{)}\PY{o}{/}\PY{n}{n} \PY{o}{*} \PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{jksig}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}45}]:} \PY{n}{n} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{count}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n}{sig\PYZus{}bias} \PY{o}{=} \PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{jksig} \PY{o}{\PYZhy{}} \PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}45}]:} \PY{c}{\PYZsh{} 64 bit floats have 32 sig figs}
-         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Original STD from Fit :   }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s}{\PYZdq{}}    \PY{o}{\PYZpc{}}\PY{k}{coeff}[2]
-         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Mean STD from Samples :   }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}  \PY{o}{\PYZpc{}}\PY{k}{jksig}.mean()
-         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Bias:                     }\PY{l+s+si}{\PYZpc{}07.4f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{sig\PYZus{}bias}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}60}]:} \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Original STD from Fit :   }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s}{\PYZdq{}}    \PY{o}{\PYZpc{}}\PY{k}{coeff}[2]
+         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Mean STD from Samples :   }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}  \PY{o}{\PYZpc{}}\PY{k}{jksig}
+         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Bias:                    }\PY{l+s+si}{\PYZpc{}07.4f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{sig\PYZus{}bias}\PY{p}{)}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 Original STD from Fit :   13.7241
 Mean STD from Samples :   13.3935
 
-Bias:                     00.3230
+Bias:                    -13.5524
     \end{Verbatim}
 
     Update the standard deviation for the Guassian Fit.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}46}]:} \PY{n}{sig} \PY{o}{=} \PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{sig\PYZus{}bias}
+{\color{incolor}In [{\color{incolor}66}]:} \PY{n}{sig} \PY{o}{=} \PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{sig\PYZus{}bias}
 
          \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{sig:}\PY{l+s+si}{\PYZpc{}.1f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}}\PY{k}{sig} \PYZsh{} rounding to three sig figs.
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-sig:13.4
+sig:27.3
     \end{Verbatim}
 
     The mean of the count taken to 3 sig figs.
 
-$\mu_{count} = 80.0 \pm 13.4$
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:}
-\end{Verbatim}
+$\mu_{count} = 80.0 \pm 27.3$
 
 
     % Add a bibliography block to the postdoc
