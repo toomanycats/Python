@@ -242,9 +242,9 @@ signal from a time series that that has a linear combination of
 confounding noise.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}1}]:} \PY{c}{\PYZsh{}\PYZpc{}install\PYZus{}ext https://raw.githubusercontent.com/rasbt/watermark/master/watermark.py}
-        \PY{o}{\PYZpc{}}\PY{k}{reload\PYZus{}ext} watermark
-        \PY{o}{\PYZpc{}}\PY{k}{watermark} \PYZhy{}p numpy,scipy,pandas,matplotlib
+{\color{incolor}In [{\color{incolor}71}]:} \PY{c}{\PYZsh{}\PYZpc{}install\PYZus{}ext https://raw.githubusercontent.com/rasbt/watermark/master/watermark.py}
+         \PY{o}{\PYZpc{}}\PY{k}{reload\PYZus{}ext} watermark
+         \PY{o}{\PYZpc{}}\PY{k}{watermark} \PYZhy{}p numpy,scipy,pandas,matplotlib
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -255,40 +255,40 @@ matplotlib 1.4.0
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}2}]:} \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
-        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
-        \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k+kn}{as} \PY{n+nn}{pd}
-        \PY{k+kn}{import} \PY{n+nn}{scipy.signal} \PY{k+kn}{as} \PY{n+nn}{signal}
-        \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+{\color{incolor}In [{\color{incolor}72}]:} \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
+         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
+         \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k+kn}{as} \PY{n+nn}{pd}
+         \PY{k+kn}{import} \PY{n+nn}{scipy.signal} \PY{k+kn}{as} \PY{n+nn}{signal}
+         \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}3}]:} \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{/home/daniel/git/Python2.7/DataScience/notebooks/TimeSeries/data.csv}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}73}]:} \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{/home/daniel/git/Python2.7/DataScience/notebooks/TimeSeries/data.csv}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}4}]:} \PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}74}]:} \PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}4}]:}          date day.of.week  car.count  weather
-        0  2010-01-01      friday       94.5     -0.1
-        1  2010-01-02    saturday      108.4     -2.4
-        2  2010-01-03      sunday      105.5     -0.5
-        3  2010-01-04      monday      109.6     -2.1
-        4  2010-01-05     tuesday      116.1      1.9
+{\color{outcolor}Out[{\color{outcolor}74}]:}          date day.of.week  car.count  weather
+         0  2010-01-01      friday       94.5     -0.1
+         1  2010-01-02    saturday      108.4     -2.4
+         2  2010-01-03      sunday      105.5     -0.5
+         3  2010-01-04      monday      109.6     -2.1
+         4  2010-01-05     tuesday      116.1      1.9
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}5}]:} \PY{c}{\PYZsh{} I like using Pandas b/c of the datetime features, resample or groupby}
-        \PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{date}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{date}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
-        \PY{n}{df}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{date}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}75}]:} \PY{c}{\PYZsh{} I like using Pandas b/c of the datetime features, resample or groupby}
+         \PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{date}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{date}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+         \PY{n}{df}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{date}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
 \end{Verbatim}
 
     \subsection{Initial Plot}\label{initial-plot}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{rot}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{p}{;}
+{\color{incolor}In [{\color{incolor}76}]:} \PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{rot}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{,} \PY{n}{grid}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}\PY{p}{;}
 \end{Verbatim}
 
     \begin{center}
@@ -303,9 +303,9 @@ random stochastic signal.
 record}\label{single-year-analysis-first-year-in-the-record}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}7}]:} \PY{c}{\PYZsh{} year = df[\PYZsq{}car.count\PYZsq{}][0:365]  if you are in a rush}
-        \PY{n}{year} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{date}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZlt{}} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{20110101}\PY{l+s}{\PYZsq{}}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}
-        \PY{n}{year}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{rot}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}\PY{p}{,} \PY{n}{title}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Single Year Analysis: First Year on Record}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{;}
+{\color{incolor}In [{\color{incolor}77}]:} \PY{c}{\PYZsh{} year = df[\PYZsq{}car.count\PYZsq{}][0:365]  if you are in a rush}
+         \PY{n}{year} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{date}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZlt{}} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{20110101}\PY{l+s}{\PYZsq{}}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{year}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{rot}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}\PY{p}{,} \PY{n}{grid}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{,} \PY{n}{title}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Single Year Analysis: First Year on Record}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{;}
 \end{Verbatim}
 
     \begin{center}
@@ -317,44 +317,41 @@ record}\label{single-year-analysis-first-year-in-the-record}
 need to treat those.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}8}]:} \PY{c}{\PYZsh{}TODO: add to signal processing module}
+{\color{incolor}In [{\color{incolor}78}]:} \PY{c}{\PYZsh{}TODO: add to signal processing module}
 
-        \PY{k}{def} \PY{n+nf}{remove\PYZus{}nans}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{return\PYZus{}nan\PYZus{}index}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{)}\PY{p}{:}
-            \PY{n}{nan\PYZus{}ind} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{nonzero}\PY{p}{(}\PY{o}{\PYZti{}}\PY{n}{np}\PY{o}{.}\PY{n}{isfinite}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-            \PY{n}{good\PYZus{}data\PYZus{}ind} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{nonzero}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{isfinite}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-            \PY{n}{good\PYZus{}data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{good\PYZus{}data\PYZus{}ind}\PY{p}{]}
+         \PY{k}{def} \PY{n+nf}{remove\PYZus{}nans}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{return\PYZus{}nan\PYZus{}index}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{)}\PY{p}{:}
+             \PY{n}{nan\PYZus{}ind} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{nonzero}\PY{p}{(}\PY{o}{\PYZti{}}\PY{n}{np}\PY{o}{.}\PY{n}{isfinite}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+             \PY{n}{good\PYZus{}data\PYZus{}ind} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{nonzero}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{isfinite}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+             \PY{n}{good\PYZus{}data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{good\PYZus{}data\PYZus{}ind}\PY{p}{]}
 
-            \PY{n}{new\PYZus{}points} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{interp}\PY{p}{(}\PY{n}{nan\PYZus{}ind}\PY{p}{,} \PY{n}{good\PYZus{}data\PYZus{}ind}\PY{p}{,} \PY{n}{good\PYZus{}data}\PY{p}{)}
-            \PY{n}{data}\PY{p}{[}\PY{n}{nan\PYZus{}ind}\PY{p}{]} \PY{o}{=} \PY{n}{new\PYZus{}points}
+             \PY{n}{new\PYZus{}points} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{interp}\PY{p}{(}\PY{n}{nan\PYZus{}ind}\PY{p}{,} \PY{n}{good\PYZus{}data\PYZus{}ind}\PY{p}{,} \PY{n}{good\PYZus{}data}\PY{p}{)}
+             \PY{n}{data}\PY{p}{[}\PY{n}{nan\PYZus{}ind}\PY{p}{]} \PY{o}{=} \PY{n}{new\PYZus{}points}
 
-            \PY{k}{if} \PY{n}{return\PYZus{}nan\PYZus{}index}\PY{p}{:}
-                \PY{k}{return} \PY{n}{data}\PY{p}{,} \PY{n}{nan\PYZus{}ind}
-            \PY{k}{else}\PY{p}{:}
-                \PY{k}{return} \PY{n}{data}
+             \PY{k}{if} \PY{n}{return\PYZus{}nan\PYZus{}index}\PY{p}{:}
+                 \PY{k}{return} \PY{n}{data}\PY{p}{,} \PY{n}{nan\PYZus{}ind}
+             \PY{k}{else}\PY{p}{:}
+                 \PY{k}{return} \PY{n}{data}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{year}\PY{p}{,} \PY{n}{nan\PYZus{}ind} \PY{o}{=} \PY{n}{remove\PYZus{}nans}\PY{p}{(}\PY{n}{year}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{return\PYZus{}nan\PYZus{}index}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
-        \PY{n}{year\PYZus{}linear\PYZus{}det} \PY{o}{=} \PY{n}{signal}\PY{o}{.}\PY{n}{detrend}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n+nb}{type}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{linear}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}79}]:} \PY{n}{year}\PY{p}{,} \PY{n}{nan\PYZus{}ind} \PY{o}{=} \PY{n}{remove\PYZus{}nans}\PY{p}{(}\PY{n}{year}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{return\PYZus{}nan\PYZus{}index}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+         \PY{n}{year\PYZus{}linear\PYZus{}det} \PY{o}{=} \PY{n}{signal}\PY{o}{.}\PY{n}{detrend}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n+nb}{type}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{linear}\PY{l+s}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
     Single Year Linear Detrend Time Series
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}80}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{year}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{p}{:}\PY{l+m+mi}{30}\PY{p}{]}\PY{p}{,} \PY{n}{year}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{p}{:}\PY{l+m+mi}{30}\PY{p}{]}\PY{p}{,} \PY{n}{rotation}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{year\PYZus{}linear\PYZus{}det}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Linear Detrend Single Year}\PY{l+s}{\PYZdq{}}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{nan\PYZus{}ind}\PY{p}{,} \PY{n}{year\PYZus{}linear\PYZus{}det}\PY{p}{[}\PY{n}{nan\PYZus{}ind}\PY{p}{]}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{rx}\PY{l+s}{\PYZsq{}}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{366}\PY{p}{)}
-\end{Verbatim}
-
-            \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}10}]:} (0, 366)
+         \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_15_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_15_0.png}
     \end{center}
     { \hspace*{\fill} \\}
 
@@ -365,22 +362,20 @@ or a feature we are looking for.
 
 The NaN replacements look reasonable.
 
-    \subsection{Group By for Basic
+    \subsection{`Group By' for Basic
 Analysis}\label{group-by-for-basic-analysis}
 
-Grouping the data points into bins and taking the mean, is very simialr
-to a Fourier Transform.
-
-Pandas makes this easy and there's no reason not to. Especially if the
-data is related to business trends.
+Grouping and aggregating is a simple and powerful way to gain insights
+into data sets. For large data, or even medium large, I use a SQL
+database. For small data like this, Pandas is perfect.
 
     \subsubsection{Group by Month: Global monthly trend averaging over the 5
 samples of each
 month}\label{group-by-month-global-monthly-trend-averaging-over-the-5-samples-of-each-month}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}11}]:} \PY{n}{grp} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{date}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:}\PY{n}{x}\PY{o}{.}\PY{n}{month}\PY{p}{)}\PY{p}{)}
-         \PY{n}{grp}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{,} \PY{n}{title}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Group by Month}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{;}
+{\color{incolor}In [{\color{incolor}81}]:} \PY{n}{grp} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{date}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:}\PY{n}{x}\PY{o}{.}\PY{n}{month}\PY{p}{)}\PY{p}{)}
+         \PY{n}{grp}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{,} \PY{n}{grid}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{,} \PY{n}{title}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Group by Month}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{;}
 \end{Verbatim}
 
     \begin{center}
@@ -391,13 +386,32 @@ month}\label{group-by-month-global-monthly-trend-averaging-over-the-5-samples-of
     A group-by is sort of like a Fourier Transform where we choose just one
 frequency bin. There's the sinusodial period $\approx$ 90 days.
 
-    \subsubsection{Group by Day: Global day trend averaging over the 5
-samples of each
-day}\label{group-by-day-global-day-trend-averaging-over-the-5-samples-of-each-day}
+    \subsection{Tangent into statistical time series
+analysis}\label{tangent-into-statistical-time-series-analysis}
+
+\subsubsection{Group by Day: Global day trend averaging over the 5 years
+of 12
+months}\label{group-by-day-global-day-trend-averaging-over-the-5-years-of-12-months}
+
+In the plot below, it would appear that the 21st day of every month,
+averaged over the 5 years, has had the highest count of cars. The 60
+days which comprise the sample is not such a high number of samples.
+I'll take a moment to try out the bootstrap method of resampling.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}12}]:} \PY{n}{grp} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{date}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:}\PY{n}{x}\PY{o}{.}\PY{n}{day}\PY{p}{)}\PY{p}{)}
-         \PY{n}{grp}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{,} \PY{n}{title}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Groupby Day}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{;}
+{\color{incolor}In [{\color{incolor}82}]:} \PY{n}{grp} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{date}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:}\PY{n}{x}\PY{o}{.}\PY{n}{day}\PY{p}{)}\PY{p}{)}
+         \PY{n}{X} \PY{o}{=} \PY{n}{grp}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}
+
+         \PY{c}{\PYZsh{} decided to not use Pandas plot method b/c I wanted the \PYZhy{}o style of lines}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{index}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{\PYZhy{}o}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{)}\PY{p}{;}
+
+         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Group By Day: Mean of Counts}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Day of the Month}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Count}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mi}{31}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
     \begin{center}
@@ -405,21 +419,43 @@ day}\label{group-by-day-global-day-trend-averaging-over-the-5-samples-of-each-da
     \end{center}
     { \hspace*{\fill} \\}
 
-    It would appear as though the 21st day of each month saw greater count.
-However, we should check to see if it is statiscally significant.
+    \subsubsection{Significance}\label{significance}
 
-The histogram below suggests that the 21st day of each month tends to
-have a higher count.
+The density estimate below suggests that the max count on the 21st day
+is significant.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}120}]:} \PY{n}{data} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{grp}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}83}]:} \PY{k+kn}{from} \PY{n+nn}{scipy.stats} \PY{k+kn}{import} \PY{n}{gaussian\PYZus{}kde}
 
-          \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
-          \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{;}
+         \PY{n}{X} \PY{o}{=} \PY{n}{grp}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{N} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+         \PY{n}{grid} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{X}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{)}
+
+         \PY{n}{kde} \PY{o}{=} \PY{n}{gaussian\PYZus{}kde}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{bw\PYZus{}method}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{)}
+         \PY{n}{out} \PY{o}{=} \PY{n}{kde}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{n}{grid}\PY{p}{)}
+
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{grid}\PY{p}{,} \PY{n}{out}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+         \PY{n}{max\PYZus{}cnt\PYZus{}ind} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{p}{)}
+         \PY{n}{cnt\PYZus{}max} \PY{o}{=} \PY{n}{X}\PY{p}{[}\PY{n}{max\PYZus{}cnt\PYZus{}ind}\PY{p}{]}
+
+         \PY{n}{ht} \PY{o}{=} \PY{n}{out}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{vlines}\PY{p}{(}\PY{n}{cnt\PYZus{}max}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{ht}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{r}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+
+         \PY{n}{max\PYZus{}ind} \PY{o}{=} \PY{n}{out}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{p}{)}
+         \PY{n}{max\PYZus{}} \PY{o}{=} \PY{n}{grid}\PY{p}{[}\PY{n}{max\PYZus{}ind}\PY{p}{]}
+
+         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Max count in plot:    }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{cnt\PYZus{}max}
+         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Mean count over days: }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{grid}\PY{p}{[}\PY{n}{max\PYZus{}ind}\PY{p}{]}
 \end{Verbatim}
 
+    \begin{Verbatim}[commandchars=\\\{\}]
+Max count in plot:    179.57
+Mean count over days: 170.79
+    \end{Verbatim}
+
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_24_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_24_1.png}
     \end{center}
     { \hspace*{\fill} \\}
 
@@ -429,7 +465,7 @@ have a higher count.
 PolyFit}\label{quadratic-detrend-using-polyfit}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{poly} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{polynomial}\PY{o}{.}\PY{n}{polynomial}
+{\color{incolor}In [{\color{incolor}84}]:} \PY{n}{poly} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{polynomial}\PY{o}{.}\PY{n}{polynomial}
          \PY{n}{counts} \PY{o}{=} \PY{n}{remove\PYZus{}nans}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{car.count}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{return\PYZus{}nan\PYZus{}index}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{)}
 
          \PY{n}{t} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
@@ -438,10 +474,11 @@ PolyFit}\label{quadratic-detrend-using-polyfit}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}14}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}85}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
 
          \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{fit\PYZus{}curve}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{r}\PY{l+s}{\PYZsq{}}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{counts}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
 
          \PY{n}{labels} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{date}\PY{l+s}{\PYZsq{}}\PY{p}{]}
          \PY{n}{date\PYZus{}str} \PY{o}{=} \PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{year}\PY{p}{)} \PY{o}{+} \PY{l+s}{\PYZdq{}}\PY{l+s}{ / }\PY{l+s}{\PYZdq{}}  \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{month}\PY{p}{)}\PY{p}{,} \PY{n}{labels}\PY{p}{)}
@@ -454,9 +491,10 @@ PolyFit}\label{quadratic-detrend-using-polyfit}
     { \hspace*{\fill} \\}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}15}]:} \PY{n}{det\PYZus{}curve} \PY{o}{=} \PY{n}{counts} \PY{o}{\PYZhy{}} \PY{n}{fit\PYZus{}curve}
+{\color{incolor}In [{\color{incolor}86}]:} \PY{n}{det\PYZus{}curve} \PY{o}{=} \PY{n}{counts} \PY{o}{\PYZhy{}} \PY{n}{fit\PYZus{}curve}
          \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{det\PYZus{}curve}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{)}\PY{p}{;}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
     \begin{center}
@@ -471,7 +509,7 @@ $\approx$ 90 day sinusodial is a well understood or nuisance, then we'll
 examine the remainder of the signal.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}16}]:} \PY{k+kn}{import} \PY{n+nn}{sys}
+{\color{incolor}In [{\color{incolor}87}]:} \PY{k+kn}{import} \PY{n+nn}{sys}
          \PY{n}{sys}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{/home/daniel/git/Python2.7/MRI/Modules}\PY{l+s}{\PYZdq{}}\PY{p}{)}
          \PY{k+kn}{import} \PY{n+nn}{SignalProcessTools}
 
@@ -485,22 +523,22 @@ I keep this method handy and it should be in my Sigtools Module. It's
 just as well that you can see inside the Welch call.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}17}]:} \PY{k}{def} \PY{n+nf}{fft}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
-                 \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}Plot FFT using Welch\PYZsq{}s method, daily resolution \PYZsq{}\PYZsq{}\PYZsq{}}
-                 \PY{n}{f}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{signal}\PY{o}{.}\PY{n}{welch}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{fs}\PY{o}{=}\PY{l+m+mf}{1.0}\PY{p}{,} \PY{n}{nperseg}\PY{o}{=}\PY{l+m+mi}{365}\PY{p}{,} \PY{n}{noverlap}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{,} \PY{n}{nfft}\PY{o}{=}\PY{l+m+mi}{512}\PY{p}{,} \PY{n}{scaling}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{spectrum}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{detrend}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{linear}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}88}]:} \PY{k}{def} \PY{n+nf}{fft}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
+                 \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}Plot FFT using Welch\PYZsq{}s method\PYZsq{}\PYZsq{}\PYZsq{}}
+                 \PY{n}{f}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{signal}\PY{o}{.}\PY{n}{welch}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{fs}\PY{o}{=}\PY{l+m+mf}{1.0}\PY{p}{,} \PY{n}{nperseg}\PY{o}{=}\PY{l+m+mi}{128}\PY{p}{,} \PY{n}{noverlap}\PY{o}{=}\PY{l+m+mi}{64}\PY{p}{,} \PY{n}{nfft}\PY{o}{=}\PY{l+m+mi}{512}\PY{p}{,} \PY{n}{scaling}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{spectrum}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{detrend}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{linear}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 
                  \PY{n}{interval} \PY{o}{=} \PY{l+m+mi}{3} \PY{c}{\PYZsh{} days}
                  \PY{n}{periods} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{/}\PY{n}{f}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{p}{:}\PY{n}{interval}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
                  \PY{c}{\PYZsh{} clean up frequency of 0 Hz}
-                 \PY{n}{periods}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}
+                 \PY{n}{periods}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0} \PY{c}{\PYZsh{} avoid 1/ 0 }
 
                  \PY{n}{frqs} \PY{o}{=} \PY{n}{f}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{p}{:}\PY{n}{interval}\PY{p}{]}
                  \PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n}{frqs}\PY{p}{,} \PY{n}{periods}\PY{p}{,} \PY{n}{rotation}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{vertical}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 
                  \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{f}\PY{p}{,} \PY{n}{y}\PY{p}{)}
+                 \PY{c}{\PYZsh{}plt.semilogy(f, y)}
 
                  \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{n+nb+bp}{True}\PY{p}{)}
-                 \PY{c}{\PYZsh{}plt.title(\PYZdq{}Welch FFT: Counts\PYZdq{})}
                  \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Relative ratio of spectrum}\PY{l+s}{\PYZdq{}}\PY{p}{)}
                  \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Number of days in a period}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 
@@ -508,7 +546,7 @@ just as well that you can see inside the Welch call.
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}89}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
          \PY{n}{f}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{frqs} \PY{o}{=} \PY{n}{fft}\PY{p}{(}\PY{n}{det\PYZus{}curve}\PY{p}{)}
 \end{Verbatim}
 
@@ -518,15 +556,15 @@ just as well that you can see inside the Welch call.
     { \hspace*{\fill} \\}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{frq} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{/} \PY{l+m+mf}{56.9} \PY{c}{\PYZsh{} from FFT output above}
+{\color{incolor}In [{\color{incolor}90}]:} \PY{n}{frq} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{/} \PY{l+m+mf}{56.9} \PY{c}{\PYZsh{} from FFT output above}
          \PY{n}{out} \PY{o}{=} \PY{n}{sigtools}\PY{o}{.}\PY{n}{hi\PYZus{}pass\PYZus{}filter}\PY{p}{(}\PY{n}{det\PYZus{}curve}\PY{p}{,} \PY{n}{frq}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
 
          \PY{n}{dff} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s}{\PYZsq{}}\PY{l+s}{count}\PY{l+s}{\PYZsq{}}\PY{p}{:}\PY{n}{out}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{p}{)}
-         \PY{n}{dff}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{title}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Counts After Quadratic Detrend and High Pass Filter}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{)}
+         \PY{n}{dff}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{title}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Counts After Quadratic Detrend and High Pass Filter}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{grid}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{)}
 \end{Verbatim}
 
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}19}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x7f226c540210>
+{\color{outcolor}Out[{\color{outcolor}90}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x7f5a3254aa10>
 \end{Verbatim}
 
     \begin{center}
@@ -534,7 +572,9 @@ just as well that you can see inside the Welch call.
     \end{center}
     { \hspace*{\fill} \\}
 
-    \subsection{Fit A Distribution}\label{fit-a-distribution}
+    \subsection{Kernel Density Estimate}\label{kernel-density-estimate}
+
+http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian\_kde.html\#scipy.stats.gaussian\_kde
 
 Sometime it makes sense to fit the data to a distribution and rely upon
 the distribution for the parameters like a mean and variance.
@@ -542,34 +582,59 @@ the distribution for the parameters like a mean and variance.
 Let's assume that's a great thing to do here.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
-
-         \PY{c}{\PYZsh{} undo the centering that occures fromt he previous procesing}
+{\color{incolor}In [{\color{incolor}91}]:} \PY{c}{\PYZsh{} undo the centering that occures fromt he previous procesing}
          \PY{n}{count} \PY{o}{=} \PY{n}{dff}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{count}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{dff}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{count}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
 
-         \PY{n}{nbins} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{count}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-         \PY{n}{y\PYZus{}counts}\PY{p}{,} \PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{n}{patch} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{count}\PY{p}{,} \PY{n}{nbins}\PY{p}{,} \PY{n}{normed}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{;}
-         \PY{n}{string} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Histrogram With }\PY{l+s+si}{\PYZpc{}s}\PY{l+s}{ Bins}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{nbins}\PY{p}{)}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{n}{string}\PY{p}{)}
+         \PY{k}{def} \PY{n+nf}{comp\PYZus{}kde}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
+             \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+             \PY{n}{min\PYZus{}} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{10}
+             \PY{n}{max\PYZus{}} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{10}
+             \PY{n}{grid} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{n}{min\PYZus{}}\PY{p}{,} \PY{n}{max\PYZus{}}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{)}
+
+             \PY{n}{kde} \PY{o}{=} \PY{n}{gaussian\PYZus{}kde}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{bw\PYZus{}method}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{)}
+             \PY{n}{out} \PY{o}{=} \PY{n}{kde}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{n}{grid}\PY{p}{)}
+
+             \PY{k}{return} \PY{n}{out}\PY{p}{,} \PY{n}{grid}
 \end{Verbatim}
 
-            \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}20}]:} <matplotlib.text.Text at 0x7f226c307510>
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}92}]:} \PY{n}{FIT}\PY{p}{,} \PY{n}{grid} \PY{o}{=} \PY{n}{comp\PYZus{}kde}\PY{p}{(}\PY{n}{count}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{grid}\PY{p}{,} \PY{n}{FIT}\PY{p}{)}
+
+         \PY{n}{max\PYZus{}ind} \PY{o}{=} \PY{n}{FIT}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{p}{)}
+         \PY{n}{MU\PYZus{}} \PY{o}{=} \PY{n}{grid}\PY{p}{[}\PY{n}{max\PYZus{}ind}\PY{p}{]}
+
+         \PY{n}{ht} \PY{o}{=} \PY{n}{FIT}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{vlines}\PY{p}{(}\PY{n}{MU\PYZus{}}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{ht}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{r}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Mean of distribution: }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{MU\PYZus{}}
 \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Mean of distribution: 79.18
+    \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_36_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_37_1.png}
     \end{center}
     { \hspace*{\fill} \\}
 
-    Perhaps a Gausian
+    \subsubsection{Variance as width to inflection
+point}\label{variance-as-width-to-inflection-point}
+
+A decent way to characterize the width, is the use the inflection point.
+
+If you want to see how that is done, take a look at my notebook on
+Wikipedia Counts and time series. In that notebook I use a
+Savitzsky-Golay filter and a numerical adaption of the 1st and 2nd
+derivative tests from calculus.
+
+    \subsection{Gaussian Fit}\label{gaussian-fit}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}21}]:} \PY{n}{bin\PYZus{}x} \PY{o}{=} \PY{n}{bin\PYZus{}x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{c}{\PYZsh{} drop the first bin to match the array lengths}
-\end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}22}]:} \PY{k+kn}{from} \PY{n+nn}{scipy.optimize} \PY{k+kn}{import} \PY{n}{curve\PYZus{}fit}
+{\color{incolor}In [{\color{incolor}93}]:} \PY{k+kn}{from} \PY{n+nn}{scipy.optimize} \PY{k+kn}{import} \PY{n}{curve\PYZus{}fit}
 
          \PY{k}{def} \PY{n+nf}{gauss}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{o}{*}\PY{n}{p}\PY{p}{)}\PY{p}{:}
              \PY{n}{A}\PY{p}{,} \PY{n}{mu}\PY{p}{,} \PY{n}{sig} \PY{o}{=} \PY{n}{p}
@@ -577,103 +642,99 @@ Let's assume that's a great thing to do here.
              \PY{k}{return} \PY{n}{gau}
 \end{Verbatim}
 
+    \subsubsection{Make a histogram}\label{make-a-histogram}
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}23}]:} \PY{n}{coeff}\PY{p}{,} \PY{n}{var\PYZus{}matrix} \PY{o}{=} \PY{n}{curve\PYZus{}fit}\PY{p}{(}\PY{n}{gauss}\PY{p}{,} \PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{n}{y\PYZus{}counts}\PY{p}{,} \PY{n}{p0}\PY{o}{=}\PY{p}{[}\PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+m+mf}{0.0001}\PY{p}{,} \PY{l+m+mf}{20.0}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}94}]:} \PY{n}{nbins} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{count}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n}{y\PYZus{}counts}\PY{p}{,} \PY{n}{bin\PYZus{}x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{histogram}\PY{p}{(}\PY{n}{count}\PY{p}{,} \PY{n}{nbins}\PY{p}{,} \PY{n}{normed}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}\PY{p}{;}
+         \PY{n}{bin\PYZus{}x} \PY{o}{=} \PY{n}{bin\PYZus{}x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{c}{\PYZsh{} drop the first bin to match the array lengths}
+
+         \PY{c}{\PYZsh{} fit the histogram to a Gaussian}
+         \PY{n}{coeff}\PY{p}{,} \PY{n}{var\PYZus{}matrix} \PY{o}{=} \PY{n}{curve\PYZus{}fit}\PY{p}{(}\PY{n}{gauss}\PY{p}{,} \PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{n}{y\PYZus{}counts}\PY{p}{,} \PY{n}{p0}\PY{o}{=}\PY{p}{[}\PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+m+mf}{0.0001}\PY{p}{,} \PY{l+m+mf}{20.0}\PY{p}{]}\PY{p}{)}
          \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Amplitude:}\PY{l+s+si}{\PYZpc{}f}\PY{l+s}{  mean:}\PY{l+s+si}{\PYZpc{}f}\PY{l+s}{   std:}\PY{l+s+si}{\PYZpc{}f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+         \PY{n}{fit\PYZus{}gau} \PY{o}{=} \PY{n}{gauss}\PY{p}{(}\PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{o}{*}\PY{n}{coeff}\PY{p}{)}
+
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{n}{fit\PYZus{}gau}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{r}\PY{l+s}{\PYZsq{}}\PY{p}{)}\PY{p}{;}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{n}{y\PYZus{}counts}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.4}\PY{p}{,} \PY{n}{width}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{align}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{center}\PY{l+s}{\PYZsq{}}\PY{p}{)}\PY{p}{;}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
 Amplitude:0.020397  mean:79.954072   std:13.724083
     \end{Verbatim}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}24}]:} \PY{n}{fit\PYZus{}gau} \PY{o}{=} \PY{n}{gauss}\PY{p}{(}\PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{o}{*}\PY{n}{coeff}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}\PY{p}{)}
-
-         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{n}{fit\PYZus{}gau}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{r}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{n}{y\PYZus{}counts}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.4}\PY{p}{,} \PY{n}{width}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{align}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{center}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-\end{Verbatim}
-
-            \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}24}]:} <Container object of 42 artists>
-\end{Verbatim}
-
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_41_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{time_series_files/time_series_42_1.png}
     \end{center}
     { \hspace*{\fill} \\}
 
     \subsection{Jackknife Bias Estimation}\label{jackknife-bias-estimation}
 
-Since the time dependant trends have been removed, the remaining records
-should be independent identically distributed records, or close to it.
-
-We are putting a lot of weight ont he Guassian fit above. That mean and
-standard deviation are the main metrics that describe the data. To find
-out if our method of computing the mean and sigma are biased, we can use
-a resampling technique. The most simple is the Jackknife.
+Maybe we decide that the data looks Gaussian enough for us and we just
+compute the mean and standard deviation. You can certainly fit a
+Gaussian with Scipy but I'll avoid it here so that I can use the
+Jackknife method on something simple.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}25}]:} \PY{c}{\PYZsh{}\PYZsh{} Helper functions for the jackknife iterations }
-
-         \PY{k}{def} \PY{n+nf}{jk\PYZus{}gau\PYZus{}fit}\PY{p}{(}\PY{n}{sample}\PY{p}{)}\PY{p}{:}
-             \PY{n}{nbins} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{sample}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-             \PY{n}{y\PYZus{}counts}\PY{p}{,} \PY{n}{bin\PYZus{}x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{histogram}\PY{p}{(}\PY{n}{sample}\PY{p}{,} \PY{n}{nbins}\PY{p}{,} \PY{n}{normed}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}\PY{p}{;} \PY{c}{\PYZsh{} slightly different method is faster as there is no plotting}
-             \PY{n}{bin\PYZus{}x} \PY{o}{=} \PY{n}{bin\PYZus{}x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
-             \PY{n}{coeff}\PY{p}{,} \PY{n}{var\PYZus{}matrix} \PY{o}{=} \PY{n}{curve\PYZus{}fit}\PY{p}{(}\PY{n}{gauss}\PY{p}{,} \PY{n}{bin\PYZus{}x}\PY{p}{,} \PY{n}{y\PYZus{}counts}\PY{p}{,} \PY{n}{p0}\PY{o}{=}\PY{p}{[}\PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+m+mf}{0.0001}\PY{p}{,} \PY{l+m+mf}{20.0}\PY{p}{]}\PY{p}{)}
-
-             \PY{k}{return} \PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{c}{\PYZsh{} amp, mean, sig}
-
-         \PY{k}{def} \PY{n+nf}{jk\PYZus{}params}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
+{\color{incolor}In [{\color{incolor}95}]:} \PY{k}{def} \PY{n+nf}{jk\PYZus{}params}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{:}
+             \PY{n}{mu} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros\PYZus{}like}\PY{p}{(}\PY{n}{data}\PY{p}{)}
              \PY{n}{sig} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros\PYZus{}like}\PY{p}{(}\PY{n}{data}\PY{p}{)}
              \PY{n}{n} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
              \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
                  \PY{n}{sample} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{i}\PY{p}{)}
-                 \PY{n}{sig}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{jk\PYZus{}gau\PYZus{}fit}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+                 \PY{n}{mu}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{sample}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{sig}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{sample}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}
 
-             \PY{k}{return} \PY{n}{sig}
+             \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{mu}\PY{p}{,} \PY{n}{sig}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}31}]:} \PY{n}{count} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{count}\PY{p}{)} \PY{c}{\PYZsh{} cast from dataframe/series into numpy array}
-         \PY{n}{jksig} \PY{o}{=} \PY{n}{jk\PYZus{}params}\PY{p}{(}\PY{n}{count}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}96}]:} \PY{n}{count} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{count}\PY{p}{)} \PY{c}{\PYZsh{} cast from dataframe/series into numpy array}
+         \PY{n}{jk\PYZus{}mu}\PY{p}{,} \PY{n}{jk\PYZus{}sig} \PY{o}{=} \PY{n}{jk\PYZus{}params}\PY{p}{(}\PY{n}{count}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
 \end{Verbatim}
 
     \subsubsection{Bias Calculation}\label{bias-calculation}
 
+Means are pretty robust estimator, but the standard deviation is not for
+low N.
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}45}]:} \PY{n}{n} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{count}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-         \PY{n}{sig\PYZus{}bias} \PY{o}{=} \PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{jksig} \PY{o}{\PYZhy{}} \PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}97}]:} \PY{n}{n} \PY{o}{=} \PY{n}{count}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+         \PY{n}{mu\PYZus{}bias} \PY{o}{=} \PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{jk\PYZus{}mu} \PY{o}{\PYZhy{}} \PY{n}{count}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         \PY{n}{sig\PYZus{}bias} \PY{o}{=} \PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{jk\PYZus{}sig} \PY{o}{\PYZhy{}} \PY{n}{count}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}60}]:} \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Original STD from Fit :   }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s}{\PYZdq{}}    \PY{o}{\PYZpc{}}\PY{k}{coeff}[2]
-         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Mean STD from Samples :   }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}  \PY{o}{\PYZpc{}}\PY{k}{jksig}
-         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Bias:                    }\PY{l+s+si}{\PYZpc{}07.4f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{sig\PYZus{}bias}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}98}]:} \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Original STD:             }\PY{l+s+si}{\PYZpc{}.10f}\PY{l+s}{\PYZdq{}}    \PY{o}{\PYZpc{}} \PY{n}{count}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}
+         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Mean STD from Samples:    }\PY{l+s+si}{\PYZpc{}.10f}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}  \PY{o}{\PYZpc{}} \PY{n}{jk\PYZus{}sig}
+         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Bias:                     }\PY{l+s+si}{\PYZpc{}e}\PY{l+s}{\PYZdq{}}       \PY{o}{\PYZpc{}} \PY{n}{sig\PYZus{}bias}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-Original STD from Fit :   13.7241
-Mean STD from Samples :   13.3935
+Original STD:             19.9345480188
+Mean STD from Samples:    19.9345433278
 
-Bias:                    -13.5524
+Bias:                     -8.561164e-03
     \end{Verbatim}
 
-    Update the standard deviation for the Guassian Fit.
-
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}66}]:} \PY{n}{sig} \PY{o}{=} \PY{n}{coeff}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{sig\PYZus{}bias}
+{\color{incolor}In [{\color{incolor}99}]:} \PY{n}{MU} \PY{o}{=} \PY{n}{count}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{mu\PYZus{}bias}
+         \PY{n}{SIG} \PY{o}{=} \PY{n}{count}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{sig\PYZus{}bias}
 
-         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{sig:}\PY{l+s+si}{\PYZpc{}.1f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}}\PY{k}{sig} \PYZsh{} rounding to three sig figs.
+         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Mean:          }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{MU} \PY{c}{\PYZsh{} rounding to three sig figs.}
+         \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{STD from KDE:  }\PY{l+s+si}{\PYZpc{}3.2f}\PY{l+s}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{SIG}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-sig:27.3
+Mean:          78.03
+STD from KDE:  19.94
     \end{Verbatim}
 
-    The mean of the count taken to 3 sig figs.
+    I'm choosing to round to a whole number since these are counts and I
+don't see the helpfulness of a fractional count for this data set.
 
-$\mu_{count} = 80.0 \pm 27.3$
+$\mu_{count} = 78 \pm 20$
 
 
     % Add a bibliography block to the postdoc
