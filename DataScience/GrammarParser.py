@@ -1,4 +1,4 @@
-''' https://gist.github.com/alexbowe/879414#file-nltk-intro-py-L34'''
+''' Refactored form of this work: https://gist.github.com/alexbowe/879414#file-nltk-intro-py-L34'''
 from nltk.corpus import stopwords
 import nltk
 
@@ -82,7 +82,6 @@ class GrammarParser(object):
         toks = nltk.regexp_tokenize(text, sentence_re)
         postoks = nltk.tag.pos_tag(toks)
 
-        #print postoks
         tree = chunker.parse(postoks)
 
         terms = self.get_terms(tree)
