@@ -4,6 +4,7 @@ import scipy
 from math import factorial
 from MiscToolsDS import MiscTools
 from os import path
+from numba import jit, double
 
 class SignalProcessTools(object):
     def __init__(self, PathType='production'):
@@ -271,4 +272,23 @@ class SignalProcessTools(object):
 
         return signal.T
 
+    @jit
+    def jit_iterative_mean_1d(self, data):
+        """
+        Compute iterative mean for an array-like object
+        """
+        mu = np.float64(0.0)
+        for i in range(len(data)):
+            mu += 1.0 / (i + 1) * (data[i] - mu)
 
+        return mu
+
+    def iterative_mean_1d(self, data):
+        """
+        Compute iterative mean for an array-like object
+        """
+        mu = np.float64(0.0)
+        for i in range(len(data)):
+            mu += 1.0 / (i + 1) * (data[i] - mu)
+
+        return mu
