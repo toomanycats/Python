@@ -17,6 +17,7 @@ import tempfile
 import StaticPaths
 import traceback
 import dicom
+import re
 
 # log for errors, expcetions, etc, inside methods
 # log = logging.getLogger('module_logger')
@@ -743,6 +744,30 @@ prelude -c %(complex_ratio)s -m %(mask)s -u %(outfile)s'''
             self.gzip(infile)
 
         remove(tmp_out)
+
+    @log_method
+    def get_fslhd(self, infile):
+        cmd = "fslhd %(infile)s "
+        cmd = cmd % {'infile':infile
+                    }
+
+        out = self.call_shell_program(cmd)
+        out = self._format_fslhd_output(out)
+
+        return out
+
+    def _format_fslhd_output(self, string):
+        # tempting to use a dict, but order is not guarunteed
+        # list is better for csv
+        rows = string.split("\n")[0:-4] # drop last 4 not helpful
+        out = []
+        obj = re.compile("(\S+)\s+(.*)")
+        for r in rows:
+            match = obj.search(r)
+            if match:
+                out.append(match.group(2))
+
+        return out
 
     def get_slice_duration(self, infile):
         cmd = "fslhd %(infile)s | grep slice_duration | sed  's/[a-zA-Z,_]//g'"
